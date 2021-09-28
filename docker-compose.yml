@@ -1,0 +1,34 @@
+version: "3.8"
+services:
+  user-management:
+    build:
+      context: ./services/user-management
+    image: user-management
+    ports:
+      - "3000:3000"
+  matching:
+    build:
+      context: ./services/matching
+    image: matching
+    ports:
+      - "4000:4000"
+  chat:
+    build:
+      context: ./services/chat
+    image: chat
+    ports:
+      - "5000:5000"
+  editor:
+    build:
+      context: ./services/editor
+    image: editor
+    ports:
+      - "6000:6000"
+  mongo:
+    image: mongo
+    volumes:
+      - data-volume:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
