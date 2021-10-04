@@ -13,6 +13,12 @@ var connectionController = require('./connectionController');
 // 2 Routes - GET to create and return the connection
 // DELETE to delete the connection once the session ends
 router.route('/connection')
-    .get(connectionController.create)
+    .get(connectionController.index)
+    .post(connectionController.create);
+
+router.route('/connection/:session_id')
+    .get(connectionController.retrieve)
     .delete(connectionController.delete);
-    
+
+// Export API routes
+module.exports = router;

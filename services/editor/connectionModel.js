@@ -17,3 +17,7 @@ var connectionSchema = mongoose.Schema({
 // Export connection model
 connectionSchema.plugin(AutoIncrement);
 var Connection = module.exports = mongoose.model('connection', connectionSchema);
+
+module.exports.get_all_connections = function(callback, limit) {
+    Connection.find(callback).limit(limit);
+}
