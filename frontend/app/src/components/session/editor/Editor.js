@@ -12,12 +12,14 @@ Sharedb.types.register(richText.type);
 
 // Connecting to our socket server
 // Currently hardcoded to port 6002
+var port = 6002;
+var document_key = "document_" + port;
 // Should get port and document key from matching service
 const socket = new WebSocket('ws://127.0.0.1:6002');
 const connection = new Sharedb.Connection(socket);
 
 // Querying for our document
-const doc = connection.get('documents', 'first_document');
+const doc = connection.get("documents", document_key);
 
 function Editor() {
   useEffect(() => {

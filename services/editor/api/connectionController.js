@@ -43,11 +43,12 @@ class ConnectionController {
         }
         if (!is_used) {
           var port = i;
+          var document_key = "document_" + port; 
           // console.log(port);
           const new_connection = new Connection({
             port: port,
             session_id: session_id,
-            document_key: "first_document",
+            document_key: document_key,
           });
           new_connection.save(function (err) {
             if (err) {
@@ -61,7 +62,7 @@ class ConnectionController {
               data: new_connection,
             });
           });
-          service.start_server(port, "first_document");
+          service.start_server(port, document_key);
           break;
         }
       }
