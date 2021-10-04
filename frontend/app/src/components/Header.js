@@ -16,6 +16,9 @@ const Header = () => {
       ) {
         return "2";
       }
+      if (pathname === "/session") {
+        return "3";
+      }
     },
     []
   );
@@ -34,6 +37,10 @@ const Header = () => {
         <Menu.Item key="2">
           Matching
           <Link to="/matching" />
+        </Menu.Item>
+        <Menu.Item key="3">
+          Session
+          <Link to="/session" />
         </Menu.Item>
       </Menu>
     </Header>

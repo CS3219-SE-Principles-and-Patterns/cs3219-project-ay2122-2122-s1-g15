@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Home from "./Home";
 import MatchingPage from "./components/matching/MatchingPage";
+import SessionPage from "./components/session/SessionPage";
 
 function App() {
   return (
@@ -17,6 +18,10 @@ function App() {
 
           <Route exact path="/matching">
             <MatchingPage />
+          </Route>
+
+          <Route exact path="/session">
+            <SessionPage />
           </Route>
         </Switch>
       </div>
