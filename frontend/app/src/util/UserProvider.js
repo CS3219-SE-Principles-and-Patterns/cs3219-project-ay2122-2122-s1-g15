@@ -4,11 +4,11 @@ import Db from "./Database";
 
 export const UserContext = createContext({ user: null });
 
-function UserProvider(props) {
+export default function UserProvider(props) {
   const [user, setUser] = React.useState(null);
 
   useEffect(() => {
-    Auth.observeAuthState(async firebaseUser => {
+    Auth.observeAuthState(async (firebaseUser) => {
       if (firebaseUser == null) {
         setUser(firebaseUser);
         return;
@@ -26,5 +26,3 @@ function UserProvider(props) {
     <UserContext.Provider value={user}>{props.children}</UserContext.Provider>
   );
 }
-
-export default UserProvider;

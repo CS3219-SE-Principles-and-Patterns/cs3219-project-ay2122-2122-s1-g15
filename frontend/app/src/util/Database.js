@@ -9,7 +9,7 @@ export default class Database {
       .collection("users")
       .doc(userId)
       .set(userData)
-      .catch(error => console.error("Error adding user to DB: ", error));
+      .catch((error) => console.error("Error adding user to DB: ", error));
   }
 
   // returns an object containing user's data
