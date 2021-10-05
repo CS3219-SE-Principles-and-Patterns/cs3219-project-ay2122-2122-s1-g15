@@ -13,7 +13,11 @@ app.use(express.json());
 app.use("/api", routes);
 // socket.io
 var httpServer = http.createServer(app);
-const io = new Server(httpServer);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+  },
+});
 app.set("io", io);
 io.use((socket, next) => {
   // ASH TODO: middleware for authentication using user jwt token
