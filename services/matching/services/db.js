@@ -16,8 +16,6 @@ class DbHandler {
         console.log(">> ERROR: Database connection error");
       });
   }
-
-  // you can write database operations here (eg. fetch a list of items)
 }
 
 let dbHandler = new DbHandler();
