@@ -1,12 +1,31 @@
-const express = require("express");
-const mongoose = require("mongoose");
 const morgan = require("morgan");
-const router = require("./api/routes");
 const port = 5000;
-const app = express();
+const app = require('express')();
+const server = require('http').createServer(app);
+
+const io = require('socket.io')(server, {
+  cors: {
+    origin: "*" // TODO: Change to our deployed domain later on
+    // methods: ["GET", "POST"],
+    // allowedHeaders: ['my-customer-header']
+  }
+});
+
 app.use(morgan("combined"));
 app.use(express.json());
-app.use("/", router);
-app.listen(port, function () {
-  console.log("Server started on port: " + port);
+
+io.on('connection', (socket) => {
+  console.log('user has been connected');
+  socket.on('chat message', (payload) => {
+    io.emit('chat message', payload);
+    console.log(payload);
+  });
+  socket.on('disconnect', () => {
+    io.emit('user disconnected');
+    console.log('user disconnected');
+  });
+});
+
+server.listen(port, () => {
+  console.log("Server start on port: " + port);
 });
