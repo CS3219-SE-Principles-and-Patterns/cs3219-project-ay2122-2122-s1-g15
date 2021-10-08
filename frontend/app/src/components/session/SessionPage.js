@@ -2,6 +2,7 @@ import React from "react";
 
 import { Breadcrumb, Layout } from "antd";
 import ChatBox from "./chat/ChatBox";
+import Editor from "./editor/Editor";
 
 const { Content } = Layout;
 
@@ -13,6 +14,7 @@ const SessionPage = () => {
           <Breadcrumb.Item>Session</Breadcrumb.Item>
         </Breadcrumb>
         <ChatBox />
+        <Editor />
       </Content>
     </Layout>
   );

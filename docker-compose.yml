@@ -23,7 +23,7 @@ services:
       context: ./services/editor
     image: editor
     ports:
-      - "6000:6000"
+      - "6001:6001"
   mongo:
     image: mongo
     volumes:
