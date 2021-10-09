@@ -70,6 +70,19 @@ class ConnectionController {
   }
 
   delete(req, res) {
+    var query = Connection.find({ session_id: req.params.session_id });
+    query.exec(function (err, connection) {
+      if (err) {
+        return res.status(400).json({
+          status: "error",
+          message: err,
+        });
+      }
+      var document_key = connection[0]["document_key"];
+      console.log(document_key);
+      service.remove_document(document_key);
+    });
+
     var delete_query = Connection.find({
       session_id: req.params.session_id,
     }).deleteMany();

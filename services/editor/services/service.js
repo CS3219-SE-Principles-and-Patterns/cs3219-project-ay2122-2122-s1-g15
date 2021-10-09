@@ -6,14 +6,16 @@ const ShareDB = require("sharedb");
 class EditorService {
   constructor() {
     connectionHandler.connect();
+    this.shareDBServer = new ShareDB();
+    console.log(this.shareDBServer);
   }
 
   start_server(port, document_key) {
     console.log("Starting server....");
     ShareDB.types.register(require("rich-text").type);
+    console.log(this.shareDBServer);
     const shareDBServer = new ShareDB();
     const connection = shareDBServer.connect();
-
     /**
      * 'documents' is collection name(table name in sql terms)
      * 'firstDocument' is the id of the document
@@ -34,12 +36,28 @@ class EditorService {
             // For transport we are using a ws JSON stream for communication
             // that can read and write js objects.
             const jsonStream = new WebSocketJSONStream(ws);
+            console.log(shareDBServer);
             shareDBServer.listen(jsonStream);
           });
         });
         return;
       }
     });
+  }
+
+  remove_document(document_key) {
+    //TODO
+    const connection = this.shareDBServer.connect();
+    const doc = connection.get("documents", document_key);
+    console.log
+    doc.del(function (err) {
+        if (err) throw err;
+        if (doc.type === null) {
+          console.log("No document found!")
+          return;
+        }
+      }
+    );
   }
 }
 
