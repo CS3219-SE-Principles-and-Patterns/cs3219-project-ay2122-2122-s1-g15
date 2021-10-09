@@ -43,7 +43,7 @@ class ConnectionController {
         }
         if (!is_used) {
           var port = i;
-          var document_key = "document_" + port; 
+          var document_key = "document_" + port;
           // console.log(port);
           const new_connection = new Connection({
             port: port,
@@ -70,6 +70,7 @@ class ConnectionController {
   }
 
   delete(req, res) {
+    var found = false;
     var query = Connection.find({ session_id: req.params.session_id });
     query.exec(function (err, connection) {
       if (err) {
@@ -78,32 +79,47 @@ class ConnectionController {
           message: err,
         });
       }
+      if (connection.length < 1) {
+        return res.status(400).json({
+          status: "error",
+          message: "No connections found!",
+        });
+      }
       var document_key = connection[0]["document_key"];
       console.log(document_key);
-      service.remove_document(document_key);
-    });
-
-    var delete_query = Connection.find({
-      session_id: req.params.session_id,
-    }).deleteMany();
-    delete_query.exec(function (err, result) {
-      if (err) {
-        return res.status(400).json({
+      try {
+        service.remove_document(document_key);
+        found = true;
+      } catch (err) {
+        res.status(400).json({
           status: "error",
           message: err,
         });
       }
-      if (result["deletedCount"] < 1) {
-        return res.status(400).json({
-          status: "error",
-          message: "Session ID not found!",
-        });
-      }
-      res.json({
-        message: "Connection deleted",
-        data: result,
-      });
     });
+    if (found) {
+      var delete_query = Connection.find({
+        session_id: req.params.session_id,
+      }).deleteMany();
+      delete_query.exec(function (err, result) {
+        if (err) {
+          return res.status(400).json({
+            status: "error",
+            message: err,
+          });
+        }
+        if (result["deletedCount"] < 1) {
+          return res.status(400).json({
+            status: "error",
+            message: "Session ID not found!",
+          });
+        }
+        res.json({
+          message: "Connection deleted",
+          data: result,
+        });
+      });
+    }
   }
 
   retrieve(req, res) {
