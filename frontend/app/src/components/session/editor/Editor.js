@@ -1,11 +1,14 @@
 // Temporary (hardcoded) frontend to test editor functionalities
 
-import React, { useEffect } from 'react';
-import Quill from 'quill';
-import 'quill/dist/quill.bubble.css';
-import Sharedb from 'sharedb/lib/client';
-import richText from 'rich-text';
+import React, { useEffect } from "react";
+import Quill from "quill";
+import "quill/dist/quill.snow.css";
+import "./Editor.css";
+import "highlight.js/styles/monokai-sublime.css";
+import Sharedb from "sharedb/lib/client";
+import richText from "rich-text";
 
+const hljs = require("highlight.js/lib/common");
 // Registering the rich text type to make sharedb work
 // with our quill editor
 Sharedb.types.register(richText.type);
@@ -26,20 +29,40 @@ function Editor() {
     doc.subscribe(function (err) {
       if (err) throw err;
 
-      const toolbarOptions = ['bold', 'italic', 'underline', 'strike', 'align'];
+      // const toolbarOptions = ['bold', 'italic', 'underline', 'strike', 'align'];
+      hljs.configure({   // optionally configure hljs
+        languages: ['javascript', 'java', 'python']
+      });
       const options = {
-        theme: 'bubble',
         modules: {
-          toolbar: toolbarOptions,
-        },
+          syntax: {
+            highlight: (text) => hljs.highlightAuto(text).value,
+          },
+          toolbar: [
+           ['bold', 'italic', 'underline', 'strike', {
+             'color': []
+             }, {
+                  "background": []
+                }, {
+                    "font": []
+                }, {
+                    "size": []
+                }, {
+                    align: []
+                }, 'image', 'code-block']]
+            },
+            scrollingContainer: "#editorcontainer",
+            theme: "snow"
       };
+
       let quill = new Quill('#editor', options);
       /**
        * On Initialising if data is present in server
        * Updaing its content to editor
        */
       quill.setContents(doc.data);
-
+      // quill.formatLine(1, quill.getLength(), { 'code-block': true });
+      
       /**
        * On Text change publishing to our server
        * so that it can be broadcasted to all other clients

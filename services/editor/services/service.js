@@ -8,27 +8,18 @@ const connection = shareDBServer.connect();
 class EditorService {
   constructor() {
     connectionHandler.connect();
-    // this.shareDBServer = new ShareDB();
-    // console.log(this.shareDBServer);
   }
 
   start_server(port, document_key) {
     console.log("Starting server....");
     ShareDB.types.register(require("rich-text").type);
-    // console.log(this.shareDBServer);
-    // const shareDBServer = new ShareDB();
-    // const connection = shareDBServer.connect();
-    /**
-     * 'documents' is collection name(table name in sql terms)
-     * 'firstDocument' is the id of the document
-     */
     const doc = connection.get("documents", document_key);
 
     doc.fetch(function (err) {
       if (err) throw err;
       if (doc.type === null) {
         /**
-         * If there is no document with id "firstDocument" in memory
+         * If there is no document with id in memory
          * we are creating it and then starting up our ws server
          */
         doc.create([{ insert: "Hello World!" }], "rich-text", () => {
@@ -48,9 +39,8 @@ class EditorService {
   }
 
   remove_document(document_key) {
-
     const doc = connection.get("documents", document_key);
-    console.log(doc)
+    // console.log(doc)
     doc.del(function (err) {
         if (err) {throw err};
       }
