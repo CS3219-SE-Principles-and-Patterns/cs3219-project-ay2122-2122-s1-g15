@@ -1,6 +1,7 @@
 import React from "react";
 
 import { Layout } from "antd";
+import { io } from "socket.io-client";
 import SelectionView from "./SelectionView";
 import LoadingView from "./LoadingView";
 import TimeoutView from "./TimeoutView";
@@ -20,7 +21,7 @@ const questionDifficulties = [
   { title: "Hard" },
 ];
 
-const MATCH_DURATION = 10;
+const MATCH_DURATION = (process.env.MATCH_DURATION && parseInt(process.env.MATCH_DURATION)) || 10;
 
 const MatchingPage = () => {
   const [view, setView] = React.useState(views.selection);
@@ -40,6 +41,8 @@ const MatchingPage = () => {
     setSelected(index);
   };
 
+  // call matching api to submit a request
+  // receive the requestId to listen to
   const submitMatchRequest = (index) => {
     var questionDifficulty = questionDifficulties[index];
     console.log("submitting for " + questionDifficulty.title);
@@ -65,9 +68,15 @@ const MatchingPage = () => {
 
   // for loading view
   const handleMatchFound = () => {
-    // modify prop to show session page
+    // ASH TODO: call parent component to show session page
     console.log("handle match found")
     setTimerStart(false)
+  }
+
+  const listenForMatch = () => {
+    var socket = io("https://server-domain.com");
+
+    // submit
   }
 
   // timer hook
