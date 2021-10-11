@@ -4,28 +4,41 @@ import Header from "./components/Header";
 import Home from "./Home";
 import MatchingPage from "./components/matching/MatchingPage";
 import SessionPage from "./components/session/SessionPage";
+import Register from "./components/user-management/Register";
+import Login from "./components/user-management/Login";
+import UserProvider from "./util/UserProvider";
 
 function App() {
   return (
-    <Router>
-      <div id="root">
-        <Header />
+    <UserProvider>
+      <Router>
+        <div id="root">
+          <Header />
 
-        <Switch>
-          <Route exact path="/">
-            <Home />
-          </Route>
+          <Switch>
+            <Route exact path="/">
+              <Home />
+            </Route>
 
-          <Route exact path="/matching">
-            <MatchingPage />
-          </Route>
+            <Route exact path="/matching">
+              <MatchingPage />
+            </Route>
 
-          <Route exact path="/session">
-            <SessionPage />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
+            <Route exact path="/session">
+              <SessionPage />
+            </Route>
+
+            <Route exact path="/register">
+              <Register />
+            </Route>
+
+            <Route exact path="/login">
+              <Login />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </UserProvider>
   );
 }
 

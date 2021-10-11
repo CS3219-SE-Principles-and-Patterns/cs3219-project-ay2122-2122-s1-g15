@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const uri = ""; // to be added
+const uri = "mongodb://localhost/connection";
 
 class DbHandler {
   constructor() {}
@@ -16,9 +16,6 @@ class DbHandler {
         console.log(">> ERROR: Database connection error");
       });
   }
-
-  // you can write database operations here (eg. fetch a list of items)
 }
-
 let dbHandler = new DbHandler();
 module.exports = dbHandler;
