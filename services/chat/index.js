@@ -12,6 +12,7 @@ const io = require('socket.io')(server, {
 });
 
 app.use(morgan("combined"));
+app.use(express.json());
 
 io.on('connection', (socket) => {
   console.log('user has been connected');
