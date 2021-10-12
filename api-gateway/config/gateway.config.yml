@@ -20,11 +20,11 @@ serviceEndpoints:
   httpbin:
     url: 'https://httpbin.org'
   chatService:
-    url: 'https://localhost:5000'
+    url: 'http://localhost:5000'
   editorService:
-    url: 'https://localhost:6001'
+    url: 'http://localhost:6001'
   matchingService:
-    url: 'https://localhost:4000'
+    url: 'http://localhost:4000'
 policies:
   - basic-auth
   - cors
