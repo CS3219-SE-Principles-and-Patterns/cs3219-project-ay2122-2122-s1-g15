@@ -1,58 +1,118 @@
 // Temporary (hardcoded) frontend to test editor functionalities
 
-import React, { useEffect } from 'react';
-import Quill from 'quill';
-import 'quill/dist/quill.bubble.css';
-import Sharedb from 'sharedb/lib/client';
-import richText from 'rich-text';
+import React, { useState, useEffect } from "react";
+import Quill from "quill";
+import axios from "axios";
+import "quill/dist/quill.snow.css";
+import "./Editor.css";
+import "highlight.js/styles/monokai-sublime.css";
+import Sharedb from "sharedb/lib/client";
+import richText from "rich-text";
 
-// Registering the rich text type to make sharedb work
-// with our quill editor
+// Adding syntax highlight support for common languages
+const hljs = require("highlight.js/lib/common");
+
+// Registering the rich text type to make sharedb work with our quill editor
 Sharedb.types.register(richText.type);
 
-// Connecting to our socket server
-// Currently hardcoded to port 6002
-var port = 6002;
-var document_key = "document_" + port;
-// Should get port and document key from matching service
-const socket = new WebSocket('ws://127.0.0.1:6002');
-const connection = new Sharedb.Connection(socket);
+function Editor(props) {
+  const [conn, setConn] = useState();
 
-// Querying for our document
-const doc = connection.get("documents", document_key);
+  function get_connection(session_id) {
+    axios
+      .get("http://localhost:6001/api/connection/" + session_id)
+      .then((res) => {
+        setConn(res.data.data);
+        // console.log(res.data.data);
+      })
+      .catch((error) => {
+        console.log(error);
+        setConn(null);
+      });
+  }
 
-function Editor() {
+  // Get Connection object from api
+  useEffect(() => { 
+    get_connection(props.session_id);
+  }, [props])
+
   useEffect(() => {
+    console.log(conn);
+    if (conn == null) {
+      console.log("Connection not found!");
+      return;
+    }
+    // Setup websocket and shareDB connection
+    var port = conn[0].port;
+    var document_key = conn[0].document_key;
+    const socket = new WebSocket("ws://127.0.0.1:" + port);
+    const connection = new Sharedb.Connection(socket);
+    // Querying for our document
+    const doc = connection.get("documents", document_key);
+
     doc.subscribe(function (err) {
       if (err) throw err;
 
-      const toolbarOptions = ['bold', 'italic', 'underline', 'strike', 'align'];
+      // const toolbarOptions = ['bold', 'italic', 'underline', 'strike', 'align'];
+      hljs.configure({
+        languages: ["javascript", "java", "python"],
+      });
       const options = {
-        theme: 'bubble',
         modules: {
-          toolbar: toolbarOptions,
+          syntax: {
+            highlight: (text) => hljs.highlightAuto(text).value,
+          },
+          toolbar: [
+            [
+              "bold",
+              "italic",
+              "underline",
+              "strike",
+              {
+                color: [],
+              },
+              {
+                background: [],
+              },
+              {
+                font: [],
+              },
+              {
+                size: [],
+              },
+              {
+                align: [],
+              },
+              "image",
+              "code-block",
+            ],
+          ],
         },
+        scrollingContainer: "#editorcontainer",
+        theme: "snow",
       };
-      let quill = new Quill('#editor', options);
+
+      let quill = new Quill("#editor", options);
       /**
        * On Initialising if data is present in server
        * Updaing its content to editor
        */
       quill.setContents(doc.data);
+      // quill.formatLine(1, quill.getLength(), { 'code-block': true });
 
       /**
        * On Text change publishing to our server
        * so that it can be broadcasted to all other clients
        */
-      quill.on('text-change', function (delta, oldDelta, source) {
-        if (source !== 'user') return;
+      quill.on("text-change", function (delta, oldDelta, source) {
+        if (source !== "user") return;
         doc.submitOp(delta, { source: quill });
       });
 
       /** listening to changes in the document
        * that is coming from our server
        */
-      doc.on('op', function (op, source) {
+      doc.on("op", function (op, source) {
         if (source === quill) return;
         quill.updateContents(op);
       });
@@ -60,11 +120,11 @@ function Editor() {
     return () => {
       connection.close();
     };
-  }, []);
+  }, [conn]);
 
   return (
-    <div style={{ margin: '5%', border: '1px solid' }}>
-      <div id='editor'></div>
+    <div style={{ margin: "5%", border: "1px solid" }}>
+      <div id="editor"></div>
     </div>
   );
 }

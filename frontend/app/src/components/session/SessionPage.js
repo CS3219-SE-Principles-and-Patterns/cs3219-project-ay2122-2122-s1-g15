@@ -6,6 +6,9 @@ import Editor from "./editor/Editor";
 
 const { Content } = Layout;
 
+// TODO: dynamically get from matching component
+const session_id = 2224;
+
 const SessionPage = () => {
   return (
     <Layout className="layout">
@@ -14,7 +17,9 @@ const SessionPage = () => {
           <Breadcrumb.Item>Session</Breadcrumb.Item>
         </Breadcrumb>
         <ChatBox />
-        <Editor />
+        <Editor 
+          session_id={session_id}
+        />
       </Content>
     </Layout>
   );
