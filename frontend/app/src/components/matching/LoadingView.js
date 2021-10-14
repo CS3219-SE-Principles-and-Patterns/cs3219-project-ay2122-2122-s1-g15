@@ -1,6 +1,6 @@
 import React from "react";
 import { Layout, Row, Col, Card } from "antd";
-import PacmanLoader from "react-spinners/PacmanLoader";
+// import PacmanLoader from "react-spinners/PacmanLoader";
 // import { CountdownCircleTimer } from "react-countdown-circle-timer";
 const { Content } = Layout;
 
@@ -23,7 +23,6 @@ const LoadingView = (props) => {
       <Content style={{ padding: "0 50px", minHeight: "100vh" }}>
         <Row style={{ height: "100vh" }} justify="center" align="middle">
           <Col span={24} style={{ textAlign: "center" }}>
-            <PacmanLoader loading={!props.matchFound} color="lightblue" />
           </Col>
           <Col span={24}>
             <Card style={countdownStyle}>{props.remainingTime >= 0 ? props.remainingTime: 0}</Card>
