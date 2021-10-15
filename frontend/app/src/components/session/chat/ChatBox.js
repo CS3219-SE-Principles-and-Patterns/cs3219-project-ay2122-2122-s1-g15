@@ -33,7 +33,7 @@ const ChatBox = () => {
 
   return (
     <>
-      <Card title="Chat" style={{ width: 300, height: 400, overflow: "auto" }}>
+      <Card title="Chat" style={{ height: "90vh", overflow: "auto" }}>
         {chat.map((payload, index) => {
           return (
             <ChatBubble

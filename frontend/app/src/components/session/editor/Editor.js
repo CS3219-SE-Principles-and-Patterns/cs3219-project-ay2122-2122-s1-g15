@@ -123,7 +123,7 @@ function Editor(props) {
   }, [conn]);
 
   return (
-    <div style={{ margin: "5%", border: "1px solid" }}>
+    <div style={{border: "1px solid" }}>
       <div id="editor"></div>
     </div>
   );
