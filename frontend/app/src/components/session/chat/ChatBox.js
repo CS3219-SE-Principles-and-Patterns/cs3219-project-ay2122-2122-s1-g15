@@ -1,9 +1,9 @@
-import {useState, useEffect} from "react";
-import { Card, Input, Button } from 'antd';
-import { SendOutlined } from '@ant-design/icons';
-import { nanoid } from 'nanoid';
-import io from 'socket.io-client';
-import ChatBubble from './ChatBubble';
+import { useState, useEffect } from "react";
+import { Card, Input, Button } from "antd";
+import { SendOutlined } from "@ant-design/icons";
+import { nanoid } from "nanoid";
+import io from "socket.io-client";
+import ChatBubble from "./ChatBubble";
 
 // TODO: Replace with deployed server endpoint
 const socket = io("http://localhost:5000")
@@ -19,8 +19,8 @@ const ChatBox = () => {
   const [isInitialLoad, setIsInitialLoad] = useState(true)
 
   const onChange = (e) => {
-    setMessage(e.target.value)
-  }
+    setMessage(e.target.value);
+  };
 
   const sendChat = (e) => {
     e.preventDefault()
@@ -46,7 +46,7 @@ const ChatBox = () => {
 
   return (
     <>
-    <Card title="Chat" style={{ width: 300, height: 400, overflow: "auto" }}>
+    <Card title="Chat" style={{ height: '90vh', overflow: "auto" }}>
       {chat.map((payload, index) => {
         return <ChatBubble key={index} msg={payload.message} isSender={payload.sender === username}/>
       })}

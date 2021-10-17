@@ -41,8 +41,6 @@ const main = async () => {
   io.on('connection', (socket) => {
     console.log('user has been connected');
     socket.on('join room', (sessionId) => {
-      console.log(rooms);
-      console.log(sids);
       socket.join(sessionId);
       console.log('socket subscribed to ' + sessionId);
     })
@@ -56,8 +54,6 @@ const main = async () => {
     socket.on('disconnect', () => {
       io.emit('user disconnected');
       console.log('user disconnected');
-      console.log(rooms);
-      console.log(sids);
     });
   });
   
