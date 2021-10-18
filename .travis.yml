@@ -1,0 +1,20 @@
+stage:
+  - test_editor
+  # - deploy
+
+language: node_js
+node_js:
+  - node
+services:
+  - mongodb
+
+jobs:
+  include:
+    - stage: test_editor
+      before_install: cd services/editor
+      install: npm install
+      script: npm run test
+
+    # - stage: deploy
+    #   install: npm install
+    #   script: serverless deploy
