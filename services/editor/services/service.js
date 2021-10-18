@@ -40,7 +40,6 @@ class EditorService {
 
   remove_document(document_key) {
     const doc = connection.get("documents", document_key);
-    console.log(doc);
     doc.del(function (err) {
         if (err) {throw err};
       }
@@ -49,7 +48,6 @@ class EditorService {
         if (err) {throw err};
       }
     );
-    connection.close();
   }
 }
 
