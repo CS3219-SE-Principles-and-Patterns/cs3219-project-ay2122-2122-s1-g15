@@ -12,6 +12,8 @@ import richText from "rich-text";
 // Adding syntax highlight support for common languages
 const hljs = require("highlight.js/lib/common");
 
+var isFirst = true;
+
 // Registering the rich text type to make sharedb work with our quill editor
 Sharedb.types.register(richText.type);
 
@@ -95,11 +97,12 @@ function Editor(props) {
       let quill = new Quill("#editor", options);
       /**
        * On Initialising if data is present in server
-       * Updaing its content to editor
+       * Updating its content to editor
        */
       quill.setContents(doc.data);
+      
       // quill.formatLine(1, quill.getLength(), { 'code-block': true });
-
+      
       /**
        * On Text change publishing to our server
        * so that it can be broadcasted to all other clients
@@ -116,6 +119,7 @@ function Editor(props) {
         if (source === quill) return;
         quill.updateContents(op);
       });
+
     });
     return () => {
       connection.close();

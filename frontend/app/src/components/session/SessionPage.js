@@ -3,17 +3,32 @@ import { AiOutlineUser } from "react-icons/ai";
 import { Layout, Card, Button, Row, Col } from "antd";
 import ChatBox from "./chat/ChatBox";
 import Editor from "./editor/Editor";
+import axios from "axios";
 
 const { Content } = Layout;
 const box = { border: "1px solid #000000" , padding: "8px 0", background: "white"};
 
 const question = { height: "20vh", border: "1px solid #000000" , padding: "8px 0", background: "white", overflow: "auto", "text-align": "center"};
 // TODO: dynamically get from matching component
-const session_id = 2224;
+const session_id_1 = 2224;
 
-const handleExitSession = () => {
-  // TODO 
-  
+const close_editor_connection = (session_id) => {
+  axios
+    .delete("http://localhost:6001/api/connection/" + session_id)
+    .catch((error) => {
+      console.log("Editor's session is not closed properly!");
+      console.log(error);
+    });
+}
+
+const handleExitSession = (session_id) => {
+  // Close editor session
+  close_editor_connection(session_id);
+  // Close chat session
+
+  // Redirect to home page
+  window.location.href="/";
+
 }
 
 const SessionPage = () => {
@@ -33,7 +48,7 @@ const SessionPage = () => {
             <div style={box}> <AiOutlineUser /> Peer's Name</div>
           </Col>
           <Col span={2} style={{ textAlign: "center" }}>
-            <Button onClick={() => handleExitSession()} style={{background: "#8B0000", color: "white"}}>
+            <Button onClick={() => handleExitSession(session_id_1)} style={{background: "#8B0000", color: "white"}}>
               Exit Session
             </Button>
           </Col>
@@ -71,7 +86,7 @@ const SessionPage = () => {
             <Row style={{ height: "70vh" }}>
               <div> 
                 <Editor 
-                session_id={session_id}
+                session_id={session_id_1}
                 />
               </div>
             </Row>
