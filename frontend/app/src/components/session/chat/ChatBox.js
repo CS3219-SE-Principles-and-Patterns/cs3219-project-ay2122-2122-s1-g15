@@ -4,6 +4,7 @@ import { SendOutlined } from "@ant-design/icons";
 import { nanoid } from "nanoid";
 import io from "socket.io-client";
 import ChatBubble from "./ChatBubble";
+import "./ChatBox.css";
 
 // TODO: Replace with deployed server endpoint
 const socket = io("http://localhost:5000")
@@ -11,6 +12,8 @@ const socket = io("http://localhost:5000")
 const username = nanoid(2)
 // TODO: Update to passed in sessionId prop
 const sessionId = 1
+
+const { TextArea } = Input;
 
 const ChatBox = () => {
 
@@ -30,9 +33,21 @@ const ChatBox = () => {
     setMessage('')
   }
 
+  const handleKeyUp = (e) => {
+    if (e.keyCode === 13) {
+      sendChat(e);
+    }
+  }
+
   useEffect(() => {
     socket.on('chat message', (payload) => {
-      console.log(payload)
+      setChat([...chat, payload])
+      console.log(chat)
+    })
+  })
+
+  useEffect(() => {
+    socket.on('user disconnected', (payload) => {
       setChat([...chat, payload])
     })
   })
@@ -46,20 +61,29 @@ const ChatBox = () => {
 
   return (
     <>
-    <Card title="Chat" style={{ height: '90vh', overflow: "auto" }}>
-      {chat.map((payload, index) => {
-        return <ChatBubble key={index} msg={payload.message} isSender={payload.sender === username}/>
-      })}
-      <Input placeholder="Enter chat message here!" 
-        value={message}
-        suffix={
+    <Card title="Chat" className="card">
+      <div className="chat-container">
+        <div className="chat-messages">
+          {chat.map((payload, index) => {
+            return <ChatBubble key={index} msg={payload.message} isSender={payload.sender === username} />
+          })}
+        </div>
+        <div className="input-container">
+          <TextArea 
+            className="chat-input"
+            placeholder="Enter message here!" 
+            value={message}
+            onKeyUp={handleKeyUp}
+            autoSize={{ minRows: 1, maxRows: 6 }}
+            onChange={onChange} />
           <Button 
-            type="primary"
-            shape="circle"
-            icon={<SendOutlined />}
-            onClick={sendChat} />
-        }
-        onChange={onChange} />
+                type="primary"
+                shape="circle"
+                style={{marginLeft: "5px"}}
+                icon={<SendOutlined />}
+                onClick={sendChat} />
+        </div>
+        </div>
     </Card>
     </>
   );
