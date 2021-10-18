@@ -27,4 +27,4 @@ app.use("/api", routes);
 app.listen(port, function () {
   console.log("Server started on port: " + port);
 });
-module.exports = app
+module.exports = app;

@@ -41,13 +41,15 @@ class EditorService {
   remove_document(document_key) {
     const doc = connection.get("documents", document_key);
     doc.del(function (err) {
-        if (err) {throw err};
+      if (err) {
+        throw err;
       }
-    );
+    });
     doc.destroy(function (err) {
-        if (err) {throw err};
+      if (err) {
+        throw err;
       }
-    );
+    });
   }
 }
 

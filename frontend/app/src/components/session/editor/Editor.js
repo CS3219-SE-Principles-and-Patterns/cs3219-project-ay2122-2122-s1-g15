@@ -12,8 +12,6 @@ import richText from "rich-text";
 // Adding syntax highlight support for common languages
 const hljs = require("highlight.js/lib/common");
 
-var isFirst = true;
-
 // Registering the rich text type to make sharedb work with our quill editor
 Sharedb.types.register(richText.type);
 
