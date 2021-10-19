@@ -125,7 +125,7 @@ function Editor(props) {
   }, [conn]);
 
   return (
-    <div style={{border: "1px solid" }}>
+    <div style={{marginTop: "1%", border: "1px solid" }}>
       <div id="editor"></div>
     </div>
   );
