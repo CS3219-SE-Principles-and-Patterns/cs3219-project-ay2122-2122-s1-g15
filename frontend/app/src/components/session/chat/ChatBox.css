@@ -1,0 +1,24 @@
+.card {
+    height: 74%;
+    padding: 0;
+}
+.chat-messages {
+    overflow-y: auto;
+    width: 100%;
+    padding: 24px;
+    height: 56vh;
+}
+.chat-input {
+    width: 100%;
+}
+.input-container {
+    display: flex;
+    padding: 12px;
+    position: absolute;
+    bottom: 2px;
+    width: 100%;
+    align-items: center;
+}
+.ant-card-body {
+    padding: 0px;
+}
