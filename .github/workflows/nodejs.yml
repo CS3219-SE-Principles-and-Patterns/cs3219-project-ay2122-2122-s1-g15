@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [master, editor-frontend]
+    branches: [ $default-branch ]
   pull_request:
-    branches: [master]
+    branches: [ $default-branch ]
 
 jobs:
   build:
@@ -24,7 +24,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - name: Test Editor Service
-    - run: |
+      run: |
         cd services/editor
         npm install
         npm run test
