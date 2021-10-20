@@ -19,6 +19,7 @@ policies:
   - oauth2
   - proxy
   - rate-limit
+  - auth
 pipelines:
   default:
     apiEndpoints:
@@ -28,5 +29,5 @@ pipelines:
     # - key-auth:
       - proxy:
           - action:
-              serviceEndpoint: httpbin 
+              serviceEndpoint: httpbin
               changeOrigin: true
