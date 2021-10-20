@@ -16,17 +16,19 @@ module.exports = {
       let serviceAccount = require("../../../serviceAccountKey.json");
       let admin = require("firebase-admin");
 
-      admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-        databaseURL: "https://peerprep-2d654.firebaseio.com",
-      });
+      if (!admin.apps.length) {
+        admin.initializeApp({
+          credential: admin.credential.cert(serviceAccount),
+          databaseURL: "https://peerprep-2d654.firebaseio.com",
+        });
+      }
 
       const getAuthToken = (req, res, next) => {
         if (
-          req.headers.authorization &&
-          req.headers.authorization.split(" ")[0] === "Bearer"
+          req.headers &&
+          req.headers['bearer']
         ) {
-          req.authToken = req.headers.authorization.split(" ")[1];
+          req.authToken = req.headers['bearer'];
         } else {
           req.authToken = null;
         }

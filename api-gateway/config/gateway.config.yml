@@ -7,9 +7,24 @@ apiEndpoints:
   api:
     host: localhost
     paths: '/ip'
+  chat:
+    host: localhost
+    paths: ['/chat', '/chat/*']
+  editor:
+    host: localhost
+    paths: ['/editor', '/editor/*']
+  matching:
+    host: localhost
+    paths: ['/matching', '/matching/*']
 serviceEndpoints:
   httpbin:
     url: 'https://httpbin.org'
+  chatService:
+    url: 'http://localhost:5000'
+  editorService:
+    url: 'http://localhost:6001'
+  matchingService:
+    url: 'http://localhost:4000'
 policies:
   - basic-auth
   - cors
@@ -25,9 +40,40 @@ pipelines:
     apiEndpoints:
       - api
     policies:
-    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-    # - key-auth:
+      # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+      # - key-auth:
       - proxy:
           - action:
               serviceEndpoint: httpbin
+              changeOrigin: true
+  chatPipeline:
+    apiEndpoints:
+      - chat
+    policies:
+      # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+      # - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: chatService
+              changeOrigin: true
+  editorPipeline:
+    apiEndpoints:
+      - editor
+    policies:
+      - auth:
+          - action:
+              baseUrl: 'https://example.com'
+      - proxy:
+          - action:
+              serviceEndpoint: editorService
+              changeOrigin: true
+  matchingPipeline:
+    apiEndpoints:
+      - matching
+    policies:
+      # Uncomment `key-auth:` when instructed to in the Getting Started guide.
+      # - key-auth:
+      - proxy:
+          - action:
+              serviceEndpoint: matchingService
               changeOrigin: true
