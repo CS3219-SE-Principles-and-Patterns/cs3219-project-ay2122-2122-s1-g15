@@ -4,6 +4,8 @@ const { Server } = require("socket.io");
 const http = require("http");
 const routes = require("./api/routes");
 const SocketController = require("./api/socket");
+const matchingController = require("./api/controller");
+
 // create express app
 const port = 4000;
 const app = express();
@@ -11,26 +13,10 @@ const app = express();
 app.use(morgan("combined"));
 app.use(express.json());
 app.use("/api", routes);
-// socket.io
-var httpServer = http.createServer(app);
-const io = new Server(httpServer, {
-  cors: {
-    origin: "*",
-  },
-});
-app.set("io", io);
-io.use((socket, next) => {
-  // ASH TODO: middleware for authentication using user jwt token
-  // Possible call required to user management service
-  next();
-});
 
-io.on("connection", (socket) => {
-  console.log("a user connected");
-  SocketController.onWait(socket);
-  SocketController.onDisconnect(socket);
-});
+// start controller
+matchingController.start();
 
-httpServer.listen(port, function () {
-  console.log("Server started on port: " + port);
+app.listen(port, function () {
+  console.log(">> Server started on port: " + port);
 });

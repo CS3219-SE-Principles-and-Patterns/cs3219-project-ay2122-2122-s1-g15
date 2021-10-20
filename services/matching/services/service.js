@@ -1,9 +1,10 @@
 /* Implements pure business logic, calls database if needed, etc. */
 const { DIFFICULTY } = require("../constants/constants");
 const { uuid } = require("uuidv4");
-const { MatchRequest } = require("../model/match-request");
+const MatchRequest = require("../model/match-request");
 const errors = require("../errors/errors");
-const { Question } = require("../model/question");
+const Question = require("../model/question");
+const mongoose = require("mongoose")
 class Service {
   constructor() {}
 
@@ -13,16 +14,17 @@ class Service {
    * @param {*} userId
    * @returns Promise
    */
-  storeMatchRequest(difficulty, userId) {
-    requestId = uuid();
-    matchRequest = new MatchRequest({
+  storeMatchRequest(userId, difficulty) {
+    var requestId = uuid();
+    var matchRequest = new MatchRequest({
       requestId,
       userId,
       difficulty,
     });
-    matchRequest
+    return matchRequest
       .save()
       .then((matchRequest) => {
+        console.log(matchRequest)
         return matchRequest;
       })
       .catch((err) => {
@@ -39,11 +41,13 @@ class Service {
    * @returns Promise
    */
   checkForMatch(difficulty, requestId) {
-    MatchRequest.checkForMatch(difficulty, requestId)
+    return MatchRequest.findMatch(difficulty, requestId)
       .then((match) => {
         if (!match) {
+          console.log("No match found")
           return null;
         }
+        console.log(`Match found: ${match}`)
         return match;
       })
       .catch((err) => {
@@ -60,16 +64,17 @@ class Service {
    * @returns Promise containing the sessionInfo
    */
   createSession(difficulty, user1, user2) {
-    Question.fetchRandomQuestion(difficulty)
+    return Question.fetchRandomQuestion(difficulty)
       .then((question) => {
         if (!question) {
           throw new Error(errors.ERROR_NO_QUESTION);
         }
+        console.log(`Retrieved random question: ${JSON.stringify(question)}`)
         var sessionId = uuid();
         var sessionInfo = {
           sessionId,
           difficulty,
-          markdown: question.markdown,
+          question,
         };
 
         // ASH TODO: unsure if creating a Session in the database is required. Also confirm what is needed by editor and chat service
@@ -81,3 +86,5 @@ class Service {
       });
   }
 }
+
+module.exports = Service

@@ -1,17 +1,25 @@
 const { body, validationResult } = require("express-validator");
+const { uuid } = require("uuidv4");
 const {
   DIFFICULTY,
   HEADER_KEYS,
   HEADER_VALS,
 } = require("../constants/constants");
-const service = require("../services/service");
+const Service = require("../services/service");
+const Producer = require("../services/producer");
+const db = require("../services/db");
 
-const queueName = "";
-const connectionString = "";
 /* Defines the logic used in handling requests */
 class MatchingController {
   constructor() {
-    this.queue = new Queue(queueName, connectionString);
+    console.log("created controller");
+    this.service = new Service();
+  }
+
+  start() {
+    db.connect();
+    this.producer = new Producer("testProducer", "amqp://localhost");
+    this.producer.connect();
   }
 
   /**
@@ -20,32 +28,29 @@ class MatchingController {
    * @returns {Object} 200, 400 or 500 codes
    */
   handleSubmitMatchRequest(req, res) {
-    // ASH TODO: add request validation
-    console.log(JSON.stringify(this.requests));
+    // ASH TODO: REQUEST VALIDATION
+    console.log(req.body);
 
     var difficulty = req.body.difficulty;
     var userId = req.params.userId;
 
     // user params valid, accept request
-    service
+    this.service
       .storeMatchRequest(userId, difficulty)
       .then((userRequest) => {
-        if (!userRequest || userRequest.requestId) {
+        if (!userRequest || !userRequest.requestId) {
+          res.status(500).send("Unable to register your request");
           throw new Error("userRequest and/or requestId is null");
         }
         var requestId = userRequest.requestId;
-        res.status(200).send({ requestId });
+        res.status(202).send({ requestId });
         return userRequest;
       })
       .then((userRequest) => {
-        // if there is a match, publish an event to inform both the users
-        var io = req.app.get("io");
-
-        // check if a match can be found and publishe
-        this.handleMatchPublish(io, difficulty, userRequest);
+        this.handleMatchPublish(difficulty, userRequest)
       })
       .catch((err) => {
-        res.status(500).send(err);
+        console.log(err);
       });
   }
 
@@ -55,36 +60,33 @@ class MatchingController {
    * @param {Object} user1
    * @param {Object} user2
    */
-  handleMatchPublish(io, difficulty, user1) {
-    this.service
-      .checkForMatch()
-      .then((user2) => {
-        if (!user2) {
-          console.log(`No match for ${JSON.stringify(user1)} found`);
-          return;
-        }
+  handleMatchPublish(difficulty, user1) {
+    this.service.checkForMatch(difficulty, user1.requestId).then((user2) => {
+      if (!user2) {
+        console.log(`!ERROR: No match for ${JSON.stringify(user1)} found`);
+        return;
+      }
 
-        // if match found, pubish session information to both users through socket
-        return this.service
-          .createSession(difficulty, user1, user2)
-          .then((sessionInfo) => {
-            var requestId1 = user1.requestId;
-            var requestId2 = user2.requestId;
-            if (requestId1 && requestId2) {
-              console.log(
-                `emitted event to ${JSON.stringify(user1)} and ${JSON.stringify(
-                  user2
-                )}`
-              );
-              io.emit.to(requestId1, sessionInfo);
-              io.emit.to(requestId2, sessionInfo);
-            }
-          });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      // if match found, pubish session information to both users through socket
+      return this.service
+        .createSession(difficulty, user1, user2)
+        .then((sessionInfo) => {
+          var requestId1 = user1.requestId;
+          var requestId2 = user2.requestId;
+          if (requestId1 && requestId2) {
+            var payload = {
+              type: "INFORM_MATCH",
+              requestIds: [requestId1, requestId2],
+              sessionInfo,
+            };
+            this.producer.publish(payload);
+          } else {
+            console.log("!ERROR: missing request ids")
+          }
+        });
+    });
   }
 }
 
-module.exports = MatchingController;
+var matchingController = new MatchingController();
+module.exports = matchingController;

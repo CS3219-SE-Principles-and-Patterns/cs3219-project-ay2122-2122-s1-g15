@@ -12,7 +12,7 @@ schema.static("findMatch", function (difficulty, userId, requestId) {
     difficulty,
     requestId: { $ne: requestId },
     userId: { $ne: userId },
-    matchFound: true,
+    matchFound: false,
   }).exec();
 });
 

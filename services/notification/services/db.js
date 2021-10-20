@@ -10,10 +10,10 @@ class DbHandler {
         useUnifiedTopology: true,
       })
       .then((db) => {
-        console.log(">> Database connected");
+        console.log(">> SUCCESS: Database connected");
       })
       .catch((err) => {
-        console.log("!Database connection error: %s", err);
+        console.log(">> ERROR: Database connection error");
       });
   }
 }

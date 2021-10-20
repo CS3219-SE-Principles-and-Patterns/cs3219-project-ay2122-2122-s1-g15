@@ -29,6 +29,8 @@ const MatchingPage = () => {
   const [remainingTime, setRemainingTime] = React.useState(MATCH_DURATION);
   const [selected, setSelected] = React.useState(null);
   const [matchFound, setMatchFound] = React.useState(false);
+  const [requestId, setRequestId] = React.useState()
+  const [sessionInfo, setSessionInfo] = React.useState();
 
   // for selection view
   const handleSubmitMatchRequest = () => {
@@ -75,8 +77,24 @@ const MatchingPage = () => {
 
   const listenForMatch = () => {
     var socket = io("https://server-domain.com");
-
     // submit
+    // client-side
+    socket.on("connect", () => {
+      // emit the wait event and send the requestId along with it
+      console.log(socket.connected);
+      socket.emit("wait", {requestId})
+    });
+
+    // listen for server response
+    socket.on(`${requestId}`, (sessionInfo) => {
+      console.log(JSON.stringify(sessionInfo))
+      // ASH TODO
+      setSessionInfo(sessionInfo)
+    })
+
+    socket.on("disconnect", () => {
+      console.log(socket.id); // undefined
+    });
   }
 
   // timer hook
