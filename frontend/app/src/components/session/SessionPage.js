@@ -1,27 +1,40 @@
-import React from "react";
+import React, {useState} from "react";
 import { AiOutlineUser } from "react-icons/ai";
-import { Layout, Card, Button, Row, Col } from "antd";
+import { Layout, Modal, Button, Row, Col } from "antd";
 import ChatBox from "./chat/ChatBox";
 import Editor from "./editor/Editor";
 import QuestionBox from "./question/QuestionBox";
+import MatchingPage from "../matching/MatchingPage";
 import './SessionPage.css'
 
-const box = { border: "1px solid #000000" , padding: "8px 0", background: "white"};
+const box = { padding: "8px 0", background: "white"};
 // TODO: dynamically get from matching component
 const session_id = 2224;
 
-const handleExitSession = () => {
-  // TODO 
-  
-}
-
 const SessionPage = () => {
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+  
+  const handleOk = () => {
+    setIsModalVisible(false);
+    // TODO: Navigate to matching page
+  };
+  
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+  
   return (
+    <>
     <Layout>
       <div className="session-header">
       <Row gutter={10} style={{ height: "10vh", boxSizing: "border-box", margin: "0% 2%"}} justify="center" align="middle">
           <Col span={6} style={{ textAlign: "center" }}>
-            <div style={box}> Session Page Title</div>
+            <div style={box}>Session Page Title</div>
           </Col>
           <Col span={8} style={{ textAlign: "center" }}>
           </Col>
@@ -32,7 +45,7 @@ const SessionPage = () => {
             <div style={box}> <AiOutlineUser /> Peer's Name</div>
           </Col>
           <Col span={2} style={{ textAlign: "center" }}>
-            <Button onClick={() => handleExitSession()} style={{background: "#8B0000", color: "white"}}>
+            <Button onClick={() => showModal()} style={{background: "#8B0000", color: "white"}}>
               Exit Session
             </Button>
           </Col>
@@ -48,6 +61,11 @@ const SessionPage = () => {
           </Col>
       </div>
     </Layout>
+     <Modal title="Exit the session" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} okText="Yes">
+     <p>Are you sure you want to exit the session? Your peer will be here alone trying to solve the question :(</p>
+     <p>You will be redirected back to the matching page.</p>
+   </Modal>
+   </>
   );
 };
 
