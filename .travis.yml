@@ -1,0 +1,38 @@
+stage:
+  - test_editor
+  # - test_user_management
+  # - test_chat
+  # - test_matching
+  # - deploy
+
+language: node_js
+node_js:
+  - node
+services:
+  - mongodb
+
+jobs:
+  include:
+    - stage: test_editor
+      before_install: cd services/editor
+      install: npm install
+      script: npm run test
+
+    # - stage: test_user_management
+    #   before_install: cd services/user-management
+    #   install: npm install
+    #   script: npm run test
+
+    # - stage: test_chat
+    #   before_install: cd services/chat
+    #   install: npm install
+    #   script: npm run test
+
+    # - stage: test_matching
+    #   before_install: cd services/matching
+    #   install: npm install
+    #   script: npm run test
+
+    # - stage: deploy
+    #   install: npm install
+    #   script: serverless deploy
