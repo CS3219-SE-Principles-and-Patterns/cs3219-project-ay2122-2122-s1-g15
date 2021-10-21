@@ -40,8 +40,9 @@ pipelines:
     apiEndpoints:
       - api
     policies:
-      # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-      # - key-auth:
+      - auth:
+          - action:
+              baseUrl: 'https://example.com'
       - proxy:
           - action:
               serviceEndpoint: httpbin
@@ -50,8 +51,9 @@ pipelines:
     apiEndpoints:
       - chat
     policies:
-      # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-      # - key-auth:
+      - auth:
+          - action:
+              baseUrl: 'https://example.com'
       - proxy:
           - action:
               serviceEndpoint: chatService
@@ -71,8 +73,9 @@ pipelines:
     apiEndpoints:
       - matching
     policies:
-      # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-      # - key-auth:
+      - auth:
+          - action:
+              baseUrl: 'https://example.com'
       - proxy:
           - action:
               serviceEndpoint: matchingService
