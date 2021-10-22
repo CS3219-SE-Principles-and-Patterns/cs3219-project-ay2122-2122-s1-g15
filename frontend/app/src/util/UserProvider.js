@@ -2,7 +2,7 @@ import React, { useEffect, createContext } from "react";
 import Auth from "./Authentication";
 import Db from "./Database";
 
-export const UserContext = createContext({ user: null });
+export const UserContext = createContext({ user: null, setUser: () => {} });
 
 export default function UserProvider(props) {
   const [user, setUser] = React.useState(null);
@@ -10,7 +10,7 @@ export default function UserProvider(props) {
   useEffect(() => {
     Auth.observeAuthState(async (firebaseUser) => {
       if (firebaseUser == null) {
-        setUser(firebaseUser);
+        setUser({});
         return;
       }
 
@@ -23,6 +23,8 @@ export default function UserProvider(props) {
   }, []);
 
   return (
-    <UserContext.Provider value={user}>{props.children}</UserContext.Provider>
+    <UserContext.Provider value={{ user, setUser }}>
+      {props.children}
+    </UserContext.Provider>
   );
 }
