@@ -1,9 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Auth from "../../util/Authentication";
 import { useHistory } from "react-router-dom";
-import { Modal, Form, Input, Layout, Col, Row, Button, Space } from "antd";
+import {
+  Modal,
+  Form,
+  Input,
+  Layout,
+  Col,
+  Row,
+  Button,
+  Space,
+  notification,
+} from "antd";
 import { PasswordInput } from "antd-password-input-strength";
 import logo from "./../../images/PeerPrep.png";
+import {UserContext} from "../../util/UserProvider";
 
 const layout = {
   labelCol: { span: 8 },
@@ -15,6 +26,7 @@ export default function Register() {
   const [form] = Form.useForm();
   const [disabledRegister, setDisabledRegister] = useState(true);
   const { Content } = Layout;
+  const userContext = useContext(UserContext);
 
   const handleFormChange = () => {
     setDisabledRegister(
@@ -28,20 +40,36 @@ export default function Register() {
 
     Auth.signUp(email, password, name)
       .then(() => {
+        notification["success"]({
+          message: "Account created!",
+          description: "Your PeerPrep account has been successfully created!",
+        });
         history.push("/");
       })
       .catch((error) => {
-          console.log("Error while signing up: ", error);
-          showErrorRegisteringModal(error.message);
-        }
-      );
+        console.log("Error while signing up: ", error);
+        showErrorRegisteringModal(error.message);
+      });
   };
+
+  useEffect(() => {
+    if (userContext?.user?.data != null) {
+        Modal.warning({
+          title: "Warning",
+          content: "Please log out of your account before registering for another account.",
+          onOk() {
+            history.push('/')
+          },
+        });
+
+    }
+  }, [userContext]);
 
   const showErrorRegisteringModal = (errorMessage) => {
     Modal.error({
-      title: 'Unable to create account',
+      title: "Unable to create account",
       content: errorMessage,
-    })
+    });
   };
 
   return (

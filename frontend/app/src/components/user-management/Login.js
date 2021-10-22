@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import Auth from "../../util/Authentication";
 import { useHistory } from "react-router-dom";
 import { Modal, Form, Input, Layout, Col, Row, Button, Space } from "antd";
 import logo from "./../../images/PeerPrep.png";
+import { UserContext } from "../../util/UserProvider";
 
 const layout = {
   labelCol: { span: 8 },
@@ -14,6 +15,7 @@ export default function Login() {
   const [form] = Form.useForm();
   const [disabledLogin, setDisabledLogin] = useState(true);
   const { Content } = Layout;
+  const userContext = useContext(UserContext);
 
   const handleFormChange = () => {
     setDisabledLogin(
@@ -26,8 +28,9 @@ export default function Login() {
     const { email, password } = values;
 
     Auth.signIn(email, password)
-      .then(() => {
-        history.push("/");
+      .then((credential) => {
+        userContext.setUser(credential?.user);
+        history.go(0);
       })
       .catch((error) => {
         console.log("Error while logging in: ", error);
@@ -35,11 +38,17 @@ export default function Login() {
       });
   };
 
+  useEffect(() => {
+    if (userContext?.user?.data != null) {
+      history.push("/");
+    }
+  }, [userContext]);
+
   const showErrorLoggingInModal = (errorMessage) => {
     Modal.error({
-      title: 'Unable to log into account',
+      title: "Unable to log into account",
       content: errorMessage,
-    })
+    });
   };
 
   return (
