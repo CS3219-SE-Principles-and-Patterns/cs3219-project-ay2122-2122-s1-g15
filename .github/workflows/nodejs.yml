@@ -2,9 +2,9 @@ name: Node.js CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
 jobs:
   test_editor:
@@ -16,20 +16,20 @@ jobs:
         # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-        cache-dependency-path: services/editor/package-lock.json
-    - name: Install dependencies and run tests
-      run: |
-        cd services/editor
-        npm install
-        npm run test
-      env:
-        CI: true
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: services/editor/package-lock.json
+      - name: Install dependencies and run tests
+        run: |
+          cd services/editor
+          npm install
+          npm run test
+        env:
+          CI: true
 
   # test_user_management:
   #   runs-on: windows-latest
@@ -55,29 +55,29 @@ jobs:
   #     env:
   #       CI: true
 
-  # test_chat:
-  #   runs-on: windows-latest
+  test_chat:
+    runs-on: windows-latest
 
-  #   strategy:
-  #     matrix:
-  #       node-version: [14.x]
-  #       # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
+    strategy:
+      matrix:
+        node-version: [14.x]
+        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
-  #   steps:
-  #   - uses: actions/checkout@v2
-  #   - name: Use Node.js ${{ matrix.node-version }}
-  #     uses: actions/setup-node@v2
-  #     with:
-  #       node-version: ${{ matrix.node-version }}
-  #       cache: 'npm'
-  #       cache-dependency-path: services/chat/package-lock.json
-  #   - name: Install dependencies and run tests
-  #     run: |
-  #       cd services/chat
-  #       npm install
-  #       npm run test
-  #     env:
-  #       CI: true
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v2
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+          cache-dependency-path: services/chat/package-lock.json
+      - name: Install dependencies and run tests
+        run: |
+          cd services/chat
+          npm install
+          npm run test
+        env:
+          CI: true
 
   # test_matching:
   #   runs-on: windows-latest
