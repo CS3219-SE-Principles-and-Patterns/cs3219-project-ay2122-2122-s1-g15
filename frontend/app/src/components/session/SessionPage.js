@@ -1,6 +1,6 @@
-import React from "react";
+import React, {useState} from "react";
 import { AiOutlineUser } from "react-icons/ai";
-import { Layout, Card, Button, Row, Col } from "antd";
+import { Layout, Modal, Button, Row, Col } from "antd";
 import ChatBox from "./chat/ChatBox";
 import Editor from "./editor/Editor";
 import axios from "axios";
@@ -8,7 +8,6 @@ import QuestionBox from "./question/QuestionBox";
 import "./SessionPage.css";
 
 const box = {
-  border: "1px solid #000000",
   padding: "8px 0",
   background: "white",
 };
@@ -34,7 +33,25 @@ const handleExitSession = (session_id) => {
 };
 
 const SessionPage = () => {
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+  
+  const handleOk = () => {
+    setIsModalVisible(false);
+    // TODO: Navigate to matching page
+    handleExitSession(session_id)
+  };
+  
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+  
   return (
+    <>
     <Layout>
       <div className="session-header">
         <Row
@@ -44,7 +61,7 @@ const SessionPage = () => {
           align="middle"
         >
           <Col span={6} style={{ textAlign: "center" }}>
-            <div style={box}> Session Page Title</div>
+            <div style={box}>Session Page Title</div>
           </Col>
           <Col span={8} style={{ textAlign: "center" }}></Col>
           <Col span={4} style={{ textAlign: "center" }}>
@@ -60,10 +77,7 @@ const SessionPage = () => {
             </div>
           </Col>
           <Col span={2} style={{ textAlign: "center" }}>
-            <Button
-              onClick={() => handleExitSession(session_id)}
-              style={{ background: "#8B0000", color: "white" }}
-            >
+            <Button onClick={() => showModal()} style={{background: "#8B0000", color: "white"}}>
               Exit Session
             </Button>
           </Col>
@@ -79,6 +93,11 @@ const SessionPage = () => {
         </Col>
       </div>
     </Layout>
+     <Modal title="Exit the session" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel} okText="Yes">
+     <p>Are you sure you want to exit the session? Your peer will be here alone trying to solve the question :(</p>
+     <p>You will be redirected back to the matching page.</p>
+   </Modal>
+   </>
   );
 };
 
