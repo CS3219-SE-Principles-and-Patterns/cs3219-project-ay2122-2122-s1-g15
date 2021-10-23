@@ -5,19 +5,9 @@ import ChatBox from "./chat/ChatBox";
 import Editor from "./editor/Editor";
 import axios from "axios";
 import QuestionBox from "./question/QuestionBox";
-<<<<<<< HEAD
-import MatchingPage from "../matching/MatchingPage";
-import './SessionPage.css'
-
-const box = { padding: "8px 0", background: "white"};
-// TODO: dynamically get from matching component
-const session_id = 2224;
-
-=======
 import "./SessionPage.css";
 
 const box = {
-  border: "1px solid #000000",
   padding: "8px 0",
   background: "white",
 };
@@ -42,7 +32,6 @@ const handleExitSession = (session_id) => {
   window.location.href = "/";
 };
 
->>>>>>> 08b22fcd2ad79b2bc7eb54657221dbcaef4768fe
 const SessionPage = () => {
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -54,6 +43,7 @@ const SessionPage = () => {
   const handleOk = () => {
     setIsModalVisible(false);
     // TODO: Navigate to matching page
+    handleExitSession(session_id)
   };
   
   const handleCancel = () => {
@@ -87,14 +77,7 @@ const SessionPage = () => {
             </div>
           </Col>
           <Col span={2} style={{ textAlign: "center" }}>
-<<<<<<< HEAD
             <Button onClick={() => showModal()} style={{background: "#8B0000", color: "white"}}>
-=======
-            <Button
-              onClick={() => handleExitSession(session_id)}
-              style={{ background: "#8B0000", color: "white" }}
-            >
->>>>>>> 08b22fcd2ad79b2bc7eb54657221dbcaef4768fe
               Exit Session
             </Button>
           </Col>
