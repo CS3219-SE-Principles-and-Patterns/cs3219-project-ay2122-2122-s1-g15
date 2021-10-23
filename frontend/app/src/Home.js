@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
-import { Layout, Col, Row, Button, Space } from "antd";
+import { Layout, Col, Row, Button, Space, Spin } from "antd";
 import logo from "./images/PeerPrep.png";
 import { UserContext } from "./util/UserProvider";
 
 const { Content } = Layout;
 
 export default function Home() {
-  const user = useContext(UserContext);
-  const loggedIn = user?.data?.email != null;
+  const userContext = useContext(UserContext);
+  const loggedIn = userContext?.user?.data?.email != null;
 
   return (
     <Layout className="layout" style={{ minHeight: "100vh" }}>
@@ -28,7 +28,7 @@ export default function Home() {
           <h3>
             The best platform in helping you to prepare for technical interviews
           </h3>
-          {!loggedIn && (
+          {userContext?.user != undefined && !loggedIn && (
             <Row align="center">
               <Space>
                 <Button type="primary" href="/register">
@@ -39,6 +39,11 @@ export default function Home() {
                 </Button>
               </Space>
             </Row>
+          )}
+          {userContext?.user == undefined && (
+            <Space style={{ marginTop: 16 }}>
+              <Spin size="large" />
+            </Space>
           )}
         </Col>
       </Content>

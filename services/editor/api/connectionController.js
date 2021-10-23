@@ -70,56 +70,37 @@ class ConnectionController {
   }
 
   delete(req, res) {
-    var found = false;
-    var query = Connection.find({ session_id: req.params.session_id });
-    query.exec(function (err, connection) {
+    console.log("deleting connection entry...");
+    var delete_query = Connection.findOneAndDelete({
+      session_id: req.params.session_id,
+    });
+    delete_query.exec(function (err, result) {
       if (err) {
         return res.status(400).json({
           status: "error",
           message: err,
         });
       }
-      if (connection.length < 1) {
+      if (!result || result["deletedCount"] < 1) {
         return res.status(400).json({
           status: "error",
-          message: "No connections found!",
+          message: "Session ID not found!",
         });
       }
-      var document_key = connection[0]["document_key"];
-      console.log(document_key);
+      var document_key = result["document_key"];
       try {
         service.remove_document(document_key);
-        found = true;
       } catch (err) {
-        res.status(400).json({
+        return res.status(400).json({
           status: "error",
           message: err,
         });
       }
-    });
-    if (found) {
-      var delete_query = Connection.find({
-        session_id: req.params.session_id,
-      }).deleteMany();
-      delete_query.exec(function (err, result) {
-        if (err) {
-          return res.status(400).json({
-            status: "error",
-            message: err,
-          });
-        }
-        if (result["deletedCount"] < 1) {
-          return res.status(400).json({
-            status: "error",
-            message: "Session ID not found!",
-          });
-        }
-        res.json({
-          message: "Connection deleted",
-          data: result,
-        });
+      res.json({
+        message: "Connection deleted",
+        data: result,
       });
-    }
+    });
   }
 
   retrieve(req, res) {
