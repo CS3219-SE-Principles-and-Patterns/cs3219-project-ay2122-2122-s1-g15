@@ -22,6 +22,7 @@ io.use((socket, next) => {
   // ASH TODO: middleware for authentication using user jwt token
   // Possible call required to user management service
   const token = socket.handshake.auth.token;
+  console.log(token)
   /*
    const err = new Error("not authorized");
   err.data = { content: "Please retry later" }; // additional details

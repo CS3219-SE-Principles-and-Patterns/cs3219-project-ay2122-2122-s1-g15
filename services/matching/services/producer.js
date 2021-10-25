@@ -15,13 +15,11 @@ class Producer {
     }
     amqp.connect(this.url, (err, conn) => {
         if (err) {
-          console.log(err);
           throw err;
         }
   
         conn.createChannel((err, ch) => {
           if (err) {
-            console.log(err)
             throw err
           }
           console.log(">> Connected to RMQ");

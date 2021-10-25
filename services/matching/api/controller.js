@@ -12,13 +12,12 @@ const db = require("../services/db");
 /* Defines the logic used in handling requests */
 class MatchingController {
   constructor() {
-    console.log("created controller");
     this.service = new Service();
   }
 
   start() {
     db.connect();
-    this.producer = new Producer("testProducer", "amqp://localhost");
+    this.producer = new Producer("testProducer", "amqp://127.0.0.1:5672");
     this.producer.connect();
   }
 
@@ -32,11 +31,11 @@ class MatchingController {
     console.log(req.body);
 
     var difficulty = req.body.difficulty;
-    var userId = req.params.userId;
+    var user = req.body.user;
 
     // user params valid, accept request
     this.service
-      .storeMatchRequest(userId, difficulty)
+      .storeMatchRequest(user, difficulty)
       .then((userRequest) => {
         if (!userRequest || !userRequest.requestId) {
           res.status(500).send("Unable to register your request");
@@ -61,7 +60,7 @@ class MatchingController {
    * @param {Object} user2
    */
   handleMatchPublish(difficulty, user1) {
-    this.service.checkForMatch(difficulty, user1.requestId).then((user2) => {
+    this.service.checkForMatch(difficulty, user1).then((user2) => {
       if (!user2) {
         console.log(`!ERROR: No match for ${JSON.stringify(user1)} found`);
         return;

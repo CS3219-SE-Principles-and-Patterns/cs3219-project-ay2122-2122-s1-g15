@@ -14,11 +14,11 @@ class Service {
    * @param {*} userId
    * @returns Promise
    */
-  storeMatchRequest(userId, difficulty) {
+  storeMatchRequest(user, difficulty) {
     var requestId = uuid();
     var matchRequest = new MatchRequest({
       requestId,
-      userId,
+      user,
       difficulty,
     });
     return matchRequest
@@ -40,14 +40,16 @@ class Service {
    * @param {string} requestId
    * @returns Promise
    */
-  checkForMatch(difficulty, requestId) {
-    return MatchRequest.findMatch(difficulty, requestId)
+  checkForMatch(difficulty, userRequest) {
+    return MatchRequest.findMatch(difficulty, userRequest)
       .then((match) => {
         if (!match) {
           console.log("No match found")
           return null;
         }
         console.log(`Match found: ${match}`)
+        userRequest.matchFound = true
+        userRequest.save()
         return match;
       })
       .catch((err) => {
@@ -71,10 +73,12 @@ class Service {
         }
         console.log(`Retrieved random question: ${JSON.stringify(question)}`)
         var sessionId = uuid();
+        var usernames = [user1.user.username, user2.user.username]
         var sessionInfo = {
           sessionId,
           difficulty,
           question,
+          usernames
         };
 
         // ASH TODO: unsure if creating a Session in the database is required. Also confirm what is needed by editor and chat service

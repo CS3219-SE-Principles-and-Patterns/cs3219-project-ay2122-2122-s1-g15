@@ -6,7 +6,7 @@ class NotificationController {
   }
 
   start() {
-    var consumer = new Consumer("testQueue", "amqp://localhost")
+    var consumer = new Consumer("testQueue", "amqp://127.0.0.1:5672")
     consumer.registerHandler(this)
     consumer.connect()
   }
