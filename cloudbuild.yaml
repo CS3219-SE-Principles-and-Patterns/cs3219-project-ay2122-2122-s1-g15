@@ -52,6 +52,6 @@ steps:
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
     # Push the image to Google Container Registry with the latest tag
 images: [
-  'gcr.io/peerprep-2d654/peerprep-client:latest'
+  'gcr.io/peerprep-2d654/peerprep-client:latest',
   'gcr.io/peerprep-2d654/peerprep-chat:latest'
 ]
