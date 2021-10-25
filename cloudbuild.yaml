@@ -1,0 +1,39 @@
+steps:
+  # Step 1
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker pull gcr.io/peerprep-2d654/peerprep-client:latest || exit 0'
+    ]
+  # Step 2
+  - name: gcr.io/cloud-builders/docker
+    args: [
+      'build',
+      '-t',
+      'gcr.io/peerprep-2d654/peerprep-client:latest',
+      '.'
+    ]
+    dir: 'peerprep-client'
+  # Step 3
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'k8s/']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+  # Step 4
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: [
+      'set',
+      'image',
+      'deployment',
+      'peerprep-client',
+      'peerprep-client=gcr.io/peerprep-2d654/peerprep-client:latest'
+    ]
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+    # Push the image to Google Container Registry with the latest tag
+images: [
+  'gcr.io/peerprep-2d654/peerprep-client:latest'
+]
