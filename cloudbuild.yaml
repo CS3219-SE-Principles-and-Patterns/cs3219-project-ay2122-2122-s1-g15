@@ -7,7 +7,7 @@ steps:
       'docker pull gcr.io/peerprep-2d654/peerprep-client:latest || exit 0'
     ]
   # Step 2
-  - name: gcr.io/cloud-builders/docker
+  - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
       '-t',
