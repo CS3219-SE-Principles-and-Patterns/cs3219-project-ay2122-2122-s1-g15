@@ -10,3 +10,16 @@ spec:
       port: 80
       targetPort: 3000
   type: LoadBalancer
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: peerprep-chat
+spec:
+  selector:
+    run: peerprep-chat
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 5000
+  type: LoadBalancer
