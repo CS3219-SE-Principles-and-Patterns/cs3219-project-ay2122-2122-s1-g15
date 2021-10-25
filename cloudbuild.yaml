@@ -17,7 +17,7 @@ steps:
     dir: 'frontend/app'
   # Step 3: Apply k8s configuration
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', '/kubernetes/']
+    args: ['apply', '-f', 'kubernetes/']
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
