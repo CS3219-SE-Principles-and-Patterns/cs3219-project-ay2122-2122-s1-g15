@@ -15,7 +15,7 @@ spec:
         run: peerprep-client
     spec:
       containers:
-        - image: gcr.io/peerprep-2d654/peerprep-client:latest
+        - image: gcr.io/peerprep-2d654/peerprep-client:latest #Replace [PROJECT-ID] accordingly
           name: peerprep-client
           ports:
             - containerPort: 3000
