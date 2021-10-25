@@ -7,10 +7,12 @@ import SessionPage from "./components/session/SessionPage";
 import Register from "./components/user-management/Register";
 import Login from "./components/user-management/Login";
 import UserProvider from "./util/UserProvider";
+import SessionProvider from "./util/SessionProvider";
 
 function App() {
   return (
     <UserProvider>
+    <SessionProvider>
       <Router>
         <div id="root">
           <Header />
@@ -38,6 +40,7 @@ function App() {
           </Switch>
         </div>
       </Router>
+      </SessionProvider>
     </UserProvider>
   );
 }

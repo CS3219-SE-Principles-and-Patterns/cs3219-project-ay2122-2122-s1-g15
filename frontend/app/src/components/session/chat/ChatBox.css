@@ -1,24 +1,30 @@
 .card {
-    height: 74%;
-    padding: 0;
+  height: 74%;
+  padding: 0;
 }
 .chat-messages {
-    overflow-y: auto;
-    width: 100%;
-    padding: 24px;
-    height: 56vh;
+  overflow-y: auto;
+  width: 100%;
+  padding: 12px;
+  height: 58vh;
 }
 .chat-input {
-    width: 100%;
+  width: 100%;
 }
 .input-container {
-    display: flex;
-    padding: 12px;
-    position: absolute;
-    bottom: 2px;
-    width: 100%;
-    align-items: center;
+  display: flex;
+  padding: 12px;
+  position: absolute;
+  bottom: 2px;
+  width: 100%;
+  align-items: center;
 }
 .ant-card-body {
-    padding: 0px;
+  padding: 0px;
+}
+
+.ant-list-split .ant-list-item {
+  border-bottom: 0px;
+  display: flow-root;
+  padding: 0px;
 }

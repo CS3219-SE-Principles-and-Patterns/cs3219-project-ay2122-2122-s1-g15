@@ -1,22 +1,31 @@
 .sent-msg {
-    margin: 8px auto;
-    float: right;
-    width: 75%;
-    background: #1890ff;
-    padding: 5px 12px;
-    text-align: left;
-    color: #fff;
-    position:relative;
-    border-radius: 10px;
+  margin: 8px auto;
+  float: right;
+  background: #1890ff;
+  padding: 5px 12px;
+  text-align: left;
+  color: #fff;
+  position: static;
+  border-radius: 10px;
 }
 .received-msg {
-    margin: 8px auto;
-    float: left;
-    width: 75%;
-    background: #ebebeb;
-    padding: 5px 12px;
-    text-align: left;
-    color: rgba(0, 0, 0, 0.85);
-    position:relative;
-    border-radius: 10px;
+  margin: 8px auto;
+  float: left;
+  background: #ebebeb;
+  padding: 5px 12px;
+  text-align: left;
+  color: rgba(0, 0, 0, 0.85);
+  position: static;
+  border-radius: 10px;
+}
+.server-msg {
+  margin: 8px auto;
+  color: #8d8d8d;
+  text-align: center;
+  position: static;
+  width: 100%;
+}
+p {
+  word-break: break-all;
+  margin-bottom: 0;
 }
