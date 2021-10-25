@@ -64,7 +64,8 @@ const ChatBox = () => {
     <Card title="Chat" className="card">
       <div className="chat-container">
         <div className="chat-messages">
-          {chat.map((payload, index) => {
+          { chat.length === 0 ? <p style={{color: "#cccccc", textAlign: "center"}}><i>This is the beginning of your conversation. Say hi!</i></p>
+          : chat.map((payload, index) => {
             return <ChatBubble key={index} msg={payload.message} isSender={payload.sender === username} />
           })}
         </div>
