@@ -14,7 +14,7 @@ steps:
       'gcr.io/peerprep-2d654/peerprep-client:latest',
       '.'
     ]
-    dir: 'peerprep-client'
+    dir: 'frontend/app'
   # Step 3
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'k8s/']
