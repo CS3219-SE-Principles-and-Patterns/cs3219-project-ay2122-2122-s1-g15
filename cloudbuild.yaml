@@ -17,7 +17,7 @@ steps:
     dir: 'frontend/app'
   # Step 3
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['apply', '-f', 'k8s/']
+    args: ['apply', '-f', './']
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
