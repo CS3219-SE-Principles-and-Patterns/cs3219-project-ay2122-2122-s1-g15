@@ -1,12 +1,12 @@
 steps:
-  # Step 1: Pull existing docker image from google container registry
+  # Step 1: Pull existing docker client image from google container registry
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [
       '-c',
       'docker pull gcr.io/peerprep-2d654/peerprep-client:latest || exit 0'
     ]
-  # Step 2: Build and push updated docker image to google container registry
+  # Step 2: Build and push updated docker client image to google container registry
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
@@ -15,20 +15,37 @@ steps:
       '.'
     ]
     dir: 'frontend/app'
-  # Step 3: Apply k8s configuration
+  # Step 3: Pull existing docker chat image from google container registry
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker pull gcr.io/peerprep-2d654/peerprep-chat:latest || exit 0'
+    ]
+  # Step 4: Build and push updated docker chat image to google container registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'gcr.io/peerprep-2d654/peerprep-chat:latest',
+      '.'
+    ]
+    dir: 'services/chat'
+  # Step 5: Apply k8s configuration
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'kubernetes/']
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
-  # Step 4: Point cluster deployment to docker image in google container registry - k8s will settle rest of the setup
+  # Step 6: Point cluster deployment to docker image in google container registry - k8s will settle rest of the setup
   - name: 'gcr.io/cloud-builders/kubectl'
     args: [
       'set',
       'image',
       'deployment',
       'peerprep-client',
-      'peerprep-client=gcr.io/peerprep-2d654/peerprep-client:latest'
+      'peerprep-client=gcr.io/peerprep-2d654/peerprep-client:latest',
+      'peerprep-client=gcr.io/peerprep-2d654/peerprep-chat:latest'
     ]
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
@@ -36,4 +53,5 @@ steps:
     # Push the image to Google Container Registry with the latest tag
 images: [
   'gcr.io/peerprep-2d654/peerprep-client:latest'
+  'gcr.io/peerprep-2d654/peerprep-chat:latest'
 ]
