@@ -26,7 +26,8 @@ class NotificationController {
 
   handleMatchPublish(msg) {
     for (var requestId of msg.requestIds) {
-      this.io.to(requestId).emit(msg.sessionInfo)
+      // this.io.to(requestId).emit(msg.sessionInfo)
+      this.io.emit(requestId, msg.sessionInfo)
       console.log(`> Emitted event to ${requestId} with payload: ${JSON.stringify(msg.sessionInfo)}`)
     }
   }

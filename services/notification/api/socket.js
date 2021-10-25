@@ -13,7 +13,6 @@ class SocketController {
     socket.on("disconnect", (payload) => {
       console.log("a user disconnected");
       console.log(payload);
-      // ASH TODO: recovery? how to inform another user?
     });
   }
 }

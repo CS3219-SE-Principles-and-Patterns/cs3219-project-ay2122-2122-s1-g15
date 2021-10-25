@@ -40,7 +40,7 @@ const SelectionView = (props) => {
                       style={selectedGridStyle}
                       onClick={() => handleClick(index)}
                     >
-                      {item.title}
+                      {item.value}
                     </Card.Grid>
                   );
                 }
@@ -50,7 +50,7 @@ const SelectionView = (props) => {
                     style={gridStyle}
                     onClick={() => handleClick(index)}
                   >
-                    {item.title}
+                    {item.value}
                   </Card.Grid>
                 );
               })}

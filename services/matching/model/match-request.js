@@ -10,14 +10,14 @@ const schema = new mongoose.Schema({
 
 schema.static("findMatch", function (difficulty, userRequest) {
   var requestId = userRequest.requestId;
-  var userId = userRequest.user.userId;
+  var uid = userRequest.user.uid;
   var update = { matchFound: true };
   var dt = new Date()
   return this.findOneAndUpdate(
     {
       difficulty,
       requestId: { $ne: requestId },
-      "user.userId": {$ne: userId},
+      "user.uid": {$ne: uid},
       matchFound: false,
       createdAt: {
         $lte: dt,

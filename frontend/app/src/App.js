@@ -9,6 +9,9 @@ import Login from "./components/user-management/Login";
 import UserProvider from "./util/UserProvider";
 
 function App() {
+  const switchToSession = (sessionInfo) => {
+    
+  }
   return (
     <UserProvider>
       <Router>
@@ -21,7 +24,7 @@ function App() {
             </Route>
 
             <Route exact path="/matching">
-              <MatchingPage />
+              <MatchingPage switchToSession={switchToSession}/>
             </Route>
 
             <Route exact path="/session">
