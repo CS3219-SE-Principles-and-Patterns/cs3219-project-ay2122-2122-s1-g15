@@ -6,7 +6,6 @@ services:
       context: services/matching
       dockerfile: Dockerfile
     image: matching
-    command: /usr/src/app/node_modules/.bin/nodemon app.js
     ports:
       - "4000:4000"
     depends_on:
@@ -40,7 +39,6 @@ services:
       context: api-gateway
       dockerfile: Dockerfile
     image: matching
-    command: /usr/src/app/node_modules/.bin/nodemon app.js
     ports:
       - "8080:8080"
     networks:
