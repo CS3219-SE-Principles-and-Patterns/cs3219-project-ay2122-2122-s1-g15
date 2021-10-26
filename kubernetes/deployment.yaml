@@ -41,3 +41,25 @@ spec:
           name: peerprep-chat
           ports:
             - containerPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: peerprep-editor
+  name: peerprep-editor
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: peerprep-editor
+  template:
+    metadata:
+      labels:
+        run: peerprep-editor
+    spec:
+      containers:
+        - image: gcr.io/peerprep-2d654/peerprep-editor:latest #Replace [PROJECT-ID] accordingly
+          name: peerprep-editor
+          ports:
+            - containerPort: 6001
