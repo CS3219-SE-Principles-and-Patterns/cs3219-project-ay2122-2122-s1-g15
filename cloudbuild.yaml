@@ -81,7 +81,7 @@ steps:
       'image',
       'deployment',
       'peerprep-editor',
-      'peerprep-client=gcr.io/peerprep-2d654/peerprep-editor:latest'
+      'peerprep-editor=gcr.io/peerprep-2d654/peerprep-editor:latest'
     ]
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
