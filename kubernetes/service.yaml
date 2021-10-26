@@ -22,7 +22,8 @@ spec:
     - protocol: TCP
       port: 4000
       targetPort: 4000
-  type: LoadBalancer
+      nodePort: 31000
+  type: NodePort
 ---
 kind: Service
 apiVersion: v1
@@ -35,7 +36,8 @@ spec:
     - protocol: TCP
       port: 5000
       targetPort: 5000
-  type: LoadBalancer
+      nodePort: 32000
+  type: NodePort
 ---
 kind: Service
 apiVersion: v1
@@ -48,4 +50,5 @@ spec:
     - protocol: TCP
       port: 6001
       targetPort: 6001
-  type: LoadBalancer
+      nodePort: 33000
+  type: NodePort
