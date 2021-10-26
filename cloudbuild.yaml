@@ -1,12 +1,12 @@
 steps:
-  # Step 1: Pull existing docker image from google container registry
+  # Pull existing docker image from google container registry
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [
       '-c',
       'docker pull gcr.io/peerprep-2d654/peerprep-client:latest || exit 0'
     ]
-  # Step 2: Build and push updated docker image to google container registry
+  # Build and push updated docker image to google container registry
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
@@ -15,6 +15,48 @@ steps:
       '.'
     ]
     dir: 'frontend/app'
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker pull gcr.io/peerprep-2d654/peerprep-matching:latest || exit 0'
+    ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'gcr.io/peerprep-2d654/peerprep-matching:latest',
+      '.'
+    ]
+    dir: 'services/matching'
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker pull gcr.io/peerprep-2d654/peerprep-chat:latest || exit 0'
+    ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'gcr.io/peerprep-2d654/peerprep-chat:latest',
+      '.'
+    ]
+    dir: 'services/chat'
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker pull gcr.io/peerprep-2d654/peerprep-editor:latest || exit 0'
+    ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'gcr.io/peerprep-2d654/peerprep-editor:latest',
+      '.'
+    ]
+    dir: 'services/editor'
   # Step 3: Apply k8s configuration
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'kubernetes/']

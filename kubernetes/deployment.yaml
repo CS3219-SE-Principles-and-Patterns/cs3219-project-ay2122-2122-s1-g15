@@ -24,6 +24,28 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   labels:
+    run: peerprep-matching
+  name: peerprep-matching
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: peerprep-matching
+  template:
+    metadata:
+      labels:
+        run: peerprep-matching
+    spec:
+      containers:
+        - image: gcr.io/peerprep-2d654/peerprep-matching:latest #Replace [PROJECT-ID] accordingly
+          name: peerprep-matching
+          ports:
+            - containerPort: 4000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
     run: peerprep-chat
   name: peerprep-chat
 spec:
