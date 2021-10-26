@@ -75,6 +75,17 @@ steps:
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: [
+      'set',
+      'image',
+      'deployment',
+      'peerprep-editor',
+      'peerprep-client=gcr.io/peerprep-2d654/peerprep-editor:latest'
+    ]
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
     # Push the image to Google Container Registry with the latest tag
 images: [
   'gcr.io/peerprep-2d654/peerprep-client:latest'
