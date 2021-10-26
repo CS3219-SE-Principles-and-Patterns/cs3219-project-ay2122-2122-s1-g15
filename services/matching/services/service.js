@@ -1,20 +1,16 @@
 /* Implements pure business logic, calls database if needed, etc. */
-const { DIFFICULTY } = require("../constants/constants");
 const { uuid } = require("uuidv4");
 const MatchRequest = require("../model/match-request");
 const errors = require("../errors/errors");
 const Question = require("../model/question");
-const mongoose = require("mongoose")
 class Service {
-  constructor() {}
-
   /**
    * Stores the match request
    * @param {*} difficulty
    * @param {*} userId
    * @returns Promise
    */
-  storeMatchRequest(user, difficulty) {
+  static storeMatchRequest(user, difficulty) {
     var requestId = uuid();
     var matchRequest = new MatchRequest({
       requestId,
@@ -24,7 +20,7 @@ class Service {
     return matchRequest
       .save()
       .then((matchRequest) => {
-        console.log(matchRequest)
+        console.log(matchRequest);
         return matchRequest;
       })
       .catch((err) => {
@@ -40,32 +36,53 @@ class Service {
    * @param {string} requestId
    * @returns Promise
    */
-  checkForMatch(difficulty, userRequest) {
-    return MatchRequest.findMatch(difficulty, userRequest)
-      .then((match) => {
-        if (!match) {
-          console.log("No match found")
+  static checkForMatch(requestId) {
+    return MatchRequest.findUser(requestId)
+      .then((userReq) => {
+        if (userReq && userReq.match) {
+          return MatchRequest.findById(userReq.match)
+          .exec().then(otherReq => {
+            return [userReq, otherReq]
+          })
+        }
+        if (!userReq) {
           return null;
         }
-        console.log(`Match found: ${match}`)
-        userRequest.matchFound = true
-        userRequest.save()
-        return match;
+
+        return MatchRequest.findMatch(userReq)
+          .then((otherReq) => {
+            if (!otherReq) {
+              return null;
+            }
+
+            console.log(`Match found for ${requestId}: ${JSON.stringify(otherReq)}`)
+
+            return this.createSession(userReq.difficulty)
+            .then(sessionInfo => {
+              userReq.match = otherReq._id;
+              userReq.sessionInfo = sessionInfo;
+              otherReq.match = userReq._id;
+              otherReq.sessionInfo = sessionInfo;
+              userReq.save();
+              otherReq.save();
+              return [userReq, otherReq]
+            })
+          })
+          .catch((err) => {
+            throw err;
+          });
       })
       .catch((err) => {
-        console.log(err);
-        throw new Error(errors.ERROR_MATCHING);
+        throw new Error(errors.ERROR_MATCHING_USER);
       });
   }
 
   /**
    * Creates a session for the two given users by fetching a question for the session
    * @param {*} difficulty
-   * @param {*} user1
-   * @param {*} user2
    * @returns Promise containing the sessionInfo
    */
-  createSession(difficulty, user1, user2) {
+  static createSession(difficulty) {
     return Question.fetchRandomQuestion(difficulty)
       .then((question) => {
         if (!question) {
@@ -73,15 +90,11 @@ class Service {
         }
         console.log(`Retrieved random question: ${JSON.stringify(question)}`)
         var sessionId = uuid();
-        var usernames = [user1.user.username, user2.user.username]
         var sessionInfo = {
           sessionId,
           difficulty,
-          question,
-          usernames
+          question: question.markdown,
         };
-
-        // ASH TODO: unsure if creating a Session in the database is required. Also confirm what is needed by editor and chat service
         return sessionInfo;
       })
       .catch((err) => {
@@ -91,4 +104,4 @@ class Service {
   }
 }
 
-module.exports = Service
+module.exports = Service;

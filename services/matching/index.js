@@ -5,6 +5,10 @@ const http = require("http");
 const routes = require("./api/routes");
 const SocketController = require("./api/socket");
 const matchingController = require("./api/controller");
+const db = require("./services/db");
+
+// start database
+db.connect();
 
 // create express app
 const port = 4000;
@@ -23,9 +27,26 @@ app.use(function (req, res, next) {
 });
 app.use("/api", routes);
 
-// start controller
-matchingController.start();
+// socket.io
+var httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: "*",
+  },
+  pingInterval: 3000,
+  pingTimeout: 60000
+});
 
-app.listen(port, function () {
+
+matchingController.start(io)
+
+io.on("connection", (socket) => {
+  console.log("> a user connected");
+  SocketController.onWait(socket);
+  // SocketController.onDisconnect(socket);
+});
+
+
+httpServer.listen(port, function () {
   console.log(">> Server started on port: " + port);
 });

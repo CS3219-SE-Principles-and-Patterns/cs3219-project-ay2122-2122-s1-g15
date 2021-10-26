@@ -11,4 +11,8 @@ router.post("/match/submit", (req, res) => {
   controller.handleSubmitMatchRequest(req, res);
 });
 
+router.get("/match/get", (req, res) => {
+  controller.handleGetMatch(req, res);
+})
+
 module.exports = router;

@@ -1,19 +1,22 @@
+const matchingController = require("./controller");
 class SocketController {
-  static onWait(socket) {
+  static onWait(socket, io) {
     socket.on("wait", (payload) => {
-      console.log(payload);
       var requestId = payload.requestId;
       if (requestId) {
-        // make the user join the room for that requestId
-        socket.join(requestId);
+        // check if the user has a match
+        matchingController.handleFindMatch(requestId).then((emitted) => {
+          if (emitted) {
+            // console.log(`Emitted sessionInfo, disconnecting ${requestId}`)
+            // socket.disconnect();
+          }
+        });
       }
     });
   }
   static onDisconnect(socket) {
-    socket.on("disconnect", (payload) => {
-      console.log("a user disconnected");
-      console.log(payload);
-      // ASH TODO: recovery? how to inform another user?
+    socket.on("disconnect", () => {
+      
     });
   }
 }
