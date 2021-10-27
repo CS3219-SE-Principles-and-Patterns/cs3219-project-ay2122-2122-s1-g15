@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const uri = ""; // to be added
+const uri = "mongodb://127.0.0.1:27017/matching"; // to be added
 
 class DbHandler {
   constructor() {}
@@ -10,10 +10,10 @@ class DbHandler {
         useUnifiedTopology: true,
       })
       .then((db) => {
-        console.log(">> SUCCESS: Database connected");
+        console.log(">> Database connected");
       })
       .catch((err) => {
-        console.log(">> ERROR: Database connection error");
+        console.log("!Database connection error: %s", err);
       });
   }
 }

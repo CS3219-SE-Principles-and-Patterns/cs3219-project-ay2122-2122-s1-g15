@@ -11,10 +11,14 @@ const schema = new mongoose.Schema({
 });
 
 schema.static("fetchRandomQuestion", function (difficulty) {
-  var count = this.count();
-  // Get a random entry
-  var random = Math.floor(Math.random() * count);
-  return this.findOne({ difficulty }).skip(random).exec();
+  return this.aggregate([{$match: {difficulty}}, { $sample: { size: 1 } }])
+  .then(lst => {
+    if (lst.length > 0) {
+      return lst[0]
+    } else {
+      return null
+    }
+  })
 });
 
 const Question = mongoose.model("Question", schema);

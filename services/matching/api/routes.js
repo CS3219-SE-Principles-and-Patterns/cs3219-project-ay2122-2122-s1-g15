@@ -7,8 +7,12 @@ router.get("/health", (req, res) => {
   res.status(200).send("ok");
 });
 
-router.post("/match/submit/{userId}", (req, res) => {
+router.post("/match/submit", (req, res) => {
   controller.handleSubmitMatchRequest(req, res);
 });
+
+router.get("/match/get", (req, res) => {
+  controller.handleGetMatch(req, res);
+})
 
 module.exports = router;

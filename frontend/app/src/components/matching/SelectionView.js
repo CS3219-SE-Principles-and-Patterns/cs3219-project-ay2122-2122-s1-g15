@@ -36,19 +36,21 @@ const SelectionView = (props) => {
                 if (index === props.selected) {
                   return (
                     <Card.Grid
+                      key={index}
                       style={selectedGridStyle}
                       onClick={() => handleClick(index)}
                     >
-                      {item.title}
+                      {item.value}
                     </Card.Grid>
                   );
                 }
                 return (
                   <Card.Grid
+                    key={index}
                     style={gridStyle}
                     onClick={() => handleClick(index)}
                   >
-                    {item.title}
+                    {item.value}
                   </Card.Grid>
                 );
               })}

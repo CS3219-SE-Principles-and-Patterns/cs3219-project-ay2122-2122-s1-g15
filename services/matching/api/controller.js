@@ -1,4 +1,5 @@
 const { body, validationResult } = require("express-validator");
+const { uuid } = require("uuidv4");
 const {
   DIFFICULTY,
   HEADER_KEYS,
@@ -6,80 +7,50 @@ const {
 } = require("../constants/constants");
 const service = require("../services/service");
 
-const queueName = "";
-const connectionString = "";
 /* Defines the logic used in handling requests */
 class MatchingController {
-  constructor() {
-    this.queue = new Queue(queueName, connectionString);
+  start(io) {
+    this.io = io;
   }
-
   /**
    * Receives a user request to find a match
    * @param {Object} req user request to to find a match
    * @returns {Object} 200, 400 or 500 codes
    */
   handleSubmitMatchRequest(req, res) {
-    // ASH TODO: add request validation
-    console.log(JSON.stringify(this.requests));
+    // ASH TODO: REQUEST VALIDATION
 
     var difficulty = req.body.difficulty;
-    var userId = req.params.userId;
+    var user = req.body.user;
 
     // user params valid, accept request
-    service
-      .storeMatchRequest(userId, difficulty)
-      .then((userRequest) => {
-        if (!userRequest || userRequest.requestId) {
-          throw new Error("userRequest and/or requestId is null");
-        }
-        var requestId = userRequest.requestId;
-        res.status(200).send({ requestId });
-        return userRequest;
-      })
-      .then((userRequest) => {
-        // if there is a match, publish an event to inform both the users
-        var io = req.app.get("io");
-
-        // check if a match can be found and publishe
-        this.handleMatchPublish(io, difficulty, userRequest);
-      })
-      .catch((err) => {
-        res.status(500).send(err);
-      });
+    service.storeMatchRequest(user, difficulty).then((userRequest) => {
+      if (!userRequest || !userRequest.requestId) {
+        res.status(500).send("Unable to register your request");
+        console.log("!ERROR: userRequest and/or requestId is null");
+      }
+      var requestId = userRequest.requestId;
+      res.status(202).send({ requestId });
+    });
   }
 
-  /**
-   * Publishes event to each user's room
-   * @param {Object} req
-   * @param {Object} user1
-   * @param {Object} user2
-   */
-  handleMatchPublish(io, difficulty, user1) {
-    this.service
-      .checkForMatch()
-      .then((user2) => {
-        if (!user2) {
-          console.log(`No match for ${JSON.stringify(user1)} found`);
-          return;
+  handleFindMatch(requestId) {
+    return service
+      .checkForMatch(requestId)
+      .then((users) => {
+        if (!users) {
+          console.log(`No match found for ${requestId}`);
+          return false;
         }
-
-        // if match found, pubish session information to both users through socket
-        return this.service
-          .createSession(difficulty, user1, user2)
-          .then((sessionInfo) => {
-            var requestId1 = user1.requestId;
-            var requestId2 = user2.requestId;
-            if (requestId1 && requestId2) {
-              console.log(
-                `emitted event to ${JSON.stringify(user1)} and ${JSON.stringify(
-                  user2
-                )}`
-              );
-              io.emit.to(requestId1, sessionInfo);
-              io.emit.to(requestId2, sessionInfo);
-            }
-          });
+        for (var user of users) {
+          this.io.emit(user.requestId, user);
+          console.log(
+            `> Emitted event to ${
+              user.requestId
+            } with payload: ${user}`
+          );
+        }
+        return true
       })
       .catch((err) => {
         console.log(err);
@@ -87,4 +58,5 @@ class MatchingController {
   }
 }
 
-module.exports = MatchingController;
+var matchingController = new MatchingController();
+module.exports = matchingController;
