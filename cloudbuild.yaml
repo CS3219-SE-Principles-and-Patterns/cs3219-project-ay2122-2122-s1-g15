@@ -57,11 +57,6 @@ steps:
 #      '.'
 #    ]
 #    dir: 'services/editor'
-  - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['delete', '-f', 'kubernetes/']
-    env:
-      - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
-      - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
   # Step 3: Apply k8s configuration
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'kubernetes/']
