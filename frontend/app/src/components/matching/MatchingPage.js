@@ -24,20 +24,15 @@ const questionDifficulties = [
 
 const MATCH_DURATION = (process.env.MATCH_DURATION && parseInt(process.env.MATCH_DURATION)) || 120;
 
-const notificationEndpoint = process.env.NOTIFICATION_SERVICE || "http://localhost:8000"
+const matchingEndpoint = process.env.MATCHING_ENDPOINT || "http://localhost:4000"
 
 const MatchingPage = (props) => {
-  // const user = React.useContext(UserContext).user
-  const user = {
-    uid: 1
-  }
+  const user = React.useContext(UserContext).user
   const [view, setView] = React.useState(views.selection);
   const [timerStart, setTimerStart] = React.useState(false);
   const [remainingTime, setRemainingTime] = React.useState(MATCH_DURATION);
   const [selected, setSelected] = React.useState(null);
   const [matchFound, setMatchFound] = React.useState(false);
-  const [sessionInfo, setSessionInfo] = React.useState();
-
   // for selection view
   const handleSubmitMatchRequest = () => {
     setView(views.loading);
@@ -80,50 +75,47 @@ const MatchingPage = (props) => {
   };
 
   // for loading view
-  const handleMatchFound = () => {
-    // ASH TODO: call parent component to show session page
-    console.log("handle match found")
+  const handleMatchFound = (session) => {
+    setMatchFound(true)
     setTimerStart(false)
-    props.switchToSession(sessionInfo)
+    props.switchToSession(session)
   }
 
   const listenForMatch = (requestId) => {
-    var socket = io(notificationEndpoint);
-    console.log(requestId)
+    var socket = io(matchingEndpoint);
     // submit
     // client-side
     socket.on("connect", () => {
       // emit the wait event and send the requestId along with it
-      // console.log(socket.connected);
-      // socket.emit("wait", {requestId})
+      console.log("connected to socket");
+      socket.emit("wait", {requestId})
+      console.log("Sent requestId to socket")
     });
 
     // listen for server response
-    socket.on(`${requestId}`, (sessionInfo) => {
-      console.log(JSON.stringify(sessionInfo))
+    socket.on(`${requestId}`, (res) => {
+      console.log("SESSIONINFO")
+      console.log(res)
       // ASH TODO
       setMatchFound(true)
-      setSessionInfo(sessionInfo)
+      return handleMatchFound(res)
     })
 
-    socket.on("disconnect", () => {
-      console.log(socket.id); // undefined
-    });
+    // socket.on("disconnect", () => {
+    // });
   }
 
   // timer hook
   React.useEffect(() => {
     let interval = null;
     if (timerStart) {
-      if (matchFound) {
-        handleMatchFound()
-      } else if (remainingTime === 0 && !matchFound) {
+      if (remainingTime === 0 && !matchFound) {
         console.log("handle match timeout");
         handleMatchTimeout();
       }
-      else if (remainingTime < MATCH_DURATION && matchFound) {
-        handleMatchFound();
-      }
+      // else if (remainingTime < MATCH_DURATION && matchFound) {
+      //   handleMatchFound();
+      // }
       else {
         interval = setInterval(() => {
           setRemainingTime((remainingTime) => remainingTime - 1);
@@ -133,7 +125,7 @@ const MatchingPage = (props) => {
       clearInterval(interval);
     }
     return () => clearInterval(interval);
-  }, [timerStart, remainingTime]);
+  }, [timerStart, remainingTime, matchFound]);
 
   const renderView = () => {
     switch (view) {
