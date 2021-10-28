@@ -1,12 +1,12 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import { Layout, Modal, Button, Row, Col } from "antd";
-import { nanoid } from "nanoid";
 import ChatBox from "./chat/ChatBox";
 import Editor from "./editor/Editor";
 import axios from "axios";
 import QuestionBox from "./question/QuestionBox";
 import "./SessionPage.css";
+import { UserContext } from "../../util/UserProvider";
 import MatchingPage from "../matching/MatchingPage";
 import { SessionContext } from "../../util/SessionProvider";
 
@@ -17,13 +17,15 @@ const box = {
 // TODO: dynamically get from matching component
 // const session_id = 2224;
 // TODO: Replace with existing username/userid, remove nanoid dependency.
-const username = nanoid(2);
 
 const SessionPage = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const sessionContext = useContext(SessionContext);
+  const [userToken, setUserToken] = useState("");
+  const [username, setUsername] = useState("");
   const { setInitiateDisconnect, hasDisconnected, session, setSession } =
     sessionContext;
+  const userContext = useContext(UserContext);
 
   const session_id = session.sessionInfo.sessionId;
   const question = session.sessionInfo.question;
@@ -51,6 +53,10 @@ const SessionPage = (props) => {
     setSession(null);
   };
 
+  const getPeersName = (currentName) => {
+
+  }
+
   const closeEditorConnection = (session_id) => {
     // axios
     //   .delete("http://localhost:6001/api/connection/" + session_id)
@@ -59,6 +65,19 @@ const SessionPage = (props) => {
     //     console.log(error);
     //   });
   };
+
+  useEffect(() => {
+    userContext?.user
+      ?.getIdToken(false)
+      .then(function (idToken) {
+        setUserToken(idToken);
+      })
+      .catch(function (error) {
+        // Handle error
+      });
+    setUsername(userContext?.user?.data?.name?.split(/\s+/)?.[0]);
+    console.log(userContext.user);
+  }, [userContext.user, userToken]);
 
   return (
     <>
