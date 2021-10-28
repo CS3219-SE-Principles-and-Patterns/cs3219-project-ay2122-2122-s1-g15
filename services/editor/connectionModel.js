@@ -5,7 +5,11 @@ var connectionSchema = mongoose.Schema(
   {
     _id: Number,
     port: Number,
-    session_id: Number,
+    session_id: {
+      type: String,
+      unique: true,
+      required: true,
+    },
     document_key: {
       type: String,
       required: true,

@@ -15,14 +15,19 @@ const box = {
   background: "white",
 };
 // TODO: dynamically get from matching component
-const session_id = 2224;
+// const session_id = 2224;
 // TODO: Replace with existing username/userid, remove nanoid dependency.
 const username = nanoid(2);
 
-const SessionPage = () => {
+const SessionPage = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const sessionContext = useContext(SessionContext);
   const { setInitiateDisconnect, hasDisconnected } = sessionContext;
+
+  const session_id = props.session.sessionInfo.sessionId;
+  const question = props.session.sessionInfo.question;
+
+  console.log(session_id);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -44,13 +49,27 @@ const SessionPage = () => {
   };
 
   const closeEditorConnection = (session_id) => {
+    // axios
+    //   .delete("http://localhost:6001/api/connection/" + session_id)
+    //   .catch((error) => {
+    //     console.log("Editor's session is not closed properly!");
+    //     console.log(error);
+    //   });
+  };
+
+  const startEditorService = (session_id) => {
+    const body = {"session_id": session_id};
     axios
-      .delete("http://localhost:6001/api/connection/" + session_id)
+      .post("http://localhost:6001/api/connection/", body)
       .catch((error) => {
-        console.log("Editor's session is not closed properly!");
+        console.log("Failed to create connection with editor service!");
         console.log(error);
       });
-  };
+  }
+  
+  useEffect(() => {
+    startEditorService(session_id);
+  }, [session_id]);
 
   if (hasDisconnected) {
     return <MatchingPage />;
