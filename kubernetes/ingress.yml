@@ -11,7 +11,8 @@ metadata:
     nginx.ingress.kubernetes.io/session-cookie-name: "peerprep-cookie"
 spec:
   rules:
-    - http:
+    - host: peerprep-matching
+      http:
         paths:
           - pathType: Prefix
             path: /
@@ -20,7 +21,8 @@ spec:
                 name: peerprep-matching
                 port:
                   number: 4000
-    - http:
+    - host: peerprep-chat
+      http:
         paths:
           - pathType: Prefix
             path: /
