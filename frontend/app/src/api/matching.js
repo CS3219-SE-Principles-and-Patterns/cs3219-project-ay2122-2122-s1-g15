@@ -1,5 +1,5 @@
 import axios from "axios"
-const MATCHING_ENDPOINT = process.env.MATCHING_ENDPOINT || "http://peerprep-matching:4000"
+const MATCHING_ENDPOINT = process.env.MATCHING_ENDPOINT || "http://localhost:4000"
 
 export const postMatchRequest = async (userObj, difficulty) => {
   var user = {
