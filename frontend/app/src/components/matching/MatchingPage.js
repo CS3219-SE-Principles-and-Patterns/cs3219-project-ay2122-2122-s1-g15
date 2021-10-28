@@ -97,10 +97,9 @@ const MatchingPage = (props) => {
 
     // listen for server response
     socket.on(`${requestId}`, (res) => {
-      console.log("SESSIONINFO")
-      console.log(res)
       // ASH TODO
       setMatchFound(true)
+      socket.close()
       return handleMatchFound(res)
     })
 
