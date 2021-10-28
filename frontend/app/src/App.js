@@ -10,39 +10,48 @@ import UserProvider from "./util/UserProvider";
 import SessionProvider from "./util/SessionProvider";
 
 function App() {
-  const switchToSession = (sessionInfo) => {
-    
-  }
+  const [session, setSession] = React.useState()
+  const switchToSession = (session) => {
+    setSession(session);
+    return
+  };
+
+  const sessionCleanup = () => {
+    setSession(null);
+  };
+
   return (
     <UserProvider>
-    <SessionProvider>
-      <Router>
-        <div id="root">
-          <Header />
+      <SessionProvider>
+        <Router>
+          <div id="root">
+            <Header />
 
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
+            <Switch>
+              <Route exact path="/">
+                <Home />
+              </Route>
 
-            <Route exact path="/matching">
-              <MatchingPage switchToSession={switchToSession}/>
-            </Route>
+              <Route exact path="/session">
+                {!session && <MatchingPage switchToSession={switchToSession} />}
+                {session && (
+                  <SessionPage
+                    session={session}
+                    sessionCleanup={sessionCleanup}
+                  />
+                )}
+              </Route>
 
-            <Route exact path="/session">
-              <SessionPage />
-            </Route>
+              <Route exact path="/register">
+                <Register />
+              </Route>
 
-            <Route exact path="/register">
-              <Register />
-            </Route>
-
-            <Route exact path="/login">
-              <Login />
-            </Route>
-          </Switch>
-        </div>
-      </Router>
+              <Route exact path="/login">
+                <Login />
+              </Route>
+            </Switch>
+          </div>
+        </Router>
       </SessionProvider>
     </UserProvider>
   );
