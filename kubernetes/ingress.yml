@@ -1,0 +1,31 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nginx-ingress-peerprep
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/affinity: "cookie"
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/affinity-mode: persistent
+    nginx.ingress.kubernetes.io/session-cookie-hash: sha1
+    nginx.ingress.kubernetes.io/session-cookie-name: "peerprep-cookie"
+spec:
+  rules:
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: peerprep-matching
+                port:
+                  number: 4000
+    - http:
+        paths:
+          - pathType: Prefix
+            path: /
+            backend:
+              service:
+                name: peerprep-chat
+                port:
+                  number: 5000
