@@ -74,7 +74,7 @@ steps:
       'set',
       'image',
       'deployment',
-      'peerprep-client-container',
+      'client',
       'peerprep-client=gcr.io/peerprep-2d654/peerprep-client:latest'
     ]
     env:
