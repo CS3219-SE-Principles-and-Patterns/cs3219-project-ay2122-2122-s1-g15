@@ -70,7 +70,7 @@ steps:
       'image',
       'deployment',
       'peerprep-client',
-      'peerprep-client=gcr.io/peerprep-2d654/peerprep-client:latest'
+      'peerprep-client-container=gcr.io/peerprep-2d654/peerprep-client:latest'
     ]
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
