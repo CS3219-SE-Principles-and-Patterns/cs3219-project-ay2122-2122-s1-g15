@@ -143,20 +143,15 @@ kind: Service
 metadata:
   name: peerprep-client
 spec:
-  # tag::NodePort1[]
-  type: NodePort
-  # end::NodePort1[]
   selector:
     # tag::app7[]
     app: client
     # end::app7[]
   ports:
     - protocol: TCP
-      port: 3000
+      port: 80
       targetPort: 3000
-      # tag::nodePort1[]
-      nodePort: 31007
-      # end::nodePort1[]
+  type: LoadBalancer
 
 ---
 apiVersion: v1
