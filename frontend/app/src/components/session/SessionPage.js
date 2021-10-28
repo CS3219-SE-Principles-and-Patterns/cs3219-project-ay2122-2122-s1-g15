@@ -27,6 +27,7 @@ const SessionPage = (props) => {
 
   const session_id = session.sessionInfo.sessionId;
   const question = session.sessionInfo.question;
+  console.log(question);
 
   console.log(session_id);
 
@@ -102,7 +103,7 @@ const SessionPage = (props) => {
         </div>
         <div className="container">
           <Col style={{ margin: "0% 1% 0% 3%" }}>
-            <QuestionBox />
+            <QuestionBox question={question}/>
             <Editor className="editor" session_id={session_id} />
           </Col>
           <Col style={{ margin: "0% 3% 0% 1%" }}>
