@@ -23,6 +23,7 @@ class ConnectionController {
     // TODO: should have some validation to check that session id is not being used.
     var session_id = req.body.session_id;
     console.log("Session_id:", session_id);
+
     var query_for_ports = Connection.find({}).select("port");
     query_for_ports.exec(function (err, connections) {
       if (err) {

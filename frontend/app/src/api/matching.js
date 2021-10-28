@@ -4,8 +4,8 @@ const API_SUBMIT = process.env.MATCHING_API_SUBMIT || "/api/match/submit"
 
 export const postMatchRequest = async (userObj, difficulty) => {
   var user = {
-    email: userObj.email,
-    displayName: userObj.displayName
+    email: userObj.data.email,
+    displayName: userObj.data.name
   }
   return axios.post(`${MATCHING_ENDPOINT}${API_SUBMIT}`, {user, difficulty})
   .then(res => {
