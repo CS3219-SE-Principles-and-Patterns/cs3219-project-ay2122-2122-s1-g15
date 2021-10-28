@@ -6,10 +6,10 @@ import './QuestionBox.css'
 const QuestionBox = (props) => {
     return (
         <>
-        <Card title="Two Sum">
+        <Card title={props.question.title}>
             <div className="question-box"> 
 
-                <ReactMarkdown children={props.question}/>
+                <ReactMarkdown children={props.question.markdown}/>
 
             </div>
         </Card>

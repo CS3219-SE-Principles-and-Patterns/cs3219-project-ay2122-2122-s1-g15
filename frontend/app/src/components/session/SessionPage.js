@@ -75,7 +75,7 @@ const SessionPage = (props) => {
             align="middle"
           >
             <Col span={6} style={{ textAlign: "center" }}>
-              <div style={box}>Session Page Title</div>
+              <div style={box}>Difficulty: {question.difficulty.toUpperCase()}</div>
             </Col>
             <Col span={8} style={{ textAlign: "center" }}></Col>
             <Col span={4} style={{ textAlign: "center" }}>
