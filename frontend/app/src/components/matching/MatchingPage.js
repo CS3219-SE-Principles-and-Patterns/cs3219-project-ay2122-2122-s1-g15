@@ -25,7 +25,7 @@ const questionDifficulties = [
 
 const MATCH_DURATION = (process.env.MATCH_DURATION && parseInt(process.env.MATCH_DURATION)) || 120;
 
-const matchingEndpoint = process.env.MATCHING_ENDPOINT || "http://localhost:4000"
+const matchingEndpoint = process.env.MATCHING_ENDPOINT || "http://localhost:4000/matching"
 
 const MatchingPage = (props) => {
   const user = React.useContext(UserContext).user

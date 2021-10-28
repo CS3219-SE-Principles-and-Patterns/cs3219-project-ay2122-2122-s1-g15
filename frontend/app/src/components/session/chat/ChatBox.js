@@ -7,7 +7,7 @@ import "./ChatBox.css";
 import { SessionContext } from "../../../util/SessionProvider";
 
 // TODO: Replace with deployed server endpoint
-const socket = io("http://localhost:5000");
+const socket = io("http://localhost:5000/chat");
 
 const { TextArea } = Input;
 

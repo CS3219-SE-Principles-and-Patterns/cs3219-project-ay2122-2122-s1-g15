@@ -4,28 +4,23 @@ metadata:
   name: nginx-ingress-peerprep
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/affinity: "cookie"
-    nginx.ingress.kubernetes.io/ssl-redirect: "false"
-    nginx.ingress.kubernetes.io/affinity-mode: persistent
-    nginx.ingress.kubernetes.io/session-cookie-hash: sha1
-    nginx.ingress.kubernetes.io/session-cookie-name: "peerprep-cookie"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   rules:
-    - host: 104.155.123.254
-      http:
+    - http:
         paths:
           - pathType: Prefix
-            path: /
+            path: /matching
             backend:
               service:
                 name: peerprep-matching
                 port:
                   number: 4000
-    - host: 104.155.123.254
-      http:
+    - http:
         paths:
           - pathType: Prefix
-            path: /
+            path: /chat
             backend:
               service:
                 name: peerprep-chat
