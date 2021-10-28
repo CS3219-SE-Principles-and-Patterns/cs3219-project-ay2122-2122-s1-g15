@@ -1,5 +1,3 @@
-// Temporary (hardcoded) frontend to test editor functionalities
-
 import React, { useState, useEffect } from "react";
 import Quill from "quill";
 import axios from "axios";
@@ -18,8 +16,17 @@ Sharedb.types.register(richText.type);
 function Editor(props) {
   const [conn, setConn] = useState();
 
-  function get_connection(session_id) {
-    axios
+  async function get_connection(session_id) {
+    const body = {"session_id": session_id};
+    console.log("Sending post request");
+    await axios
+      .post("http://localhost:6001/api/connection/", body)
+      .catch((error) => {
+        console.log("Failed to create connection with editor service!");
+        console.log(error);
+      });
+    console.log("Getting created connection");
+    await axios
       .get("http://localhost:6001/api/connection/" + session_id)
       .then((res) => {
         setConn(res.data.data);
@@ -31,10 +38,15 @@ function Editor(props) {
       });
   }
 
+  // async function startEditorService(session_id) {
+    
+  // }
+
   // Get Connection object from api
-  useEffect(() => { 
+  useEffect(() => {
+    // startEditorService(props.session_id);
     get_connection(props.session_id);
-  }, [props])
+  }, [props]);
 
   useEffect(() => {
     console.log(conn);
@@ -98,9 +110,9 @@ function Editor(props) {
        * Updating its content to editor
        */
       quill.setContents(doc.data);
-      
+
       // quill.formatLine(1, quill.getLength(), { 'code-block': true });
-      
+
       /**
        * On Text change publishing to our server
        * so that it can be broadcasted to all other clients
@@ -117,7 +129,6 @@ function Editor(props) {
         if (source === quill) return;
         quill.updateContents(op);
       });
-
     });
     return () => {
       connection.close();
@@ -125,7 +136,7 @@ function Editor(props) {
   }, [conn]);
 
   return (
-    <div style={{marginTop: "1%", border: "1px solid" }}>
+    <div style={{ border: "1px solid" }}>
       <div id="editor"></div>
     </div>
   );

@@ -25,8 +25,8 @@ const SessionPage = (props) => {
   const { setInitiateDisconnect, hasDisconnected, session, setSession } =
     sessionContext;
 
-  const session_id = props.session.sessionInfo.sessionId;
-  const question = props.session.sessionInfo.question;
+  const session_id = session.sessionInfo.sessionId;
+  const question = session.sessionInfo.question;
 
   console.log(session_id);
 
@@ -58,20 +58,6 @@ const SessionPage = (props) => {
     //     console.log(error);
     //   });
   };
-
-  const startEditorService = (session_id) => {
-    const body = {"session_id": session_id};
-    axios
-      .post("http://localhost:6001/api/connection/", body)
-      .catch((error) => {
-        console.log("Failed to create connection with editor service!");
-        console.log(error);
-      });
-  }
-  
-  useEffect(() => {
-    startEditorService(session_id);
-  }, [session_id]);
 
   return (
     <>
