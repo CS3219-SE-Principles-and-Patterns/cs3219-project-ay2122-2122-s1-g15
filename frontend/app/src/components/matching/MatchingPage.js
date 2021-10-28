@@ -7,6 +7,7 @@ import LoadingView from "./LoadingView";
 import TimeoutView from "./TimeoutView";
 import {postMatchRequest} from "../../api/matching"
 import { UserContext } from "../../util/UserProvider";
+import {SessionContext} from "../../util/SessionProvider"
 const { Content } = Layout;
 
 
@@ -29,6 +30,8 @@ const matchingEndpoint = process.env.MATCHING_ENDPOINT || "http://localhost:4000
 const MatchingPage = (props) => {
   const user = React.useContext(UserContext).user
   const [view, setView] = React.useState(views.selection);
+  const sessionContext = React.useContext(SessionContext);
+  const { session, setSession } = sessionContext;
   const [timerStart, setTimerStart] = React.useState(false);
   const [remainingTime, setRemainingTime] = React.useState(MATCH_DURATION);
   const [selected, setSelected] = React.useState(null);
@@ -78,7 +81,7 @@ const MatchingPage = (props) => {
   const handleMatchFound = (session) => {
     setMatchFound(true)
     setTimerStart(false)
-    props.switchToSession(session)
+    setSession(session)
   }
 
   const listenForMatch = (requestId) => {
