@@ -5,12 +5,13 @@ class SocketController {
       var requestId = payload.requestId;
       if (requestId) {
         // check if the user has a match
-        matchingController.handleFindMatch(requestId).then((emitted) => {
-          if (emitted) {
-            // console.log(`Emitted sessionInfo, disconnecting ${requestId}`)
-            // socket.disconnect();
-          }
-        });
+        // matchingController.handleFindMatch(requestId).then((emitted) => {
+        //   if (emitted) {
+        //     console.log(`Emitted sessionInfo, disconnecting ${requestId}`)
+        //     socket.disconnect();
+        //   }
+        // });
+        matchingController.handleFindMatch(requestId)
       }
     });
   }
