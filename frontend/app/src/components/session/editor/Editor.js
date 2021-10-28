@@ -38,13 +38,8 @@ function Editor(props) {
       });
   }
 
-  // async function startEditorService(session_id) {
-    
-  // }
-
   // Get Connection object from api
   useEffect(() => {
-    // startEditorService(props.session_id);
     get_connection(props.session_id);
   }, [props]);
 
@@ -136,7 +131,7 @@ function Editor(props) {
   }, [conn]);
 
   return (
-    <div style={{ border: "1px solid" }}>
+    <div style={{ marginTop: "1%", border: "1px solid" }}>
       <div id="editor"></div>
     </div>
   );
