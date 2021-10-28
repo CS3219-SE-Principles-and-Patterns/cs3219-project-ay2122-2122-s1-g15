@@ -1,4 +1,4 @@
-const MATCH_DURATION = process.env.MATCH_DURATION || 60;
+const MATCH_DURATION =  process.env.MATCH_DURATION || 120;
 const mongoose = require("mongoose");
 const schema = new mongoose.Schema({
   user: { type: Object, required: true },
