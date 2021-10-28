@@ -1,12 +1,13 @@
 import axios from "axios"
 const MATCHING_ENDPOINT = process.env.MATCHING_ENDPOINT || "http://localhost:4000"
+const API_SUBMIT = process.env.MATCHING_API_SUBMIT || "/api/match/submit"
 
 export const postMatchRequest = async (userObj, difficulty) => {
   var user = {
     email: userObj.email,
     displayName: userObj.displayName
   }
-  return axios.post(`${MATCHING_ENDPOINT}/api/match/submit`, {user, difficulty})
+  return axios.post(`${MATCHING_ENDPOINT}${API_SUBMIT}`, {user, difficulty})
   .then(res => {
     console.log(res)
     return res.data

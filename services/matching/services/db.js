@@ -1,3 +1,5 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const mongoose = require("mongoose");
 const uri = "mongodb://127.0.0.1:27017/matching"; // to be added
 

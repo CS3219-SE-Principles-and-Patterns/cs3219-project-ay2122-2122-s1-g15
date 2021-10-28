@@ -93,7 +93,7 @@ class Service {
         var sessionInfo = {
           sessionId,
           difficulty,
-          question: question.markdown,
+          question
         };
         return sessionInfo;
       })
