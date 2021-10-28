@@ -20,11 +20,11 @@ const { Content } = Layout;
 // TODO: dynamically get from matching component
 const session_id = 2224;
 // TODO: Replace with existing username/userid, remove nanoid dependency.
-const username = nanoid(2);
 
 const SessionPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [userToken, setUserToken] = useState("");
+  const [username, setUsername] = useState("");
   const sessionContext = useContext(SessionContext);
   const { setInitiateDisconnect, hasDisconnected } = sessionContext;
   const userContext = useContext(UserContext);
@@ -66,11 +66,13 @@ const SessionPage = () => {
       .catch(function (error) {
         // Handle error
       });
+    setUsername(userContext?.user?.data?.name?.split(/\s+/)?.[0]);
+    console.log(userContext.user);
   }, [userContext.user, userToken]);
 
   if (hasDisconnected) {
     return <MatchingPage />;
-  } else if (userToken !== "") {
+  } else if (userToken !== "" && username !== "") {
     return (
       <>
         <Layout>

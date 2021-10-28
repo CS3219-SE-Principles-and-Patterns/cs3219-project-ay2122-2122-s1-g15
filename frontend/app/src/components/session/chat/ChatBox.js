@@ -65,7 +65,6 @@ const ChatBox = (props) => {
 
   useEffect(() => {
     if (isInitialLoad) {
-      console.log(socket);
       const payload = { username, sessionId };
       socket.emit("join room", payload);
       setIsInitialLoad(false);
