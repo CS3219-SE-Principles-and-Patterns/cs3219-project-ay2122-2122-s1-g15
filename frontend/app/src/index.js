@@ -3,10 +3,16 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import UserProvider from "./util/UserProvider";
+import SessionProvider from "./util/SessionProvider";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <UserProvider>
+      <SessionProvider>
+        <App />
+      </SessionProvider>
+    </UserProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
