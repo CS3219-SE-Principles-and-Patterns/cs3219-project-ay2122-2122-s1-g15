@@ -6,25 +6,25 @@ admin:
 apiEndpoints:
   api:
     host: localhost
-    paths: '/ip'
+    paths: "/ip"
   chat:
     host: localhost
-    paths: ['/chat', '/chat/*']
+    paths: ["/chat", "/chat/*"]
   editor:
     host: localhost
-    paths: ['/editor', '/editor/*']
+    paths: ["/editor", "/editor/*"]
   matching:
     host: localhost
-    paths: ['/matching', '/matching/*']
+    paths: ["/matching", "/matching/*"]
 serviceEndpoints:
   httpbin:
-    url: 'https://httpbin.org'
+    url: "https://httpbin.org"
   chatService:
-    url: 'http://localhost:5000'
+    url: "http://localhost:5000/chat"
   editorService:
-    url: 'http://localhost:6001'
+    url: "http://localhost:6001"
   matchingService:
-    url: 'http://localhost:4000'
+    url: "http://localhost:4000"
 policies:
   - basic-auth
   - cors
@@ -42,7 +42,7 @@ pipelines:
     policies:
       - auth:
           - action:
-              baseUrl: 'https://example.com'
+              baseUrl: "https://example.com"
       - proxy:
           - action:
               serviceEndpoint: httpbin
@@ -53,18 +53,42 @@ pipelines:
     policies:
       - auth:
           - action:
-              baseUrl: 'https://example.com'
+              baseUrl: "https://example.com"
       - proxy:
           - action:
               serviceEndpoint: chatService
               changeOrigin: true
+      - cors:
+          - action:
+              origin: http://localhost:3000
+              credentials: true
+              allowedHeaders:
+                [
+                  "Content-type",
+                  "Authorization",
+                  "Origin",
+                  "Access-Control-Allow-Origin",
+                  "Accept",
+                  "Options",
+                  "X-Requested-With",
+                ]
+              exposedHeaders:
+                [
+                  "Content-type",
+                  "Authorization",
+                  "Origin",
+                  "Access-Control-Allow-Origin",
+                  "Accept",
+                  "Options",
+                  "X-Requested-With",
+                ]
   editorPipeline:
     apiEndpoints:
       - editor
     policies:
       - auth:
           - action:
-              baseUrl: 'https://example.com'
+              baseUrl: "https://example.com"
       - proxy:
           - action:
               serviceEndpoint: editorService
@@ -75,7 +99,7 @@ pipelines:
     policies:
       - auth:
           - action:
-              baseUrl: 'https://example.com'
+              baseUrl: "https://example.com"
       - proxy:
           - action:
               serviceEndpoint: matchingService

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 import { Layout, Modal, Button, Row, Col } from "antd";
 import { nanoid } from "nanoid";
@@ -9,11 +9,14 @@ import QuestionBox from "./question/QuestionBox";
 import "./SessionPage.css";
 import MatchingPage from "../matching/MatchingPage";
 import { SessionContext } from "../../util/SessionProvider";
+import { UserContext } from "../../util/UserProvider";
+import PacmanLoader from "react-spinners/PacmanLoader";
 
 const box = {
   padding: "8px 0",
   background: "white",
 };
+const { Content } = Layout;
 // TODO: dynamically get from matching component
 const session_id = 2224;
 // TODO: Replace with existing username/userid, remove nanoid dependency.
@@ -21,8 +24,10 @@ const username = nanoid(2);
 
 const SessionPage = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [userToken, setUserToken] = useState("");
   const sessionContext = useContext(SessionContext);
   const { setInitiateDisconnect, hasDisconnected } = sessionContext;
+  const userContext = useContext(UserContext);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -52,9 +57,20 @@ const SessionPage = () => {
       });
   };
 
+  useEffect(() => {
+    userContext?.user
+      ?.getIdToken(false)
+      .then(function (idToken) {
+        setUserToken(idToken);
+      })
+      .catch(function (error) {
+        // Handle error
+      });
+  }, [userContext.user, userToken]);
+
   if (hasDisconnected) {
     return <MatchingPage />;
-  } else {
+  } else if (userToken !== "") {
     return (
       <>
         <Layout>
@@ -106,6 +122,7 @@ const SessionPage = () => {
                 className="chat"
                 sessionId={session_id}
                 username={username}
+                userToken={userToken}
               />
             </Col>
           </div>
@@ -124,6 +141,18 @@ const SessionPage = () => {
           <p>You will be redirected back to the matching page.</p>
         </Modal>
       </>
+    );
+  } else {
+    return (
+      <Layout className="layout">
+        <Content style={{ padding: "0 50px", minHeight: "100vh" }}>
+          <Row style={{ height: "100vh" }} justify="center" align="middle">
+            <Col span={24} style={{ textAlign: "center" }}>
+              <PacmanLoader color="lightblue" />
+            </Col>
+          </Row>
+        </Content>
+      </Layout>
     );
   }
 };

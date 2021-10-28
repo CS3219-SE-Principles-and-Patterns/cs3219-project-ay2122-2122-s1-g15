@@ -6,18 +6,24 @@ import ChatBubble from "./ChatBubble";
 import "./ChatBox.css";
 import { SessionContext } from "../../../util/SessionProvider";
 
-// TODO: Replace with deployed server endpoint
-const socket = io("http://localhost:5000");
-
 const { TextArea } = Input;
 
 const ChatBox = (props) => {
-  const { username, sessionId } = props;
+  const { username, sessionId, userToken } = props;
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const sessionContext = useContext(SessionContext);
   const { initiateDisconnect, setHasDisconnected } = sessionContext;
+
+  // TODO: Replace with deployed server endpoint
+  const socket = io("http://localhost:8080/chat", {
+    path: "/chat/socket.io/",
+    extraHeaders: {
+      bearer: userToken,
+      "Access-Control-Allow-Origin": "*",
+    },
+  });
 
   const onChange = (e) => {
     setMessage(e.target.value);
@@ -25,7 +31,7 @@ const ChatBox = (props) => {
 
   const sendChat = (e) => {
     e.preventDefault();
-    const formattedMsg = message.trim().replace(/\n$/, "");
+    const formattedMsg = message.trim();
     if (formattedMsg !== "") {
       socket.emit("chat message", {
         message: formattedMsg,
@@ -53,15 +59,13 @@ const ChatBox = (props) => {
     socket.on("user disconnected", (payload) => {
       setChat([...chat, payload]);
     });
-    socket.on("user connected", (payload) => {
-      setChat([...chat, payload]);
-    });
     const messageContainer = document.getElementById("message-container");
     messageContainer.scrollTo(0, messageContainer.scrollHeight);
   }, [chat, chat.length]);
 
   useEffect(() => {
     if (isInitialLoad) {
+      console.log(socket);
       const payload = { username, sessionId };
       socket.emit("join room", payload);
       setIsInitialLoad(false);

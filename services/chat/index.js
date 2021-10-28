@@ -1,11 +1,13 @@
 const { createAdapter } = require("@socket.io/mongo-adapter");
 const { MongoClient } = require("mongodb");
+const cors = require("cors");
 
 const DB = "peer-prep";
 const COLLECTION = "socket.io-adapter-events";
 const port = 5000;
 
 const app = require("express")();
+app.use(cors());
 const server = require("http").createServer(app);
 
 const mongoClient = new MongoClient(
@@ -19,8 +21,9 @@ const io = require("socket.io")(server, {
   cors: {
     origin: "*", // TODO: Change to our deployed domain later on
     // methods: ["GET", "POST"],
-    // allowedHeaders: ['my-customer-header']
+    // allowedHeaders: ["Access-Control-Allow-Origin"],
   },
+  path: "/chat",
 });
 
 const main = async () => {
