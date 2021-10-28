@@ -1,7 +1,7 @@
 module.exports.DIFFICULTY = {
-  EASY: "EASY",
-  MEDIUM: "MEDIUM",
-  HARD: "HARD",
+  EASY: "easy",
+  MEDIUM: "medium",
+  HARD: "hard",
 };
 
 module.exports.HEADER_VALS = {
