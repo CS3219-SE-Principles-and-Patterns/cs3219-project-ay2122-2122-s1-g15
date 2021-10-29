@@ -29,8 +29,6 @@ const SessionPage = (props) => {
 
   const session_id = session.sessionInfo.sessionId;
   const question = session.sessionInfo.question;
-  console.log(question);
-
   console.log(session_id);
 
   const showModal = () => {
@@ -53,17 +51,13 @@ const SessionPage = (props) => {
     setSession(null);
   };
 
-  const getPeersName = (currentName) => {
-
-  }
-
   const closeEditorConnection = (session_id) => {
-    // axios
-    //   .delete("http://localhost:6001/api/connection/" + session_id)
-    //   .catch((error) => {
-    //     console.log("Editor's session is not closed properly!");
-    //     console.log(error);
-    //   });
+    axios
+      .delete("http://localhost:6001/api/connection/" + session_id)
+      .catch((error) => {
+        console.log("Editor's session is not closed properly!");
+        console.log(error);
+      });
   };
 
   useEffect(() => {

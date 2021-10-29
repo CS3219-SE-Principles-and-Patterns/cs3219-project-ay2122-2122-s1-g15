@@ -7,6 +7,8 @@ import "highlight.js/styles/monokai-sublime.css";
 import Sharedb from "sharedb/lib/client";
 import richText from "rich-text";
 
+const WSS_PORT = 6100;
+
 // Adding syntax highlight support for common languages
 const hljs = require("highlight.js/lib/common");
 
@@ -15,6 +17,7 @@ Sharedb.types.register(richText.type);
 
 function Editor(props) {
   const [conn, setConn] = useState();
+  const [hasConnected, setHasConnected] = useState();
 
   async function get_connection(session_id) {
     const body = {"session_id": session_id};
@@ -22,7 +25,7 @@ function Editor(props) {
     await axios
       .post("http://localhost:6001/api/connection/", body)
       .catch((error) => {
-        console.log("Failed to create connection with editor service!");
+        console.log("Failed to create connection object!");
         console.log(error);
       });
     console.log("Getting created connection");
@@ -45,89 +48,91 @@ function Editor(props) {
 
   useEffect(() => {
     console.log(conn);
-    if (conn == null) {
-      console.log("Connection not found!");
-      return;
-    }
-    // Setup websocket and shareDB connection
-    var port = conn[0].port;
-    var document_key = conn[0].document_key;
-    const socket = new WebSocket("ws://127.0.0.1:" + port);
-    const connection = new Sharedb.Connection(socket);
-    // Querying for our document
-    const doc = connection.get("documents", document_key);
+    
+    if (!hasConnected) {
+      if (conn == null) {
+        console.log("Connection not found!");
+        return;
+      }
+      // Setup websocket and shareDB connection
+      var port = conn[0].port;
+      var document_key = conn[0].document_key;
+      const socket = new WebSocket("ws://127.0.0.1:" + WSS_PORT);
+      const connection = new Sharedb.Connection(socket);
+      // Querying for our document
+      const doc = connection.get("documents", document_key);
 
-    doc.subscribe(function (err) {
-      if (err) throw err;
+      doc.subscribe(function (err) {
+        if (err) throw err;
 
-      // const toolbarOptions = ['bold', 'italic', 'underline', 'strike', 'align'];
-      hljs.configure({
-        languages: ["javascript", "java", "python"],
-      });
-      const options = {
-        modules: {
-          syntax: {
-            highlight: (text) => hljs.highlightAuto(text).value,
-          },
-          toolbar: [
-            [
-              "bold",
-              "italic",
-              "underline",
-              "strike",
-              {
-                color: [],
-              },
-              {
-                background: [],
-              },
-              {
-                font: [],
-              },
-              {
-                size: [],
-              },
-              {
-                align: [],
-              },
-              "image",
-              "code-block",
+        // const toolbarOptions = ['bold', 'italic', 'underline', 'strike', 'align'];
+        hljs.configure({
+          languages: ["javascript", "java", "python"],
+        });
+        const options = {
+          modules: {
+            syntax: {
+              highlight: (text) => hljs.highlightAuto(text).value,
+            },
+            toolbar: [
+              [
+                "bold",
+                "italic",
+                "underline",
+                "strike",
+                {
+                  color: [],
+                },
+                {
+                  background: [],
+                },
+                {
+                  font: [],
+                },
+                {
+                  size: [],
+                },
+                {
+                  align: [],
+                },
+                "image",
+                "code-block",
+              ],
             ],
-          ],
-        },
-        scrollingContainer: "#editorcontainer",
-        theme: "snow",
-      };
+          },
+          scrollingContainer: "#editorcontainer",
+          theme: "snow",
+        };
 
-      let quill = new Quill("#editor", options);
-      /**
-       * On Initialising if data is present in server
-       * Updating its content to editor
-       */
-      quill.setContents(doc.data);
+        let quill = new Quill("#editor", options);
+        /**
+         * On Initialising if data is present in server
+         * Updating its content to editor
+         */
+        quill.setContents(doc.data);
 
-      // quill.formatLine(1, quill.getLength(), { 'code-block': true });
+        // quill.formatLine(1, quill.getLength(), { 'code-block': true });
 
-      /**
-       * On Text change publishing to our server
-       * so that it can be broadcasted to all other clients
-       */
-      quill.on("text-change", function (delta, oldDelta, source) {
-        if (source !== "user") return;
-        doc.submitOp(delta, { source: quill });
+        /**
+         * On Text change publishing to our server
+         * so that it can be broadcasted to all other clients
+         */
+        quill.on("text-change", function (delta, oldDelta, source) {
+          if (source !== "user") return;
+          doc.submitOp(delta, { source: quill });
+        });
+
+        /** listening to changes in the document
+         * that is coming from our server
+         */
+        doc.on("op", function (op, source) {
+          if (source === quill) return;
+          quill.updateContents(op);
+        });
+        setHasConnected(true);
       });
-
-      /** listening to changes in the document
-       * that is coming from our server
-       */
-      doc.on("op", function (op, source) {
-        if (source === quill) return;
-        quill.updateContents(op);
-      });
-    });
-    return () => {
-      connection.close();
-    };
+    }
+    return;
   }, [conn]);
 
   return (
