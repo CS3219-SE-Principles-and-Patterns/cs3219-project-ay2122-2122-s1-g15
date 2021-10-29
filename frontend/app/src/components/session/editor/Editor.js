@@ -48,9 +48,8 @@ function Editor(props) {
   }, [props]);
 
   useEffect(() => {
-    console.log(conn);
-    
     if (!hasConnected) {
+      console.log(conn);
       if (conn == null) {
         console.log("Connection not found!");
         return;
@@ -112,8 +111,6 @@ function Editor(props) {
          */
         quill.setContents(doc.data);
 
-        // quill.formatLine(1, quill.getLength(), { 'code-block': true });
-
         /**
          * On Text change publishing to our server
          * so that it can be broadcasted to all other clients
@@ -133,6 +130,8 @@ function Editor(props) {
           quill.updateContents(op);
         });
 
+        /** Sets a state if peer has disconnected
+         */
         doc.on("del", function (op, source) {
           setHasPeer(false);
           console.log("Peer disconnected!");
