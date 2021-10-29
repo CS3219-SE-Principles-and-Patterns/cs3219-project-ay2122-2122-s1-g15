@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import ReconnectingWebSocket from 'reconnecting-websocket';
 import Quill from "quill";
 import axios from "axios";
 import "quill/dist/quill.snow.css";
@@ -18,7 +19,7 @@ Sharedb.types.register(richText.type);
 function Editor(props) {
   const [conn, setConn] = useState();
   const [hasConnected, setHasConnected] = useState(false);
-  // const [peerDisconnected, setPeerDisconnected] = useState(false);
+  const [hasDisconnected, setHasDisconnected] = useState(false);
 
   async function get_connection(session_id) {
     const body = {"session_id": session_id};
@@ -44,6 +45,7 @@ function Editor(props) {
 
   // Get Connection object from api
   useEffect(() => {
+    console.log("hasConnected:" + hasConnected)
     if (!hasConnected) {
       get_connection(props.session_id);
     }
@@ -57,9 +59,9 @@ function Editor(props) {
         return;
       }
       // Setup websocket and shareDB connection
-      var port = conn[0].port;
       var document_key = conn[0].document_key;
-      const socket = new WebSocket("ws://127.0.0.1:" + WSS_PORT);
+      const socket = new ReconnectingWebSocket("ws://127.0.0.1:" + WSS_PORT);
+      // const socket = new WebSocket("ws://127.0.0.1:" + WSS_PORT);
       const connection = new Sharedb.Connection(socket);
       // Querying for our document
       const doc = connection.get("documents", document_key);
@@ -112,7 +114,8 @@ function Editor(props) {
          */
         quill.setContents(doc.data);
 
-         doc.on("del", function (op, source) {
+        doc.on("del", function (op, source) {
+          setHasDisconnected(true);
           console.log("Peer disconnected!");
         });
 

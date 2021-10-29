@@ -1,7 +1,24 @@
 const service = require("../services/service");
 const Connection = require("../connectionModel");
+const { connection } = require("mongoose");
 class ConnectionController {
-  constructor() {}
+  constructor() {
+    // Creates all existing documents
+    Connection.get_all_connections(function (err, connections) {
+      if (err) {
+        return res.status(400).json({
+          status: "error",
+          message: err,
+        });
+      }
+      for(var i = 0; i < connections.length; i++) {
+        console.log(connections[i]);
+        const document_key = connections[i]["document_key"];
+        service.create_doc(document_key);
+        console.log("" + document_key + " created!");
+      }
+    });
+  }
 
   index(req, res) {
     Connection.get_all_connections(function (err, connections) {
