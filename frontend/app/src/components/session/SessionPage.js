@@ -94,13 +94,13 @@ const SessionPage = (props) => {
               <div style={box}>
                 {" "}
                 <AiOutlineUser />
-                {username}{" "}
+                Current User: {username}{" "}
               </div>
             </Col>
             <Col span={4} style={{ textAlign: "center" }}>
               <div style={box}>
                 {" "}
-                <AiOutlineUser /> Peer's Name
+                <AiOutlineUser /> Peer's Name: {peer}
               </div>
             </Col>
             <Col span={2} style={{ textAlign: "center" }}>
