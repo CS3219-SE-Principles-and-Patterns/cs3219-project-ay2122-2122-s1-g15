@@ -26,6 +26,8 @@ const SessionPage = (props) => {
 
   const session_id = session.sessionInfo.sessionId;
   const question = session.sessionInfo.question;
+  const peer = session.matchedUser.displayName;
+
   console.log(session_id);
 
   const showModal = () => {
