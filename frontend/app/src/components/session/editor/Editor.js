@@ -26,7 +26,11 @@ function Editor(props) {
     await axios
       .post("http://localhost:6001/api/connection/", body)
       .catch((error) => {
+<<<<<<< HEAD
         console.log("Failed to create connection object!");
+=======
+        console.log("Failed to create connection with editor service!");
+>>>>>>> 9ca997de99fb9e3a50c116130a877d9767e86963
         console.log(error);
       });
     console.log("Getting created connection");
@@ -99,6 +103,7 @@ function Editor(props) {
                 "code-block",
               ],
             ],
+<<<<<<< HEAD
           },
           scrollingContainer: "#editorcontainer",
           theme: "snow",
@@ -141,6 +146,43 @@ function Editor(props) {
       });
     }
     return;
+=======
+          ],
+        },
+        scrollingContainer: "#editorcontainer",
+        theme: "snow",
+      };
+
+      let quill = new Quill("#editor", options);
+      /**
+       * On Initialising if data is present in server
+       * Updating its content to editor
+       */
+      quill.setContents(doc.data);
+
+      // quill.formatLine(1, quill.getLength(), { 'code-block': true });
+
+      /**
+       * On Text change publishing to our server
+       * so that it can be broadcasted to all other clients
+       */
+      quill.on("text-change", function (delta, oldDelta, source) {
+        if (source !== "user") return;
+        doc.submitOp(delta, { source: quill });
+      });
+
+      /** listening to changes in the document
+       * that is coming from our server
+       */
+      doc.on("op", function (op, source) {
+        if (source === quill) return;
+        quill.updateContents(op);
+      });
+    });
+    return () => {
+      connection.close();
+    };
+>>>>>>> 9ca997de99fb9e3a50c116130a877d9767e86963
   }, [conn]);
 
   return (

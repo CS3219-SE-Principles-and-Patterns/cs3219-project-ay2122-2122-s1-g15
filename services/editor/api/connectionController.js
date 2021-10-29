@@ -22,12 +22,18 @@ class ConnectionController {
   create(req, res) {
     var session_id = req.body.session_id;
     console.log("Session_id:", session_id);
+<<<<<<< HEAD
     var document_key = "document_" + session_id;
     const new_connection = new Connection({
       session_id: session_id,
       document_key: document_key,
     });
     new_connection.save(function (err) {
+=======
+
+    var query_for_ports = Connection.find({}).select("port");
+    query_for_ports.exec(function (err, connections) {
+>>>>>>> 9ca997de99fb9e3a50c116130a877d9767e86963
       if (err) {
         return res.status(400).json({
           status: "error",
