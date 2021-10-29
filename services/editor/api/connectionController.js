@@ -34,7 +34,7 @@ class ConnectionController {
           message: err,
         });
       }
-      service.start_server(document_key);
+      service.create_doc(document_key);
       res.json({
         message: "New Connection Created!",
         data: new_connection,

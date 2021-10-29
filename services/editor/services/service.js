@@ -19,7 +19,7 @@ class EditorService {
     });
   }
 
-  start_server(document_key) {
+  create_doc(document_key) {
     console.log("Starting server....");
     ShareDB.types.register(require("rich-text").type);
     const doc = connection.get("documents", document_key);
@@ -28,25 +28,7 @@ class EditorService {
         if (error) console.error(error)
       })
     }
-    // doc.fetch(function (err) {
-    //   if (err) throw err;
-    //   if (doc.type === null) {
-    //     /**
-    //      * If there is no document with id in memory
-    //      * we are creating it and then starting up our ws server
-    //      */
-    //     doc.create([{ insert: "Hello World!" }], "rich-text", () => {
-    //       wss.on("connection", function connection(ws) {
-    //         // For transport we are using a ws JSON stream for communication
-    //         // that can read and write js objects.
-    //         const jsonStream = new WebSocketJSONStream(ws);
-    //         // console.log(shareDBServer);
-    //         shareDBServer.listen(jsonStream);
-    //       });
-    //     });
-    //     return;
-    //   }
-    // });
+
   }
 
   remove_document(document_key) {

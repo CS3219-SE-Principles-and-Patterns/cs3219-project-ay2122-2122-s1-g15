@@ -17,8 +17,8 @@ Sharedb.types.register(richText.type);
 
 function Editor(props) {
   const [conn, setConn] = useState();
-  const [hasConnected, setHasConnected] = useState();
-  const [peerDisconnected, setPeerDisconnected] = useState();
+  const [hasConnected, setHasConnected] = useState(false);
+  // const [peerDisconnected, setPeerDisconnected] = useState(false);
 
   async function get_connection(session_id) {
     const body = {"session_id": session_id};
@@ -44,7 +44,9 @@ function Editor(props) {
 
   // Get Connection object from api
   useEffect(() => {
-    get_connection(props.session_id);
+    if (!hasConnected) {
+      get_connection(props.session_id);
+    }
   }, [props]);
 
   useEffect(() => {
@@ -110,14 +112,17 @@ function Editor(props) {
          */
         quill.setContents(doc.data);
 
+         doc.on("del", function (op, source) {
+          console.log("Peer disconnected!");
+        });
+
         /**
          * On Text change publishing to our server
          * so that it can be broadcasted to all other clients
          */
         quill.on("text-change", function (delta, oldDelta, source) {
           if (source !== "user") return;
-          console.log("peerDisconnected:" + peerDisconnected);
-          if (peerDisconnected) return;
+          if (!doc.type) return;
           doc.submitOp(delta, { source: quill });
           
         });
@@ -128,14 +133,6 @@ function Editor(props) {
         doc.on("op", function (op, source) {
           if (source === quill) return;
           quill.updateContents(op);
-        });
-
-        /** Sets a state if peer has disconnected
-         */
-        doc.on("del", function (op, source) {
-          setPeerDisconnected(true);
-          console.log("peerDisconnected:" + peerDisconnected);
-          console.log("Peer disconnected!");
         });
 
         setHasConnected(true);
