@@ -18,7 +18,7 @@ Sharedb.types.register(richText.type);
 function Editor(props) {
   const [conn, setConn] = useState();
   const [hasConnected, setHasConnected] = useState();
-  const [hasPeer, setHasPeer] = useState();
+  const [peerDisconnected, setPeerDisconnected] = useState();
 
   async function get_connection(session_id) {
     const body = {"session_id": session_id};
@@ -64,7 +64,6 @@ function Editor(props) {
 
       doc.subscribe(function (err) {
         if (err) throw err;
-
         // const toolbarOptions = ['bold', 'italic', 'underline', 'strike', 'align'];
         hljs.configure({
           languages: ["javascript", "java", "python"],
@@ -117,7 +116,8 @@ function Editor(props) {
          */
         quill.on("text-change", function (delta, oldDelta, source) {
           if (source !== "user") return;
-          if (!hasPeer) return;
+          console.log("peerDisconnected:" + peerDisconnected);
+          if (peerDisconnected) return;
           doc.submitOp(delta, { source: quill });
           
         });
@@ -133,7 +133,8 @@ function Editor(props) {
         /** Sets a state if peer has disconnected
          */
         doc.on("del", function (op, source) {
-          setHasPeer(false);
+          setPeerDisconnected(true);
+          console.log("peerDisconnected:" + peerDisconnected);
           console.log("Peer disconnected!");
         });
 
