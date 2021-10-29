@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const uri = "mongodb://localhost/connection";
+const uri = "mongodb+srv://atlas_admin:KEwpeOZbjbfrWIOQ@nodejs-reviews.0ekmm.mongodb.net/connection?retryWrites=true&w=majority";
 
 class DbHandler {
   constructor() {}
