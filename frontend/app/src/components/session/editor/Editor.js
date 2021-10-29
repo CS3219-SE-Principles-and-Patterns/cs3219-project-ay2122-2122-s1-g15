@@ -18,6 +18,7 @@ Sharedb.types.register(richText.type);
 function Editor(props) {
   const [conn, setConn] = useState();
   const [hasConnected, setHasConnected] = useState();
+  const [hasPeer, setHasPeer] = useState();
 
   async function get_connection(session_id) {
     const body = {"session_id": session_id};
@@ -119,7 +120,9 @@ function Editor(props) {
          */
         quill.on("text-change", function (delta, oldDelta, source) {
           if (source !== "user") return;
+          if (!hasPeer) return;
           doc.submitOp(delta, { source: quill });
+          
         });
 
         /** listening to changes in the document
@@ -129,6 +132,12 @@ function Editor(props) {
           if (source === quill) return;
           quill.updateContents(op);
         });
+
+        doc.on("del", function (op, source) {
+          setHasPeer(false);
+          console.log("Peer disconnected!");
+        });
+
         setHasConnected(true);
       });
     }
