@@ -14,9 +14,6 @@ const box = {
   padding: "8px 0",
   background: "white",
 };
-// TODO: dynamically get from matching component
-// const session_id = 2224;
-// TODO: Replace with existing username/userid, remove nanoid dependency.
 
 const SessionPage = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -29,11 +26,6 @@ const SessionPage = (props) => {
 
   const session_id = session.sessionInfo.sessionId;
   const question = session.sessionInfo.question;
-<<<<<<< HEAD
-=======
-  console.log(question);
-
->>>>>>> 9ca997de99fb9e3a50c116130a877d9767e86963
   console.log(session_id);
 
   const showModal = () => {
@@ -56,17 +48,13 @@ const SessionPage = (props) => {
     setSession(null);
   };
 
-  const getPeersName = (currentName) => {
-
-  }
-
   const closeEditorConnection = (session_id) => {
-    // axios
-    //   .delete("http://localhost:6001/api/connection/" + session_id)
-    //   .catch((error) => {
-    //     console.log("Editor's session is not closed properly!");
-    //     console.log(error);
-    //   });
+    axios
+      .delete("http://localhost:6001/api/connection/" + session_id)
+      .catch((error) => {
+        console.log("Editor's session is not closed properly!");
+        console.log(error);
+      });
   };
 
   useEffect(() => {
