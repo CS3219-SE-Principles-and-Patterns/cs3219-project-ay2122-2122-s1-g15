@@ -1,10 +1,11 @@
-const MATCH_DURATION = process.env.MATCH_DURATION || 60;
+const MATCH_DURATION =  process.env.MATCH_DURATION || 120;
 const mongoose = require("mongoose");
 const schema = new mongoose.Schema({
   user: { type: Object, required: true },
   requestId: { type: String, required: true },
   difficulty: { type: String, required: true },
   match: {type: mongoose.Schema.Types.ObjectId, default: null },
+  matchedUser: {type: Object, default: null},
   sessionInfo: {type : Object, default: null},
   createdAt: { type: Date, expires: 3600, default: Date.now },
 });

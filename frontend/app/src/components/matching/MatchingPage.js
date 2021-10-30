@@ -23,7 +23,7 @@ const questionDifficulties = [
   {key: "hard", value: "Hard"}
 ];
 
-const MATCH_DURATION = (process.env.MATCH_DURATION && parseInt(process.env.MATCH_DURATION)) || 120;
+const MATCH_DURATION = process.env.MATCH_DURATION || 120;
 
 const matchingEndpoint = process.env.MATCHING_ENDPOINT || "http://localhost:4000/matching"
 

@@ -1,3 +1,5 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require("express");
 const morgan = require("morgan");
 const { Server } = require("socket.io");
@@ -11,7 +13,7 @@ const db = require("./services/db");
 db.connect();
 
 // create express app
-const port = 4000;
+const port = process.env.SERVER_PORT || 4000;
 const app = express();
 // express middleware
 app.use(morgan("combined"));
@@ -22,7 +24,7 @@ app.use(function (req, res, next) {
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-  res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+  res.header("Access-Control-Allow-Methods", "POST, GET");
   next();
 });
 app.use("/api", routes);
@@ -33,10 +35,9 @@ const io = new Server(httpServer, {
   cors: {
     origin: "*",
   },
-  pingInterval: 3000,
-  pingTimeout: 60000
+  pingInterval: process.env.SOCKET_PING_INTERVAL || 3000,
+  pingTimeout: process.env.SOCKET_PING_TIMEOUT || 60000
 });
-
 
 matchingController.start(io)
 

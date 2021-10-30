@@ -60,8 +60,10 @@ class Service {
             return this.createSession(userReq.difficulty)
             .then(sessionInfo => {
               userReq.match = otherReq._id;
+              userReq.matchedUser = otherReq.user;
               userReq.sessionInfo = sessionInfo;
               otherReq.match = userReq._id;
+              otherReq.matchedUser = userReq.user;
               otherReq.sessionInfo = sessionInfo;
               userReq.save();
               otherReq.save();
@@ -93,7 +95,7 @@ class Service {
         var sessionInfo = {
           sessionId,
           difficulty,
-          question: question.markdown,
+          question
         };
         return sessionInfo;
       })
