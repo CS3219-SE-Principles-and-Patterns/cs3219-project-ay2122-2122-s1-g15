@@ -1,8 +1,10 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const express = require("express");
 const mongoose = require("mongoose");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
-const port = 6001;
+const port = process.env.SERVER_PORT || 6001;
 const app = express();
 app.use(morgan("combined"));
 app.use(

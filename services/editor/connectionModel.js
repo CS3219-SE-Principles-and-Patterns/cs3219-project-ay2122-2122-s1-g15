@@ -4,7 +4,6 @@ var AutoIncrement = require("mongoose-sequence")(mongoose);
 var connectionSchema = mongoose.Schema(
   {
     _id: Number,
-    port: Number,
     session_id: {
       type: String,
       unique: true,

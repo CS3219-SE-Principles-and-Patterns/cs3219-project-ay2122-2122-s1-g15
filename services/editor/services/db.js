@@ -1,5 +1,7 @@
+const dotenv = require('dotenv');
+dotenv.config();
 const mongoose = require("mongoose");
-const uri = "mongodb://localhost/connection";
+const uri = process.env.MONGO_URI || "mongodb+srv://atlas_admin:KEwpeOZbjbfrWIOQ@nodejs-reviews.0ekmm.mongodb.net/connection?retryWrites=true&w=majority";
 
 class DbHandler {
   constructor() {}
