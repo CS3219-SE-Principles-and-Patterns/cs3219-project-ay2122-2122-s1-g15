@@ -9,9 +9,9 @@ import { SessionContext } from "../../../util/SessionProvider";
 // TODO: Replace with deployed server endpoint
 const socket = io("https://34.79.116.255/chat/", {
   path: "/chat/socket.io/",
-  extraHeaders: {
-    "Access-Control-Allow-Origin": "*",
-  }
+  // extraHeaders: {
+  //   "Access-Control-Allow-Origin": "*",
+  // }
 });
 
 const { TextArea } = Input;
