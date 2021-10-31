@@ -23,8 +23,8 @@ function App() {
           </Route>
 
           <Route exact path="/session">
-            {/*{!session && <MatchingPage />}*/}
-            { <SessionPage />}
+            {!session && <MatchingPage />}
+            {session && <SessionPage />}
           </Route>
 
           <Route exact path="/register">
