@@ -85,7 +85,9 @@ const MatchingPage = (props) => {
   }
 
   const listenForMatch = (requestId) => {
-    var socket = io(matchingEndpoint);
+    var socket = io(matchingEndpoint, {
+      path: "/matching/socket/socket.io/",
+    });
     // submit
     // client-side
     socket.on("connect", () => {

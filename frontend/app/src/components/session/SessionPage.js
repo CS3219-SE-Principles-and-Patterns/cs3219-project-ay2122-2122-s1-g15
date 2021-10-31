@@ -24,9 +24,9 @@ const SessionPage = (props) => {
     sessionContext;
   const userContext = useContext(UserContext);
 
-  const session_id = session.sessionInfo.sessionId;
-  const question = session.sessionInfo.question;
-  const peer = session.matchedUser.displayName;
+  const session_id = session?.sessionInfo?.sessionId || "1234";
+  const question = session?.sessionInfo?.question;
+  const peer = session?.matchedUser?.displayName;
 
   console.log(session_id);
 
@@ -87,7 +87,7 @@ const SessionPage = (props) => {
             align="middle"
           >
             <Col span={6} style={{ textAlign: "center" }}>
-              <div style={box}>Difficulty: {question.difficulty.toUpperCase()}</div>
+              <div style={box}>Difficulty: {question?.difficulty?.toUpperCase()}</div>
             </Col>
             <Col span={8} style={{ textAlign: "center" }}></Col>
             <Col span={4} style={{ textAlign: "center" }}>

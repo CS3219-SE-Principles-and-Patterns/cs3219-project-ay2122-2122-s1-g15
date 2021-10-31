@@ -21,6 +21,8 @@ const io = require("socket.io")(server, {
     // methods: ["GET", "POST"],
     // allowedHeaders: ['my-customer-header']
   },
+  path: "/chat",
+  allowEIO3: true
 });
 
 const main = async () => {
