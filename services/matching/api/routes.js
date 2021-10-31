@@ -15,4 +15,8 @@ router.get("/match/get", (req, res) => {
   controller.handleGetMatch(req, res);
 })
 
+router.put("/match/cancel", (req, res) => {
+  controller.handleMatchCancel(req, res);
+})
+
 module.exports = router;
