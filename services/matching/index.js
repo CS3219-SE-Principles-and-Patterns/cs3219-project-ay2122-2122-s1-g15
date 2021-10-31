@@ -27,7 +27,7 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Methods", "POST, GET");
   next();
 });
-app.use("/api", routes);
+app.use("/matching", routes);
 
 // socket.io
 var httpServer = http.createServer(app);

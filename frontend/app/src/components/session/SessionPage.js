@@ -52,7 +52,7 @@ const SessionPage = (props) => {
 
   const closeEditorConnection = (session_id) => {
     axios
-      .delete("http://localhost:6001/api/connection/" + session_id)
+      .delete("http://34.79.116.255/editor/api/connection/" + session_id)
       .catch((error) => {
         console.log("Editor's session is not closed properly!");
         console.log(error);
