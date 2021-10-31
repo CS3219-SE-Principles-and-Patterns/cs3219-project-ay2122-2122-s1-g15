@@ -1,10 +1,59 @@
 .container {
-    margin: 1% 3%;
-    display: grid;
-    grid-template-columns: 3fr 1fr;
-    height: 100vh;
+  margin: 1% 3%;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  height: fit-content;
 }
 
 .session-header {
-    margin: 1% 3%;
+  margin-left: 0.5%;
+  margin-right: 0.5%;
+}
+
+/* .header-left {
+  width: 25%;
+} */
+
+.header-right {
+  display: flex;
+  /* width: 75%; */
+}
+
+.user-box {
+  line-height: 1.5715;
+  position: relative;
+  display: inline-block;
+  font-weight: 400;
+  white-space: nowrap;
+  text-align: center;
+  background-image: none;
+  border: 1px solid transparent;
+  box-shadow: 0 2px 0 rgb(0 0 0 / 2%);
+  /* touch-action: manipulation; */
+  height: 32px;
+  padding: 4px 15px;
+  font-size: 14px;
+  border-radius: 2px;
+  color: rgba(0, 0, 0, 0.85);
+  border-color: #d9d9d9;
+  background: #fff;
+}
+
+.ant-page-header-heading-title {
+  margin-right: 12px;
+  margin-bottom: 0;
+  color: rgba(0, 0, 0, 0.85);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 32px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.container-left {
+}
+
+.container-right {
+  height: 100%;
 }

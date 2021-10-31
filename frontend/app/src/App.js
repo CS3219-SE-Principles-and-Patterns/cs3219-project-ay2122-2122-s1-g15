@@ -12,6 +12,9 @@ import { SessionContext } from "./util/SessionProvider";
 function App() {
   const sessionContext = React.useContext(SessionContext);
   const { session, setSession } = sessionContext;
+
+  console.log(session);
+
   return (
     <Router>
       <div id="root">
