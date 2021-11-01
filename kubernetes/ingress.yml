@@ -5,9 +5,9 @@ metadata:
   annotations:
     ingress.kubernetes.io/service-upstream: "true"
     kubernetes.io/ingress.class: "nginx"
-    nginx.org/websocket-services : "peerprep-chat"
+    nginx.org/websocket-services : "peerprep-matching"
     nginx.ingress.kubernetes.io/ssl-passthrough: "true"
-    nginx.ingress.kubernetes.io/websocket-services: "socket-service"
+    nginx.ingress.kubernetes.io/websocket-services: "peerprep-matching"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/enable-cors: "true"
