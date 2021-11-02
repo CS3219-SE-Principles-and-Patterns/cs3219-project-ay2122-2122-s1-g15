@@ -5,19 +5,33 @@ import io from "socket.io-client";
 import ChatBubble from "./ChatBubble";
 import "./ChatBox.css";
 import { SessionContext } from "../../../util/SessionProvider";
-
-// TODO: Replace with deployed server endpoint
-const socket = io("http://localhost:5000");
+import InfiniteScroll from "react-infinite-scroll-component";
 
 const { TextArea } = Input;
 
 const ChatBox = (props) => {
-  const { username, sessionId } = props;
+  const { username, sessionId, userToken } = props;
   const [message, setMessage] = useState("");
   const [chat, setChat] = useState([]);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const sessionContext = useContext(SessionContext);
-  const { initiateDisconnect, setHasDisconnected } = sessionContext;
+  const { initiateDisconnect, setInitiateDisconnect, session, setSession } =
+    sessionContext;
+
+  // TODO: Replace with deployed server endpoint
+  // const socket = io("http://localhost:8080/", {
+  //   path: "/chat/socket.io/",
+  //   extraHeaders: {
+  //     bearer: userToken,
+  //     "Access-Control-Allow-Origin": "*",
+  //   },
+  //   transports: ["websocket"],
+  // });
+
+  const socket = io("http://localhost:5000/", {
+    path: "/chat/socket.io/",
+    transports: ["websocket"],
+  });
 
   const onChange = (e) => {
     setMessage(e.target.value);
@@ -25,16 +39,13 @@ const ChatBox = (props) => {
 
   const sendChat = (e) => {
     e.preventDefault();
-    const formattedMsg = message.trim().replace(/\n$/, "");
+    const formattedMsg = message.trim();
     if (formattedMsg !== "") {
       socket.emit("chat message", {
         message: formattedMsg,
         sender: username,
         sessionId: sessionId,
       });
-      const payload = { message: formattedMsg, sender: username };
-      setChat((chatHistory) => [...chatHistory, payload]);
-      console.log(chat);
     }
     setMessage("");
   };
@@ -47,61 +58,75 @@ const ChatBox = (props) => {
 
   useEffect(() => {
     socket.on("chat message", (payload) => {
-      setChat([...chat, payload]);
-      console.log(chat);
+      console.log(payload);
+      setChat((chat) => [...chat, payload]);
     });
     socket.on("user disconnected", (payload) => {
-      setChat([...chat, payload]);
+      setChat((chat) => [...chat, payload]);
     });
-    socket.on("user connected", (payload) => {
-      setChat([...chat, payload]);
-    });
-    const messageContainer = document.getElementById("message-container");
-    messageContainer.scrollTo(0, messageContainer.scrollHeight);
-  }, [chat, chat.length]);
+  }, []);
 
   useEffect(() => {
     if (isInitialLoad) {
+      socket.connect();
       const payload = { username, sessionId };
       socket.emit("join room", payload);
       setIsInitialLoad(false);
     }
-  }, [isInitialLoad, sessionId, username]);
+  }, []);
 
   useEffect(() => {
-    if (initiateDisconnect) {
+    if (initiateDisconnect === true) {
+      console.log("initiating disconnect!");
       const payload = { sessionId, username };
       socket.emit("initiate disconnect", payload);
-      socket.disconnect(payload);
-      setHasDisconnected(true);
+      setSession(null);
+      setInitiateDisconnect(false);
     }
-  }, [initiateDisconnect, setHasDisconnected, sessionId, username]);
+  }, [initiateDisconnect]);
 
   return (
     <>
       <Card title="Chat" className="card">
-        <div className="chat-container">
-          <div id="message-container" className="chat-messages">
-            {chat.length === 0 ? (
-              <p style={{ color: "#cccccc", textAlign: "center" }}>
-                <i>This is the beginning of your conversation. Say hi!</i>
-              </p>
-            ) : (
-              <List
-                dataSource={chat}
-                renderItem={(payload, index) => (
-                  <List.Item>
-                    <ChatBubble
-                      key={index}
-                      msg={payload.message}
-                      sender={payload.sender}
-                      username={username}
-                    />
-                  </List.Item>
-                )}
-              />
-            )}
-          </div>
+        <div id="chat-container" className="chat-container">
+          {chat.length === 0 ? (
+            <p
+              style={{ color: "#cccccc", textAlign: "center", padding: "12px" }}
+            >
+              <i>This is the beginning of your conversation. Say hi!</i>
+            </p>
+          ) : (
+            <div
+              id="scrollableDiv"
+              className="scrollable"
+              style={{
+                overflow: "auto",
+                padding: "0 16px",
+                height: "600px",
+              }}
+            >
+              <InfiniteScroll
+                dataLength={chat.length}
+                scrollableTarget="scrollableDiv"
+              >
+                <List
+                  className="message-list"
+                  dataSource={chat}
+                  renderItem={(payload, index) => (
+                    <List.Item>
+                      <ChatBubble
+                        key={index}
+                        msg={payload.message}
+                        sender={payload.sender}
+                        username={username}
+                        id={payload.chatId}
+                      />
+                    </List.Item>
+                  )}
+                />
+              </InfiniteScroll>
+            </div>
+          )}
           <div className="input-container">
             <TextArea
               className="chat-input"
