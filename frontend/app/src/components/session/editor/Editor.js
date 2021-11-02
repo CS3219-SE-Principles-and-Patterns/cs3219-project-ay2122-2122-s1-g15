@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ReconnectingWebSocket from 'reconnecting-websocket';
+import ReconnectingWebSocket from "reconnecting-websocket";
 import Quill from "quill";
 import axios from "axios";
 import "quill/dist/quill.snow.css";
@@ -22,7 +22,7 @@ function Editor(props) {
   const [hasDisconnected, setHasDisconnected] = useState(false);
 
   async function get_connection(session_id) {
-    const body = {"session_id": session_id};
+    const body = { session_id: session_id };
     console.log("Sending post request");
     await axios
       .post("https://34.79.116.255/editor/api/connection/", body)
@@ -45,7 +45,7 @@ function Editor(props) {
 
   // Get Connection object from api
   useEffect(() => {
-    console.log("hasConnected:" + hasConnected)
+    console.log("hasConnected:" + hasConnected);
     if (!hasConnected) {
       get_connection(props.session_id);
     }
@@ -127,7 +127,6 @@ function Editor(props) {
           if (source !== "user") return;
           if (!doc.type) return;
           doc.submitOp(delta, { source: quill });
-
         });
 
         /** listening to changes in the document
@@ -145,7 +144,7 @@ function Editor(props) {
   }, [conn]);
 
   return (
-    <div style={{ marginTop: "1%", border: "1px solid" }}>
+    <div style={{ marginTop: "1%", marginBottom: "1%", border: "1px solid" }}>
       <div id="editor"></div>
     </div>
   );

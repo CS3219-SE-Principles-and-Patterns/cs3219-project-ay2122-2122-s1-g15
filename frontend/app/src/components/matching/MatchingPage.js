@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 import SelectionView from "./SelectionView";
 import LoadingView from "./LoadingView";
 import TimeoutView from "./TimeoutView";
-import {postMatchRequest} from "../../api/matching"
+import {postMatchRequest, cancelMatchRequest} from "../../api/matching"
 import { UserContext } from "../../util/UserProvider";
 import {SessionContext} from "../../util/SessionProvider"
 const { Content } = Layout;
@@ -23,9 +23,10 @@ const questionDifficulties = [
   {key: "hard", value: "Hard"}
 ];
 
-const MATCH_DURATION = process.env.MATCH_DURATION || 120;
+const MATCH_DURATION = process.env.REACT_APP_MATCH_DURATION || 60;
 
-const matchingEndpoint = process.env.MATCHING_ENDPOINT || "http://34.79.116.255/matching"
+const matchingEndpoint = process.env.REACT_APP_MATCHING_ENDPOINT || "http://34.79.116.255/matching"
+var socket = null;
 
 const MatchingPage = (props) => {
   const user = React.useContext(UserContext).user
@@ -36,6 +37,7 @@ const MatchingPage = (props) => {
   const [remainingTime, setRemainingTime] = React.useState(MATCH_DURATION);
   const [selected, setSelected] = React.useState(null);
   const [matchFound, setMatchFound] = React.useState(false);
+  const [requestId, setRequestId] = React.useState()
   // for selection view
   const handleSubmitMatchRequest = () => {
     setView(views.loading);
@@ -52,11 +54,14 @@ const MatchingPage = (props) => {
   const submitMatchRequest = async (index) => {
     var difficulty = questionDifficulties[index];
     var response = await postMatchRequest(user, difficulty.key)
-    if (response) {
+    if (response && response.requestId) {
       console.log("Received request id: " + response.requestId)
+      setRequestId(response.requestId)
       return listenForMatch(response.requestId)
     }
-    console.log("Error occured")
+
+    // add error toast
+    console.log("Error occured: response or requestId null when sending matching request")
   };
 
   // for timeout view
@@ -64,37 +69,53 @@ const MatchingPage = (props) => {
     setTimerStart(false);
     setRemainingTime(MATCH_DURATION);
     setView(views.timeout);
+
+    socket?.close()
   };
 
   const handleRetryMatch = () => {
-    setView(views.loading);
-    setTimerStart(true);
-    submitMatchRequest(selected);
+    setRemainingTime(MATCH_DURATION);
+    handleSubmitMatchRequest()
   };
 
   const handleReturnToSelection = () => {
     setView(views.selection);
+    setRequestId(null)
     setSelected(null);
   };
 
+  const handleMatchCancel = () => {
+    setRemainingTime(MATCH_DURATION);
+    setTimerStart(false);
+    socket?.close()
+
+    // send update api call to matching to inform of cancel
+    cancelMatchRequest(requestId)
+    handleReturnToSelection()
+  }
+
   // for loading view
   const handleMatchFound = (session) => {
+    setTimerStart(false);
     setMatchFound(true)
-    setTimerStart(false)
-    setSession(session)
+
+    // introduce a delay before switching over to session page
+    setTimeout(() => setSession(session), 2500)
   }
 
   const listenForMatch = (requestId) => {
     var socket = io(matchingEndpoint, {
       path: "/matching/socket/socket.io/",
     });
+    console.log("Listen for match")
+    socket = io(matchingEndpoint);
     // submit
     // client-side
     socket.on("connect", () => {
       // emit the wait event and send the requestId along with it
       console.log("connected to socket");
       socket.emit("wait", {requestId})
-      console.log("Sent requestId to socket")
+      console.log(`Sent requestId ${requestId} to socket`)
     });
 
     // listen for server response
@@ -147,6 +168,7 @@ const MatchingPage = (props) => {
           <LoadingView
             remainingTime={remainingTime}
             matchFound={matchFound}
+            handleMatchCancel={handleMatchCancel}
           />
         );
       case views.timeout:

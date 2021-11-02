@@ -25,7 +25,8 @@
   position: static;
   width: 100%;
 }
-p {
+.chat-p {
   word-break: break-all;
+  white-space: pre-line;
   margin-bottom: 0;
 }

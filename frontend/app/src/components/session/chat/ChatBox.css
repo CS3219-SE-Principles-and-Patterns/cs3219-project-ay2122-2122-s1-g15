@@ -1,12 +1,13 @@
 .card {
-  height: 74%;
   padding: 0;
+  height: 100%;
 }
 .chat-messages {
   overflow-y: auto;
   width: 100%;
   padding: 12px;
-  height: 58vh;
+  min-height: calc(100% - 108px);
+  max-height: calc(100% - 42px);
 }
 .chat-input {
   width: 100%;
@@ -18,13 +19,31 @@
   bottom: 2px;
   width: 100%;
   align-items: center;
+  max-height: 108px;
+  min-height: 42px;
+  background: #fff;
 }
 .ant-card-body {
   padding: 0px;
+  height: calc(100% - 57.67px);
 }
 
 .ant-list-split .ant-list-item {
   border-bottom: 0px;
   display: flow-root;
   padding: 0px;
+}
+
+.chat-container {
+  min-height: calc(100% - 108px);
+  max-height: calc(100% - 42px);
+}
+
+.message-list {
+  padding: 12px;
+}
+
+.scrollable {
+  min-height: calc(100% - 118px);
+  max-height: calc(100% - 52px);
 }
