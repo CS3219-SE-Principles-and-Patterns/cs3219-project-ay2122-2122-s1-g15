@@ -4,20 +4,14 @@ class SocketController {
     socket.on("wait", (payload) => {
       var requestId = payload.requestId;
       if (requestId) {
-        // check if the user has a match
-        // matchingController.handleFindMatch(requestId).then((emitted) => {
-        //   if (emitted) {
-        //     console.log(`Emitted sessionInfo, disconnecting ${requestId}`)
-        //     socket.disconnect();
-        //   }
-        // });
+        console.log(`A user waiting on socket with requestId ${requestId}`)
         matchingController.handleFindMatch(requestId)
       }
     });
   }
   static onDisconnect(socket) {
     socket.on("disconnect", () => {
-      
+      console.log("A user disconnected")
     });
   }
 }

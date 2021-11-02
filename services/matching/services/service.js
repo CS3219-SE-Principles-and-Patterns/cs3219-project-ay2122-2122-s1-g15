@@ -104,6 +104,14 @@ class Service {
         throw new Error(errors.ERROR_FETCH_QUESTION);
       });
   }
+
+  static cancelMatch(requestId) {
+    var findCriteria = {requestId}
+    var update = {
+      match: "USER_CANCELLED"
+    }
+    return MatchRequest.updateMatch(findCriteria, update)
+  }
 }
 
 module.exports = Service;

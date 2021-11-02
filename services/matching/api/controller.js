@@ -56,6 +56,21 @@ class MatchingController {
         console.log(err);
       });
   }
+
+  handleMatchCancel(req, res) {
+    var requestId = req.body.requestId
+    service.cancelMatch(requestId)
+    .then(() => {
+      console.log(`Succesfully cancelled match for ${requestId}`)
+      res.status(200).send("Successfully cancelled")
+    })
+    .catch(err => {
+      console.log(`Error occured when cancelling match for ${requestId}: `)
+      console.log(err)
+      res.status(500).send("Error occured when cancelling")
+    })
+  }
+
 }
 
 var matchingController = new MatchingController();
