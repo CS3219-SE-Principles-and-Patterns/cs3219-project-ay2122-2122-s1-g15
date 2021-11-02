@@ -4,7 +4,7 @@ const schema = new mongoose.Schema({
   user: { type: Object, required: true },
   requestId: { type: String, required: true },
   difficulty: { type: String, required: true },
-  match: {type: mongoose.Schema.Types.ObjectId, default: null },
+  match: {type: mongoose.Schema.Types.Mixed, default: null },
   matchedUser: {type: Object, default: null},
   sessionInfo: {type : Object, default: null},
   createdAt: { type: Date, expires: 3600, default: Date.now },
@@ -34,6 +34,13 @@ schema.static("findMatch", function ( userRequest) {
         $gte: new Date(dt.getTime() - MATCH_DURATION * 1000)
       }
     },
+    update
+  ).exec();
+});
+
+schema.static("updateMatch", function (findCriteria, update) {
+  return this.findOneAndUpdate(
+    findCriteria,
     update
   ).exec();
 });
