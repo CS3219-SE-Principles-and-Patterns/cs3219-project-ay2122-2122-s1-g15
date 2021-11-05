@@ -23,9 +23,9 @@ const SessionPage = (props) => {
   const { setInitiateDisconnect, session } = sessionContext;
   const userContext = useContext(UserContext);
 
-  const session_id = session.sessionInfo.sessionId;
-  const question = session.sessionInfo.question;
-  const peer = session.matchedUser.displayName;
+  const session_id = session?.sessionInfo?.sessionId || "1234";
+  const question = session?.sessionInfo?.question;
+  const peer = session?.matchedUser?.displayName;
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -49,7 +49,7 @@ const SessionPage = (props) => {
 
   const closeEditorConnection = (session_id) => {
     axios
-      .delete("http://localhost:6001/api/connection/" + session_id)
+      .delete("https://34.117.253.13/editor/api/connection/" + session_id)
       .catch((error) => {
         console.log("Editor's session is not closed properly!");
         console.log(error);

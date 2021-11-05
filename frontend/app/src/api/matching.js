@@ -1,7 +1,8 @@
 
 import axios from "axios"
-const MATCHING_ENDPOINT = process.env.REACT_APP_MATCHING_ENDPOINT || "http://localhost:4000"
-const API_SUBMIT = process.env.REACT_APP_MATCHING_API_SUBMIT || "/api/match/submit"
+
+const MATCHING_ENDPOINT = "https://peerprep.ninja/matching/api"
+const API_SUBMIT = process.env.MATCHING_API_SUBMIT || "/match/submit"
 const API_CANCEL = process.env.REACT_APP_MATCHING_API_CANCEL || "/api/match/cancel"
 const API_FIND = process.env.REACT_APP_MATCHING_API_FIND || "/api/match/find"
 
@@ -31,7 +32,7 @@ export const cancelMatchRequest = async (requestId) => {
   .catch(err => {
     console.log(err)
   })
-  
+
 }
 
 export const findMatch = async (requestId) => {

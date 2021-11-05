@@ -29,7 +29,7 @@ const startRoutes = () => {
     res.header("Access-Control-Allow-Methods", "POST, GET, PUT");
     next();
   });
-  app.use("/api", routes);
+  app.use("/matching/api", routes);
 };
 
 const startServer = () => {

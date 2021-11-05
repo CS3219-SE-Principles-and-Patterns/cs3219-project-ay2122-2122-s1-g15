@@ -29,11 +29,6 @@ const questionDifficulties = [
 const MATCH_DURATION = process.env.REACT_APP_MATCH_DURATION || 60;
 const MATCH_POLL_INTERVAL = process.env.REACT_APP_MATCH_POLL_INTERVAL || 2000;
 
-const matchingEndpoint =
-  process.env.REACT_APP_MATCHING_ENDPOINT || "http://localhost:4000";
-
-// var socket = null;
-
 const MatchingPage = (props) => {
   const user = React.useContext(UserContext).user;
   const [view, setView] = React.useState(views.selection);
@@ -113,14 +108,6 @@ const MatchingPage = (props) => {
     // introduce a delay before switching over to session page
     setTimeout(() => setSession(session), 2500);
   };
-
-  // const listenForMatch = async (requestId) => {
-  //   console.log("Listen for match");
-  //   var response = await findMatch(requestId);
-  //   if (response && response.found) {
-  //     return handleMatchFound(response.session);
-  //   }
-  // };
 
   // timer hook
   React.useEffect(() => {
