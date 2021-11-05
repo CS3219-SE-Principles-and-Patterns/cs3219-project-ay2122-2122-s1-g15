@@ -58,13 +58,10 @@ const MatchingPage = (props) => {
     if (response && response.requestId) {
       console.log("Received request id: " + response.requestId);
       setRequestId(response.requestId);
-      // return listenForMatch(response.requestId)
       setView(views.loading);
       setTimerStart(true);
       return;
     }
-
-    // add error toast
     console.log(
       "Error occured: response or requestId null when sending matching request"
     );
@@ -75,8 +72,6 @@ const MatchingPage = (props) => {
     setTimerStart(false);
     setRemainingTime(MATCH_DURATION);
     setView(views.timeout);
-
-    // socket?.close();
   };
 
   const handleRetryMatch = () => {
@@ -93,8 +88,7 @@ const MatchingPage = (props) => {
   const handleMatchCancel = () => {
     setRemainingTime(MATCH_DURATION);
     setTimerStart(false);
-    // socket?.close();
-
+    
     // send update api call to matching to inform of cancel
     cancelMatchRequest(requestId);
     handleReturnToSelection();
