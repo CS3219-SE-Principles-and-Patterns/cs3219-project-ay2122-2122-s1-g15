@@ -40,10 +40,7 @@ class Service {
     return MatchRequest.findUser(requestId)
       .then((userReq) => {
         if (userReq && userReq.match) {
-          return MatchRequest.findById(userReq.match)
-          .exec().then(otherReq => {
-            return [userReq, otherReq]
-          })
+            return userReq
         }
         if (!userReq) {
           return null;
@@ -67,7 +64,7 @@ class Service {
               otherReq.sessionInfo = sessionInfo;
               userReq.save();
               otherReq.save();
-              return [userReq, otherReq]
+              return userReq;
             })
           })
           .catch((err) => {

@@ -20,6 +20,12 @@ module.exports = {
     body("requestId").exists(),
     body("requestId").isString(),
     body("requestId").isLength(36)
+  ],
+
+  matchFind: [
+    body("requestId").exists(),
+    body("requestId").isString(),
+    body("requestId").isLength(36)
   ]
 
 

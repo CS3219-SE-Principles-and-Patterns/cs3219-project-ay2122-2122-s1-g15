@@ -17,4 +17,8 @@ validation.matchCancel, (req, res) => {
   controller.handleMatchCancel(req, res);
 });
 
+router.put("/match/find", validation.matchFind, (req, res) => {
+  controller.handleFindMatch(req, res);
+})
+
 module.exports = router;
