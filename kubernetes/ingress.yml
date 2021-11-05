@@ -6,7 +6,7 @@ metadata:
     kubernetes.io/ingress.global-static-ip-name: "peerprep-address"
     kubernetes.io/ingress.class: "gce"
     ingress.gcp.kubernetes.io/pre-shared-cert: 'peerprep-cert'
-    kubernetes.io/ingress.allow-http: "false"
+    ingress.kubernetes.io/enable-cors: "true"
 spec:
   defaultBackend:
     service:
@@ -16,24 +16,34 @@ spec:
   rules:
     - http:
         paths:
-          - path: /matching
+          - path: /
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: peerprep-client
+                port:
+                  number: 3000
+          - path: /matching/*
             pathType: ImplementationSpecific
             backend:
               service:
                 name: peerprep-matching
                 port:
                   number: 4000
-          - path: /chat
+          - path: /chat/*
             pathType: ImplementationSpecific
             backend:
               service:
                 name: peerprep-chat
                 port:
                   number: 5000
-          - path: /editor
+          - path: /editor/*
             pathType: ImplementationSpecific
             backend:
               service:
                 name: peerprep-editor
                 port:
                   number: 6001
+  tls:
+    - hosts:
+        - peerprep.ninja

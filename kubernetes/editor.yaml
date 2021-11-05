@@ -1,39 +1,3 @@
-
-apiVersion: apps/v1
-kind: Deployment
-metadata:
-  name: peerprep-chat
-  # tag::labels3[]
-  labels:
-    # end::labels3[]
-    # tag::app4[]
-    app: chat
-    # end::app4[]
-spec:
-  selector:
-    matchLabels:
-      # tag::app5[]
-      app: chat
-      # end::app5[]
-  template:
-    metadata:
-      # tag::labels4[]
-      labels:
-        # end::labels4[]
-        # tag::app6[]
-        app: chat
-        # end::app6[]
-    spec:
-      containers:
-        - name: peerprep-chat-container
-          # tag::image2[]
-          image: gcr.io/peerprep-2d654/peerprep-chat:latest
-          # end::image2[]
-          ports:
-            # tag::containerPort2[]
-            - containerPort: 5000
-          # end::containerPort2[]
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -68,28 +32,6 @@ spec:
             # tag::containerPort2[]
             - containerPort: 6001
           # end::containerPort2[]
-
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: peerprep-chat
-spec:
-  # tag::NodePort2[]
-  type: NodePort
-  # end::NodePort2[]
-  selector:
-    # tag::app8[]
-    app: chat
-    # end::app8[]
-  ports:
-    - protocol: TCP
-      port: 5000
-      targetPort: 5000
-      # tag::nodePort2[]
-      nodePort: 31005
-      # end::nodePort2[]
-
 ---
 apiVersion: v1
 kind: Service
