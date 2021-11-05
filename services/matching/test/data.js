@@ -6,7 +6,7 @@ class TestData {
   requestId = uuid();
   requestId1 = uuid();
   requestId2 = uuid();
-  sessionId = uuid()
+  sessionId = uuid();
   difficulty = "hard";
   user1 = {
     displayName: "test1",
@@ -40,6 +40,28 @@ class TestData {
     markdown: "test",
     title: "title",
   });
+
+  getSession(sessionNum) {
+    // ignore sessionId
+    var sessionInfo = {
+      sessionId: this.sessionId,
+      difficulty: this.difficulty,
+      question: this.question,
+    };
+
+    if (sessionNum === 1) {
+      var session1 = { ...this.userReq1 };
+      session1.match = this.userReq2._id;
+      session1.matchedUser = this.userReq2.user;
+      session1.sessionInfo = sessionInfo;
+      return session1;
+    } else {
+      var session2 = { ...this.userReq2 };
+      session2.match = this.userReq1._id;
+      session2.matchedUser = this.userReq1.user;
+      session2.sessionInfo = sessionInfo;
+    }
+  }
 
   // getUsers() {
   //   var session1 = {...userReq1}

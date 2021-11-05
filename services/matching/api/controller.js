@@ -33,6 +33,8 @@ class MatchingController {
       }
       var requestId = userRequest.requestId;
       res.status(200).send({ requestId });
+    }).catch(err => {
+      res.status(500).send("Internal server error")
     });
   }
 
@@ -83,6 +85,7 @@ class MatchingController {
       })
       .catch((err) => {
         console.log(err);
+        res.status(500).send("Internal server error");
       });
   }
 

@@ -43,7 +43,8 @@ class Service {
             return userReq
         }
         if (!userReq) {
-          return null;
+          // return null;
+          throw new Error(`User with requestId ${requestId} not found in database`);
         }
 
         return MatchRequest.findMatch(userReq)
