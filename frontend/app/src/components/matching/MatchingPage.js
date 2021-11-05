@@ -110,7 +110,7 @@ const MatchingPage = (props) => {
     // var socket = io(matchingEndpoint, {
     //     //   path: "/matching/socket/socket.io/",
     //     // });
-    var socket = io(matchingEndpoint, {path: "/matching/socket/socket.io"});
+    var socket = io(matchingEndpoint, {path: "/matching/socket/socket.io", transports: ['websocket']});
     console.log("Listen for match")
     // socket = io(matchingEndpoint);
     // submit

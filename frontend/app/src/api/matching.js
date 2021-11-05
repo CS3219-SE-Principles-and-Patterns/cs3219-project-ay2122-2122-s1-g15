@@ -1,7 +1,7 @@
 
 import axios from "axios"
 
-const MATCHING_ENDPOINT = "https://peerprep.ninja/matching/socket"
+const MATCHING_ENDPOINT = "https://peerprep.ninja/matching/api"
 const API_SUBMIT = process.env.MATCHING_API_SUBMIT || "/match/submit"
 const API_CANCEL = process.env.REACT_APP_MATCHING_API_CANCEL || "/api/match/cancel"
 

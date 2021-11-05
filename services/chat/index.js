@@ -1,14 +1,28 @@
 const { createAdapter } = require("@socket.io/mongo-adapter");
 const { MongoClient } = require("mongodb");
 const cors = require("cors");
+const express = require("express");
+const routes = require("./api/routes");
 
 const DB = "peer-prep";
 const COLLECTION = "socket.io-adapter-events";
 const port = 5000;
 const { uuid } = require("uuidv4");
 
-const app = require("express")();
+const app = express();
 app.use(cors());
+app.use("/chat/health", routes);
+app.use(express.json());
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  res.header("Access-Control-Allow-Methods", "POST, GET");
+  next();
+});
+app.use((req, res, next)=> { console.log(req.url); next(); });
 const server = require("http").createServer(app);
 
 const mongoClient = new MongoClient(
@@ -24,7 +38,7 @@ const io = require("socket.io")(server, {
     // methods: ["GET", "POST"],
     // allowedHeaders: ["Access-Control-Allow-Origin"],
   },
-  path: "/chat",
+  path: "/chat/socket",
   allowEIO3: true
 });
 

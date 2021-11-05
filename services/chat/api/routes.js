@@ -2,7 +2,9 @@ const express = require("express");
 const controller = require("./controller");
 const router = express.Router();
 
-// code here
-router.get("/", controller.example);
+// standard health check
+router.get("/", (req, res) => {
+  res.status(200).send("ok");
+});
 
 module.exports = router;
