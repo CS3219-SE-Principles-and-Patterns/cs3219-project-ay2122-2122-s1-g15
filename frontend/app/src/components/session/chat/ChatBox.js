@@ -28,7 +28,7 @@ const ChatBox = (props) => {
   //   transports: ["websocket"],
   // });
 
-  const socket = io("http://34.117.253.13/chat/", {
+  const socket = io("https://34.117.253.13/chat/", {
     path: "/chat/socket.io/",
     transports: ["websocket"],
   });

@@ -27,7 +27,7 @@ const MATCH_DURATION = process.env.REACT_APP_MATCH_DURATION || 60;
 
 // const matchingEndpoint = "http://34.76.82.128:4000/matching/socket"
 // const matchingEndpoint = "http://localhost:4000/"
-const matchingEndpoint = "http://34.117.253.13/matching/socket"
+const matchingEndpoint = "https://34.117.253.13/matching/socket"
 var socket = null;
 
 const MatchingPage = (props) => {
