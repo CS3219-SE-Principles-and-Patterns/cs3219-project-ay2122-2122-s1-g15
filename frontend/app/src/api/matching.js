@@ -1,7 +1,7 @@
 
 import axios from "axios"
 
-const MATCHING_ENDPOINT = process.env.MATCHING_ENDPOINT || "https://34.79.116.255/matching"
+const MATCHING_ENDPOINT = "https://34.117.253.13/matching/api"
 const API_SUBMIT = process.env.MATCHING_API_SUBMIT || "/match/submit"
 const API_CANCEL = process.env.REACT_APP_MATCHING_API_CANCEL || "/api/match/cancel"
 

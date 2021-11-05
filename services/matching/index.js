@@ -27,7 +27,7 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Methods", "POST, GET");
   next();
 });
-app.use("/matching/", routes);
+app.use((req, res, next)=> { console.log(req.url); next(); });
 
 // socket.io
 var httpServer = http.createServer(app);
@@ -37,9 +37,10 @@ const io = new Server(httpServer, {
   },
   pingInterval: process.env.SOCKET_PING_INTERVAL || 3000,
   pingTimeout: process.env.SOCKET_PING_TIMEOUT || 60000,
-  path: "/matching/socket/",
+  path: "/matching/socket",
   allowEIO3: true
 });
+// io.path("/matching")
 
 matchingController.start(io);
 
@@ -53,3 +54,4 @@ io.on("connection", (socket) => {
 httpServer.listen(port, function () {
   console.log(">> Server started on port: " + port);
 });
+app.use("/matching/api", routes);

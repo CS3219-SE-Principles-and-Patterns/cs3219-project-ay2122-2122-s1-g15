@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peerprep-client
+  # tag::labels1[]
+  labels:
+    # end::labels1[]
+    # tag::app1[]
+    app: client
+    # end::app1[]
+spec:
+  selector:
+    matchLabels:
+      # tag::app2[]
+      app: client
+      # end::app2[]
+  template:
+    metadata:
+      # tag::labels2[]
+      labels:
+        # end::labels2[]
+        # tag::app3[]
+        app: client
+        # end::app3[]
+    spec:
+      containers:
+        - name: peerprep-client-container
+          # tag::image1[]
+          image: gcr.io/peerprep-2d654/peerprep-client:latest
+          # end::image1[]
+          ports:
+            # tag::containerPort1[]
+            - containerPort: 3000
+          # end::containerPort1[]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: peerprep-client
+spec:
+  # tag::NodePort2[]
+  type: NodePort
+  # end::NodePort2[]
+  selector:
+    # tag::app8[]
+    app: client
+    # end::app8[]
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      # tag::nodePort2[]
+      nodePort: 31003
+      # end::nodePort2[]

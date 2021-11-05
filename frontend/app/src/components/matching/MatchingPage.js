@@ -25,7 +25,9 @@ const questionDifficulties = [
 
 const MATCH_DURATION = process.env.REACT_APP_MATCH_DURATION || 60;
 
-const matchingEndpoint = process.env.REACT_APP_MATCHING_ENDPOINT || "http://34.79.116.255/matching"
+// const matchingEndpoint = "http://34.76.82.128:4000/matching/socket"
+// const matchingEndpoint = "http://localhost:4000/"
+const matchingEndpoint = "http://34.117.253.13/matching/socket"
 var socket = null;
 
 const MatchingPage = (props) => {
@@ -104,11 +106,12 @@ const MatchingPage = (props) => {
   }
 
   const listenForMatch = (requestId) => {
-    var socket = io(matchingEndpoint, {
-      path: "/matching/socket/socket.io/",
-    });
+    // var socket = io(matchingEndpoint, {
+    //     //   path: "/matching/socket/socket.io/",
+    //     // });
+    var socket = io(matchingEndpoint, {path: "/matching/socket/socket.io"});
     console.log("Listen for match")
-    socket = io(matchingEndpoint);
+    // socket = io(matchingEndpoint);
     // submit
     // client-side
     socket.on("connect", () => {
