@@ -1,22 +1,20 @@
 var express = require("express");
 var router = express.Router();
 var controller = require("./controller");
+var validation = require("./validation")
 
 // standard health check
 router.get("/health", (req, res) => {
   res.status(200).send("ok");
 });
 
-router.post("/match/submit", (req, res) => {
+router.post("/match/submit", validation.matchSubmit, (req, res) => {
   controller.handleSubmitMatchRequest(req, res);
 });
 
-router.get("/match/get", (req, res) => {
-  controller.handleGetMatch(req, res);
-})
-
-router.put("/match/cancel", (req, res) => {
+router.put("/match/cancel", 
+validation.matchCancel, (req, res) => {
   controller.handleMatchCancel(req, res);
-})
+});
 
 module.exports = router;

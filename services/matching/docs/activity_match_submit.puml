@@ -1,0 +1,22 @@
+@startuml
+start
+-> "wait" event payload: {requestId};
+if (There is a MatchRequest in the database with this requestId) then(true)
+else
+-> false;
+stop
+endif
+if (A match has already been saved under this MatchRequest) then(true)
+: Emit an event to both users with their sessionInfo;
+stop
+else
+-> false;
+if (Is there another MatchRequest that fulfills the matching criteria?) then (true)
+: Create sessionInfo containing session id and a random question;
+: Save the sessionInfo in each MatchRequest;
+: Emit an event for each user with their corresponding MatchRequests;
+stop
+else
+-> false;
+stop
+@enduml

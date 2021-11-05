@@ -1,10 +1,10 @@
-const { body, validationResult } = require("express-validator");
 const { uuid } = require("uuidv4");
 const {
   DIFFICULTY,
   HEADER_KEYS,
   HEADER_VALS,
 } = require("../constants/constants");
+const { body, validationResult } = require("express-validator");
 const service = require("../services/service");
 
 /* Defines the logic used in handling requests */
@@ -12,13 +12,20 @@ class MatchingController {
   start(io) {
     this.io = io;
   }
+
   /**
    * Receives a user request to find a match
    * @param {Object} req user request to to find a match
    * @returns {Object} 200, 400 or 500 codes
    */
   handleSubmitMatchRequest(req, res) {
-    // ASH TODO: REQUEST VALIDATION
+    try {
+      validationResult(req).throw()
+    }
+    catch(err) {
+      res.status(400).send("Invalid request body")
+      return
+    }
 
     var difficulty = req.body.difficulty;
     var user = req.body.user;
@@ -30,7 +37,7 @@ class MatchingController {
         console.log("!ERROR: userRequest and/or requestId is null");
       }
       var requestId = userRequest.requestId;
-      res.status(202).send({ requestId });
+      res.status(200).send({ requestId });
     });
   }
 
@@ -58,6 +65,14 @@ class MatchingController {
   }
 
   handleMatchCancel(req, res) {
+    try {
+      validationResult(req).throw()
+    }
+    catch(err) {
+      res.status(400).send("Invalid request body")
+      return
+    }
+    
     var requestId = req.body.requestId
     service.cancelMatch(requestId)
     .then(() => {

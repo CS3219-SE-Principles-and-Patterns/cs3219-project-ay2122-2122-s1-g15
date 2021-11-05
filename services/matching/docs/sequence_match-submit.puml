@@ -1,0 +1,26 @@
+@startuml
+actor User as user
+' box frontend
+participant "Frontend" as webapp
+' participant "Socket Client" as socketclient
+' end box
+boundary "API Gateway" as gateway
+box "Matching Service"
+participant "Controller" as controller
+participant "Service" as service
+end box
+box "Matching Database"
+collections Questions as questions
+collections MatchRequests as matchrequests
+
+
+user -> webapp : select question difficulty \n (Hard/Medium/Easy)
+user -> webapp : clicks submit
+webapp -> gateway: POST /api/match/submit \npayload:{user, difficulty}
+gateway -> controller: POST /api/match/submit \npayload:{user, difficulty}
+controller -> service: storeMatchRequest(payload)
+service -> matchrequests: create MatchRequest and save to collection
+service -> controller: generated requestId
+controller -> gateway: 200 OK \npayload: {requestId}
+gateway -> webapp: 200 OK Accepted \npayload: {requestId}
+@enduml

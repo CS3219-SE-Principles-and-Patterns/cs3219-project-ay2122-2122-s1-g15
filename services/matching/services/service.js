@@ -75,6 +75,7 @@ class Service {
           });
       })
       .catch((err) => {
+        console.log(err)
         throw new Error(errors.ERROR_MATCHING_USER);
       });
   }

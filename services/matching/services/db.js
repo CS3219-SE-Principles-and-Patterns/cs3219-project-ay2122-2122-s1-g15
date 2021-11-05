@@ -7,7 +7,7 @@ const uri = process.env.MONGO_URI || "mongodb+srv://match-admin:1NFBdz5xwHsyGkXo
 class DbHandler {
   constructor() {}
   connect() {
-    mongoose
+    return mongoose
       .connect(uri, {
         useNewUrlParser: true,
         useUnifiedTopology: true,
