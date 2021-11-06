@@ -40,13 +40,11 @@ class Service {
     return MatchRequest.findUser(requestId)
       .then((userReq) => {
         if (userReq && userReq.match) {
-          return MatchRequest.findById(userReq.match)
-          .exec().then(otherReq => {
-            return [userReq, otherReq]
-          })
+            return userReq
         }
         if (!userReq) {
-          return null;
+          // return null;
+          throw new Error(`User with requestId ${requestId} not found in database`);
         }
 
         return MatchRequest.findMatch(userReq)
@@ -67,7 +65,7 @@ class Service {
               otherReq.sessionInfo = sessionInfo;
               userReq.save();
               otherReq.save();
-              return [userReq, otherReq]
+              return userReq;
             })
           })
           .catch((err) => {
@@ -75,6 +73,7 @@ class Service {
           });
       })
       .catch((err) => {
+        console.log(err)
         throw new Error(errors.ERROR_MATCHING_USER);
       });
   }
@@ -103,6 +102,14 @@ class Service {
         console.log(err);
         throw new Error(errors.ERROR_FETCH_QUESTION);
       });
+  }
+
+  static cancelMatch(requestId) {
+    var findCriteria = {requestId}
+    var update = {
+      match: "USER_CANCELLED"
+    }
+    return MatchRequest.updateMatch(findCriteria, update)
   }
 }
 

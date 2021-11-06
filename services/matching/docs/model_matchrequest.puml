@@ -1,0 +1,25 @@
+@startuml
+class MatchRequest {
+  _id: ObjectID
+  ..
+  user: Object
+  ..
+  requestId: String
+  ..
+  difficulty: String
+  ..
+  createdAt: Timestamp
+  ..
+  match: ObjectID
+  ..
+  matchedUser: Object
+  ..
+  sessionInfo: Object
+  --
+  findUser(requestId)
+  ..
+  updateMatch(requestId, update)
+  ..
+  findById(_id)
+}
+@enduml
