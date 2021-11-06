@@ -40,8 +40,8 @@ app.use(function (req, res, next) {
 });
 const routes = require("./api/routes");
 // Send message for default URL
-app.get("/", (req, res) => res.send("Welcome to the editor service"));
-app.use("/api", routes);
+app.get("/editor/", (req, res) => res.send("Welcome to the editor service"));
+app.use("/editor/api", routes);
 
 app.listen(port, function () {
   console.log("Server started on port: " + port);

@@ -11,12 +11,9 @@ const Header = () => {
   let location = useLocation();
   const getDefaultSelectedKey = useCallback(
     (pathname) => {
-      if (pathname === "/") {
+      if (pathname === "/" || pathname === "") {
         return "1";
       }
-      // if (pathname === "/matching") {
-      //   return "2";
-      // }
       if (pathname === "/session") {
         return "3";
       }

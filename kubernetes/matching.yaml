@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peerprep-matching
+  # tag::labels3[]
+  labels:
+    # end::labels3[]
+    # tag::app4[]
+    app: matching
+    # end::app4[]
+spec:
+  selector:
+    matchLabels:
+      # tag::app5[]
+      app: matching
+      # end::app5[]
+  template:
+    metadata:
+      # tag::labels4[]
+      labels:
+        # end::labels4[]
+        # tag::app6[]
+        app: matching
+        # end::app6[]
+    spec:
+      containers:
+        - name: peerprep-matching-container
+          # tag::image2[]
+          image: gcr.io/peerprep-2d654/peerprep-matching:latest
+          # end::image2[]
+          ports:
+            # tag::containerPort2[]
+            - containerPort: 4000
+          # end::containerPort2[]
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: peerprep-matching
+spec:
+  # tag::NodePort2[]
+  type: NodePort
+  # end::NodePort2[]
+  selector:
+    # tag::app8[]
+    app: matching
+    # end::app8[]
+  ports:
+    - protocol: TCP
+      port: 4000
+      targetPort: 4000
+      nodePort: 31007

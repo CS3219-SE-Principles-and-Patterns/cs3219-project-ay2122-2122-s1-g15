@@ -1,0 +1,26 @@
+@startuml
+start
+:User selects a question difficulty;
+:User clicks submit;
+repeat
+  -> Call to /api/match/submit;
+  : Receive requestId;
+  -> Listen for an event with the requestId;
+  :User is brought to the loading page;
+  if (Peer has not been found and user clicks cancel?) then (true)
+  :User returns to question difficulty selection page;
+  stop
+  else (false)
+  endif
+  if (Peer found by matching service within 60 seconds?) then (true)
+  : Receive sessionInfo from event with requestId;
+  :User is directed to the session with the other peer;
+  stop
+  else (false)
+  :User is shown the failure page;
+  endif
+repeat while (User chooses to retry finding a match?) is (true)
+-> false;
+:User returns to question difficulty selection page;
+stop
+@enduml

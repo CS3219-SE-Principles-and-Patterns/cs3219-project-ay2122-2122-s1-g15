@@ -1,0 +1,86 @@
+steps:
+  # Pull existing docker image from google container registry
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker pull gcr.io/peerprep-2d654/peerprep-client:latest || exit 0'
+    ]
+  # Build and push updated docker image to google container registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'gcr.io/peerprep-2d654/peerprep-client:latest',
+      '.'
+    ]
+    dir: 'frontend/app'
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker pull gcr.io/peerprep-2d654/peerprep-matching:latest || exit 0'
+    ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'gcr.io/peerprep-2d654/peerprep-matching:latest',
+      '.'
+    ]
+    dir: 'services/matching'
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker pull gcr.io/peerprep-2d654/peerprep-chat:latest || exit 0'
+    ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'gcr.io/peerprep-2d654/peerprep-chat:latest',
+      '.'
+    ]
+    dir: 'services/chat'
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker pull gcr.io/peerprep-2d654/peerprep-editor:latest || exit 0'
+    ]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: [
+      'build',
+      '-t',
+      'gcr.io/peerprep-2d654/peerprep-editor:latest',
+      '.'
+    ]
+    dir: 'services/editor'
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['delete', '-f', 'kubernetes/kubernetes.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+  # Step 3: Apply k8s configuration
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['apply', '-f', 'kubernetes/']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+  # Step 4: Point cluster deployment to docker image in google container registry - k8s will settle rest of the setup
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: [
+      'set',
+      'image',
+      'deployment',
+      'peerprep-client',
+      'peerprep-client-container=gcr.io/peerprep-2d654/peerprep-client:latest'
+    ]
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+    # Push the image to Google Container Registry with the latest tag
+images: [
+  'gcr.io/peerprep-2d654/peerprep-client:latest'
+]

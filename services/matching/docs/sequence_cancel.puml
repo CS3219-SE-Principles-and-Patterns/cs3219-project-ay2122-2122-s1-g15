@@ -1,0 +1,29 @@
+@startuml
+actor User as user
+'box frontend
+participant "Frontend" as webapp
+' participant "Socket Client" as socketclient
+' end box
+boundary "API Gateway" as gateway
+box "Matching Service"
+participant "Controller" as controller
+participant "Service" as service
+end box
+box "Matching Database"
+collections Questions as questions
+collections MatchRequests as matchrequests
+
+user -> webapp: clicks cancel while on loading page
+webapp -> gateway: PUT /api/match/cancel \npayload: {requestId}
+par 
+webapp -> webapp: switch to question difficulty selection page
+else
+gateway -> controller: PUT /api/match/cancel \npayload: {requestId}
+controller -> service: cancelMatch(requestId)
+service -> matchrequests: find MatchRequest with requestId \nand update it as cancelled
+matchrequests -> service
+service -> controller
+controller -> gateway: 200 OK
+gateway -> webapp: 200 OK
+end
+@enduml

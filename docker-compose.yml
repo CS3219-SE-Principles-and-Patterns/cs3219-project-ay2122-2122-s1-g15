@@ -1,34 +1,68 @@
-version: "3.8"
+version: '3.9'
+
 services:
-  user-management:
-    build:
-      context: ./services/user-management
-    image: user-management
-    ports:
-      - "3000:3000"
   matching:
     build:
-      context: ./services/matching
+      context: services/matching
+      dockerfile: Dockerfile
     image: matching
     ports:
       - "4000:4000"
+    depends_on:
+      - api-gateway
+    networks:
+      - app-network
   chat:
     build:
-      context: ./services/chat
+      context: services/chat
+      dockerfile: Dockerfile
     image: chat
     ports:
       - "5000:5000"
+    depends_on:
+      - api-gateway
+    networks:
+      - app-network
   editor:
     build:
-      context: ./services/editor
+      context: services/editor
+      dockerfile: Dockerfile
     image: editor
     ports:
       - "6001:6001"
-  mongo:
-    image: mongo
-    volumes:
-      - data-volume:/data/db
-    ports:
-      - "27017:27017"
+    depends_on:
+      - api-gateway
     networks:
       - app-network
+  api-gateway:
+    build:
+      context: api-gateway
+      dockerfile: Dockerfile
+    image: matching
+    ports:
+      - "8080:8080"
+    networks:
+      - app-network
+  client:
+    build:
+      context: frontend/app
+      dockerfile: Dockerfile
+    image: peerprep-client
+    stdin_open: true
+    command: npm start
+    depends_on:
+      - api-gateway
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  data-volume:
+  node_modules:
+  web-root:
+    driver: local
