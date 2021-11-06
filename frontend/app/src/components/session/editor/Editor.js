@@ -8,7 +8,11 @@ import "highlight.js/styles/monokai-sublime.css";
 import Sharedb from "sharedb/lib/client";
 import richText from "rich-text";
 
-const WSS_PORT = 6100;
+// const WSS_PORT = 6100;
+const socket = new ReconnectingWebSocket("wss://peerprep.ninja/editor");
+// const socket = new ReconnectingWebSocket("wss://peerprep.ninja:" + WSS_PORT);
+// const socket = new WebSocket("wss://127.0.0.1:" + WSS_PORT);
+const connection = new Sharedb.Connection(socket);
 
 // Adding syntax highlight support for common languages
 const hljs = require("highlight.js/lib/common");
@@ -25,14 +29,14 @@ function Editor(props) {
     const body = { session_id: session_id };
     console.log("Sending post request");
     await axios
-      .post("https://peerprep.ninja/editor/api/connection/", body)
+      .post("http://localhost:6001/editor/api/connection/", body)
       .catch((error) => {
         console.log("Failed to create connection object!");
         console.log(error);
       });
     console.log("Getting created connection");
     await axios
-      .get("https://peerprep.ninja/editor/api/connection/" + session_id)
+      .get("http://localhost:6001/editor/api/connection/" + session_id)
       .then((res) => {
         setConn(res.data.data);
         // console.log(res.data.data);
@@ -60,10 +64,6 @@ function Editor(props) {
       }
       // Setup websocket and shareDB connection
       var document_key = conn[0].document_key;
-      // const socket = new ReconnectingWebSocket("ws://127.0.0.1:" + WSS_PORT);
-      const socket = new ReconnectingWebSocket("ws://peerprep.ninja:" + WSS_PORT);
-      // const socket = new WebSocket("ws://127.0.0.1:" + WSS_PORT);
-      const connection = new Sharedb.Connection(socket);
       // Querying for our document
       const doc = connection.get("documents", document_key);
 

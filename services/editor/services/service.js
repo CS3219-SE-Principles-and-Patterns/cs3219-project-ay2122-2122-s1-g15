@@ -1,10 +1,12 @@
+const app = require('../index');
 const WebSocket = require("ws");
 const WebSocketJSONStream = require("@teamwork/websocket-json-stream");
 const ShareDB = require("sharedb");
+const server = require("http").createServer(app);
 const shareDBServer = new ShareDB();
 const connection = shareDBServer.connect();
-const WSS_PORT = 6100;
-const wss = new WebSocket.Server({ port: WSS_PORT });
+// const WSS_PORT = 6100;
+const wss = new WebSocket.Server({ server: server });
 
 class EditorService {
   constructor() {
