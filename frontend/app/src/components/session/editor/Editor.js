@@ -29,14 +29,14 @@ function Editor(props) {
     const body = { session_id: session_id };
     console.log("Sending post request");
     await axios
-      .post("http://localhost:6001/editor/api/connection/", body)
+      .post("http://peerprep.ninja/editor/api/connection/", body)
       .catch((error) => {
         console.log("Failed to create connection object!");
         console.log(error);
       });
     console.log("Getting created connection");
     await axios
-      .get("http://localhost:6001/editor/api/connection/" + session_id)
+      .get("http://peerprep.ninja/editor/api/connection/" + session_id)
       .then((res) => {
         setConn(res.data.data);
         // console.log(res.data.data);
