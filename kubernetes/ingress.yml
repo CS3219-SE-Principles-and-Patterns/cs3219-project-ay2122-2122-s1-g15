@@ -44,6 +44,3 @@ spec:
                 name: peerprep-editor
                 port:
                   number: 6001
-  tls:
-    - hosts:
-        - peerprep.ninja
