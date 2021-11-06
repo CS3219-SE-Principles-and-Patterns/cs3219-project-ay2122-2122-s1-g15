@@ -1,22 +1,11 @@
-const { createAdapter } = require("@socket.io/mongo-adapter");
-const { MongoClient } = require("mongodb");
 const cors = require("cors");
 
-const DB = "peer-prep";
-const COLLECTION = "socket.io-adapter-events";
 const port = 5000;
 const { uuid } = require("uuidv4");
 
 const app = require("express")();
 app.use(cors());
 const server = require("http").createServer(app);
-
-const mongoClient = new MongoClient(
-  "mongodb+srv://chat-admin:fiESyt7PDeQpXtOi@cluster0.tjs9a.mongodb.net/peerprep?retryWrites=true&w=majority",
-  {
-    useUnifiedTopology: true,
-  }
-);
 
 const io = require("socket.io")(server, {
   cors: {
@@ -28,20 +17,6 @@ const io = require("socket.io")(server, {
 });
 
 const main = () => {
-  // await mongoClient.connect();
-
-  // try {
-  //   await mongoClient.db(DB).createCollection(COLLECTION, {
-  //     capped: true,
-  //     size: 1e6,
-  //   });
-  // } catch (e) {
-  //   // collection already exists
-  // }
-  // const mongoCollection = mongoClient.db(DB).collection(COLLECTION);
-
-  // io.adapter(createAdapter(mongoCollection));
-
   io.on("connection", (socket) => {
     socket.on("join room", ({ sessionId, username }) => {
       socket.join(sessionId);
@@ -61,7 +36,6 @@ const main = () => {
         sender,
         chatId,
       };
-      // socket.to(sessionId).emit("chat message", payload);
       io.sockets.in(sessionId).emit("chat message", payload);
       console.log(payload);
     });
