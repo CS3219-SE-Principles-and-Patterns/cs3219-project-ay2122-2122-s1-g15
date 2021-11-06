@@ -5,8 +5,24 @@ const mongoose = require("mongoose");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const port = process.env.SERVER_PORT || 6001;
+const uri = process.env.MONGO_URI || "mongodb+srv://atlas_admin:KEwpeOZbjbfrWIOQ@nodejs-reviews.0ekmm.mongodb.net/connection?retryWrites=true&w=majority";
 const app = express();
 app.use(morgan("combined"));
+
+// start database
+mongoose
+  .connect(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then((db) => {
+    console.log(">> SUCCESS: Database connected");
+    app.emit("dbConnected");
+  })
+  .catch((err) => {
+    console.log(">> ERROR: Database connection error");
+  });
+
 app.use(
   bodyParser.urlencoded({
     extended: true,
@@ -30,3 +46,5 @@ app.use("/api", routes);
 app.listen(port, function () {
   console.log("Server started on port: " + port);
 });
+
+module.exports = app;
