@@ -49,7 +49,7 @@ const SessionPage = (props) => {
 
   const closeEditorConnection = (session_id) => {
     axios
-      .delete("https://34.117.253.13/editor/api/connection/" + session_id)
+      .delete("https://peerprep.ninja/editor/api/connection/" + session_id)
       .catch((error) => {
         console.log("Editor's session is not closed properly!");
         console.log(error);

@@ -28,8 +28,8 @@ const ChatBox = (props) => {
   //   transports: ["websocket"],
   // });
 
-  const socket = io("https://34.117.253.13/chat/", {
-    path: "/chat/socket.io/",
+  const socket = io("https://peerprep.ninja", {
+    path: "/chat/socket/socket.io",
     transports: ["websocket"],
   });
 
