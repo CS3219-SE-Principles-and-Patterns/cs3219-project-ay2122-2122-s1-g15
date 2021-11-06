@@ -61,7 +61,7 @@ function Editor(props) {
       // Setup websocket and shareDB connection
       var document_key = conn[0].document_key;
       // const socket = new ReconnectingWebSocket("ws://127.0.0.1:" + WSS_PORT);
-      const socket = new ReconnectingWebSocket("ws://peerprep.ninja:" + WSS_PORT);
+      const socket = new ReconnectingWebSocket("wss://peerprep.ninja:" + WSS_PORT);
       // const socket = new WebSocket("ws://127.0.0.1:" + WSS_PORT);
       const connection = new Sharedb.Connection(socket);
       // Querying for our document
