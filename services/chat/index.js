@@ -1,7 +1,6 @@
 const cors = require("cors");
 const express = require("express");
 const routes = require("./api/routes");
-
 const port = 5000;
 const { uuid } = require("uuidv4");
 
@@ -47,15 +46,14 @@ const main = () => {
       console.log(`user ${username} has been connected`);
       console.log(`socket subscribed to ${sessionId}`);
     });
-    socket.on("chat message", ({ message, sender, sessionId }) => {
-      const chatId = uuid();
+    socket.on("chat message", ({ message, sender, sessionId, chatId }) => {
       const payload = {
         message,
         sender,
         chatId,
+        sessionId,
       };
-      socket.to(sessionId).emit("chat message", payload);
-      // io.sockets.in(sessionId).emit("chat message", payload);
+      socket.broadcast.to(sessionId).emit("chat message", payload);
       console.log(payload);
     });
     socket.on("initiate disconnect", ({ sessionId, username }) => {

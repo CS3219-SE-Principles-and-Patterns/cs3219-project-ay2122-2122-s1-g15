@@ -32,16 +32,13 @@ const ChatBox = (props) => {
     e.preventDefault();
     const formattedMsg = message.trim();
     if (formattedMsg !== "") {
-      socket.emit("chat message", {
-        message: formattedMsg,
-        sender: username,
-        sessionId: sessionId,
-      });
       const messagePayload = {
         message: formattedMsg,
         sender: username,
+        sessionId: sessionId,
         chatId: uuid(),
       };
+      socket.emit("chat message", messagePayload);
       console.log("Sent a chat msg!");
       setChat((chat) => [...chat, messagePayload]);
     }
