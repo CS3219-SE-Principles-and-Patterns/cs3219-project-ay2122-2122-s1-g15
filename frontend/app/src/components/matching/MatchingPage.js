@@ -1,7 +1,6 @@
 import React from "react";
 
 import { Layout } from "antd";
-// import { io } from "socket.io-client";
 import SelectionView from "./SelectionView";
 import LoadingView from "./LoadingView";
 import TimeoutView from "./TimeoutView";
@@ -30,7 +29,7 @@ const MATCH_DURATION = process.env.REACT_APP_MATCH_DURATION || 60;
 const MATCH_POLL_INTERVAL = process.env.REACT_APP_MATCH_POLL_INTERVAL || 2000;
 
 const MatchingPage = (props) => {
-  const user = React.useContext(UserContext).user;
+  var userContext = React.useContext(UserContext);
   const [view, setView] = React.useState(views.selection);
   const sessionContext = React.useContext(SessionContext);
   const { session, setSession } = sessionContext;
@@ -39,6 +38,8 @@ const MatchingPage = (props) => {
   const [selected, setSelected] = React.useState(null);
   const [matchFound, setMatchFound] = React.useState(false);
   const [requestId, setRequestId] = React.useState();
+  const [userToken, setUserToken] = React.useState();
+  const [user, setUser] = React.useState();
   // for selection view
   const handleSubmitMatchRequest = () => {
     // setView(views.loading);
@@ -54,7 +55,7 @@ const MatchingPage = (props) => {
   // receive the requestId to listen to
   const submitMatchRequest = async (index) => {
     var difficulty = questionDifficulties[index];
-    var response = await postMatchRequest(user, difficulty.key);
+    var response = await postMatchRequest(user, difficulty.key, userToken);
     if (response && response.requestId) {
       console.log("Received request id: " + response.requestId);
       setRequestId(response.requestId);
@@ -90,7 +91,7 @@ const MatchingPage = (props) => {
     setTimerStart(false);
     
     // send update api call to matching to inform of cancel
-    cancelMatchRequest(requestId);
+    cancelMatchRequest(requestId, userToken);
     handleReturnToSelection();
   };
 
@@ -107,7 +108,7 @@ const MatchingPage = (props) => {
   React.useEffect(() => {
     const listenForMatch = async () => {
       console.log("Listen for match");
-      var response = await findMatch(requestId);
+      var response = await findMatch(requestId, userToken);
       if (response && response.found) {
         return handleMatchFound(response.session);
       }
@@ -126,7 +127,7 @@ const MatchingPage = (props) => {
         }, 1000);
         listenInterval = setInterval(() => {
           listenForMatch();
-        }, 2000)
+        }, MATCH_POLL_INTERVAL)
       }
     } else if (!timerStart && remainingTime !== 0) {
       clearInterval(interval);
@@ -137,6 +138,16 @@ const MatchingPage = (props) => {
       clearInterval(listenInterval);
     }
   }, [timerStart, remainingTime, matchFound, requestId]);
+
+  React.useEffect(() => {
+    if (userContext && userContext.user && Object.keys(userContext.user).length != 0) {
+      userContext.user.getIdToken(false).then((idToken) => {
+        setUserToken(idToken)
+        console.log("User idtoken found")
+      })
+    }
+    setUser(userContext?.user);
+  }, [userContext, userContext?.user]);
 
   const renderView = () => {
     switch (view) {
@@ -169,7 +180,7 @@ const MatchingPage = (props) => {
   return (
     <Layout className="layout">
       <Content style={{ padding: "0 50px", minHeight: "100vh" }}>
-        {renderView()}
+        {userToken ? renderView(): null}
       </Content>
     </Layout>
   );

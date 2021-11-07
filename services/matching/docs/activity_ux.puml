@@ -5,7 +5,7 @@ start
 repeat
   -> Call to /api/match/submit;
   : Receive requestId;
-  -> Listen for an event with the requestId;
+  -> /api/match/find \npayload: {requestId};
   :User is brought to the loading page;
   if (Peer has not been found and user clicks cancel?) then (true)
   :User returns to question difficulty selection page;
@@ -13,7 +13,7 @@ repeat
   else (false)
   endif
   if (Peer found by matching service within 60 seconds?) then (true)
-  : Receive sessionInfo from event with requestId;
+  : Receive sessionInfo from /api/match/find;
   :User is directed to the session with the other peer;
   stop
   else (false)

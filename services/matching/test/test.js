@@ -24,7 +24,7 @@ describe("GET /health", () => {
   it("should return successful health check", (done) => {
     chai
       .request(server)
-      .get("/api/health")
+      .get("/matching/api/health")
       .end((err, res) => {
         res.should.have.status(200);
         done();
@@ -47,7 +47,7 @@ describe("POST /match/submit", () => {
 
     chai
       .request(server)
-      .post("/api/match/submit")
+      .post("/matching/api/match/submit")
       .send({ user, difficulty })
       .end((err, res) => {
         res.should.have.status(200);
@@ -60,7 +60,7 @@ describe("POST /match/submit", () => {
   it("should return a 400 error due to missing user object in request body", (done) => {
     chai
       .request(server)
-      .post("/api/match/submit")
+      .post("/matching/api/match/submit")
       .send({ difficulty })
       .end((err, res) => {
         res.should.have.status(400);
@@ -71,7 +71,7 @@ describe("POST /match/submit", () => {
   it("should return a 400 error due to incorrect difficulty in request body", (done) => {
     chai
       .request(server)
-      .post("/api/match/submit")
+      .post("/matching/api/match/submit")
       .send({ user, difficulty: "hArD" })
       .end((err, res) => {
         res.should.have.status(400);
@@ -101,7 +101,7 @@ describe("PUT /match/cancel", () => {
 
     chai
       .request(server)
-      .put("/api/match/cancel")
+      .put("/matching/api/match/cancel")
       .send({ requestId })
       .end((err, res) => {
         res.should.have.status(200);
@@ -112,7 +112,7 @@ describe("PUT /match/cancel", () => {
   it("should return response with 400 status code due to incorrect requestId", (done) => {
     chai
       .request(server)
-      .put("/api/match/cancel")
+      .put("/matching/api/match/cancel")
       .send({ requestId: "123" })
       .end((err, res) => {
         res.should.have.status(400);
@@ -123,16 +123,14 @@ describe("PUT /match/cancel", () => {
 
 describe("PUT /match/find", () => {
   var session1 = data.getSession(1)
-  var session2 = data.getSession(2)
   var requestId1 = data.requestId1
-  var requestId2 = data.requestId2
   var userReq1 = data.userReq1
   var userReq2 = data.userReq2
   it("should return response with 200 status code but with no match found", (done) => {
     sinon.stub(MatchRequest, "findUser").withArgs(requestId1).resolves(userReq1);
     sinon.stub(MatchRequest, "findMatch").withArgs(userReq1).resolves(null)
     chai.request(server)
-    .put("/api/match/find")
+    .put("/matching/api/match/find")
     .send({requestId: requestId1})
     .end((err, res) => {
       res.should.have.status(200);
@@ -144,26 +142,24 @@ describe("PUT /match/find", () => {
   it("should return response with 200 status code and match found. service should search database for a match.", (done) => {
     sinon.stub(MatchRequest, "findUser").withArgs(requestId1).resolves(userReq1);
     sinon.stub(MatchRequest, "findMatch").withArgs(userReq1).resolves(userReq2)
-    var saveStub = sinon.stub(MatchRequest.prototype, "save")
+    sinon.stub(MatchRequest.prototype, "save").resolves()
     chai.request(server)
-    .put("/api/match/find")
+    .put("/matching/api/match/find")
     .send({requestId: requestId1})
     .end((err, res) => {
       res.should.have.status(200);
       res.body.found.should.equal(true)
       expect(res.body.session).to.not.be.null
       expect(res.body.session.requestId).to.equal(requestId1)
-      saveStub.restore()
-      sinon.assert.calledTwice(saveStub)
       done()
     })
   })
 
   it("should return response with 200 status code and match found. service should return the user's request as match was found previously.", (done) => {
     sinon.stub(MatchRequest, "findUser").withArgs(requestId1).resolves(session1);
-    var saveStub = sinon.stub(MatchRequest.prototype, "save")
+    var saveStub = sinon.stub(MatchRequest.prototype, "save").resolves()
     chai.request(server)
-    .put("/api/match/find")
+    .put("/matching/api/match/find")
     .send({requestId: requestId1})
     .end((err, res) => {
       res.should.have.status(200);

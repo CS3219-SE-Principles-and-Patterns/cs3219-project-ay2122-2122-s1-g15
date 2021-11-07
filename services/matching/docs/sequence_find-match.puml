@@ -10,19 +10,11 @@ box "Matching Database"
 collections Questions as questions
 collections MatchRequests as matchrequests
 
-
-webapp -> gateway: connect to socket server
-gateway -> controller: connect to socket server
-controller -> gateway: connection accepted
-gateway -> webapp: connection accepted
-webapp -> gateway: Emit "wait" \npayload: {requestId}
-par
-webapp -> webapp: Listen for requestId event
-else
-gateway -> controller: "wait" \npayload: {requestId}
+webapp -> gateway: PUT /api/find/match\npayload: {requestId}
+gateway -> controller: PUT /api/find/match\npayload: {requestId}
 controller -> service: checkForMatch(requestId)
-service -> matchrequests: find MatchRequest with requestId
-matchrequests -> service: MatchRequest
+service -> matchrequests: find user's MatchRequest with requestId
+matchrequests -> service: user's MatchRequest
 service -> matchrequests: find another MatchRequest
 matchrequests -> service: another MatchRequest
 service -> questions: get a random question
@@ -30,12 +22,8 @@ questions -> service: Question
 service -> service : create sessionInfo and attach to each MatchRequest
 service -> matchrequests: update the 2 MatchRequests
 matchrequests -> service
-service -> controller: 2 MatchRequests
-loop for each MatchRequest
-controller -> gateway: Emit requestId \npayload: MatchRequest
-end
-controller -> gateway: requestId \npayload: MatchRequest
-gateway -> webapp: requestId \npayload: MatchRequest
-end
+service -> controller: user's MatchRequest
+controller -> gateway: 200 OK\npayload: {user's MatchRequest}
+gateway -> webapp: 200 OK\npayload: {user's MatchRequest}
 webapp-> webapp: switch to session page
 @enduml
