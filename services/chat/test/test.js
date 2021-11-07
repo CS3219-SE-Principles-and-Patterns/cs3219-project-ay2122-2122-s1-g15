@@ -11,7 +11,9 @@ describe("Chat Service Unit Tests", () => {
     /**
      * Sets up event listener for client1 and performs assertion on event arguments.
      */
-    client1 = io.connect(socketURL);
+    client1 = io(socketURL, {
+      path: "/chat/socket.io/",
+    });
     client1.on("chat message", function (args) {
       expect(args.message).to.equal("test");
       expect(args.sender).to.equal("client2");
@@ -26,8 +28,9 @@ describe("Chat Service Unit Tests", () => {
     client1.on("connect", function () {
       client1.emit("join room", testPayload);
       // Set up client2 connection
-      client2 = io.connect(socketURL);
-
+      client2 = io(socketURL, {
+        path: "/chat/socket.io/",
+      });
       client2.on("connect", function () {
         // Emit event when all clients are connected.
         client2.emit("join room", testPayload);
@@ -44,7 +47,9 @@ describe("Chat Service Unit Tests", () => {
     /**
      * Sets up event listener for client1 and performs assertion on event arguments.
      */
-    client1 = io.connect(socketURL);
+    client1 = io(socketURL, {
+      path: "/chat/socket.io/",
+    });
     client1.on("user disconnected", function (args) {
       expect(args.sender).to.equal("server");
       expect(args.message).to.equal("client2 disconnected!");
@@ -59,7 +64,9 @@ describe("Chat Service Unit Tests", () => {
     client1.on("connect", function () {
       client1.emit("join room", testPayload);
       // Set up client2 connection
-      client2 = io.connect(socketURL);
+      client2 = io(socketURL, {
+        path: "/chat/socket.io/",
+      });
       client2.on("connect", function () {
         // Emit event when all clients are connected.
         client2.emit("join room", testPayload);
@@ -75,7 +82,9 @@ describe("Chat Service Unit Tests", () => {
     /**
      * Sets up event listener for client1 and performs assertion on event arguments.
      */
-    client1 = io.connect(socketURL);
+    client1 = io(socketURL, {
+      path: "/chat/socket.io/",
+    });
     client1.on("user connected", function (args) {
       expect(args.sender).to.equal("server");
       expect(args.message).to.equal("client2 connected!");
@@ -90,7 +99,9 @@ describe("Chat Service Unit Tests", () => {
     client1.on("connect", function () {
       client1.emit("join room", testPayload);
       // Set up client2 connection
-      client2 = io.connect(socketURL);
+      client2 = io(socketURL, {
+        path: "/chat/socket.io/",
+      });
       client2.on("connect", function () {
         // Emit event when all clients are connected.
         client2.emit("join room", { username: "client2", sessionId: "test" });

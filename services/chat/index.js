@@ -1,11 +1,6 @@
-const { createAdapter } = require("@socket.io/mongo-adapter");
-const { MongoClient } = require("mongodb");
 const cors = require("cors");
 const express = require("express");
 const routes = require("./api/routes");
-
-const DB = "peer-prep";
-const COLLECTION = "socket.io-adapter-events";
 const port = 5000;
 const { uuid } = require("uuidv4");
 
@@ -28,13 +23,6 @@ app.use((req, res, next) => {
 });
 const server = require("http").createServer(app);
 
-const mongoClient = new MongoClient(
-  "mongodb+srv://chat-admin:fiESyt7PDeQpXtOi@cluster0.tjs9a.mongodb.net/peerprep?retryWrites=true&w=majority",
-  {
-    useUnifiedTopology: true,
-  }
-);
-
 const io = require("socket.io")(server, {
   cors: {
     origin: "*", // TODO: Change to our deployed domain later on
@@ -46,20 +34,6 @@ const io = require("socket.io")(server, {
 });
 
 const main = () => {
-  // await mongoClient.connect();
-
-  // try {
-  //   await mongoClient.db(DB).createCollection(COLLECTION, {
-  //     capped: true,
-  //     size: 1e6,
-  //   });
-  // } catch (e) {
-  //   // collection already exists
-  // }
-  // const mongoCollection = mongoClient.db(DB).collection(COLLECTION);
-
-  // io.adapter(createAdapter(mongoCollection));
-
   io.on("connection", (socket) => {
     socket.on("join room", ({ sessionId, username }) => {
       socket.join(sessionId);
@@ -72,15 +46,14 @@ const main = () => {
       console.log(`user ${username} has been connected`);
       console.log(`socket subscribed to ${sessionId}`);
     });
-    socket.on("chat message", ({ message, sender, sessionId }) => {
-      const chatId = uuid();
+    socket.on("chat message", ({ message, sender, sessionId, chatId }) => {
       const payload = {
         message,
         sender,
         chatId,
+        sessionId,
       };
-      socket.to(sessionId).emit("chat message", payload);
-      // io.sockets.in(sessionId).emit("chat message", payload);
+      socket.broadcast.to(sessionId).emit("chat message", payload);
       console.log(payload);
     });
     socket.on("initiate disconnect", ({ sessionId, username }) => {
