@@ -57,18 +57,34 @@ steps:
       '.'
     ]
     dir: 'services/editor'
+  # Remove existing k8s pods
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['delete', '-f', 'kubernetes/kubernetes.yaml']
+    args: ['delete', '-f', 'kubernetes/client.yaml']
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
-  # Step 3: Apply k8s configuration
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['delete', '-f', 'kubernetes/chat.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['delete', '-f', 'kubernetes/editor.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args: ['delete', '-f', 'kubernetes/matching.yaml']
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+  # Apply k8s configuration
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'kubernetes/']
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
-  # Step 4: Point cluster deployment to docker image in google container registry - k8s will settle rest of the setup
+  # Point cluster deployment to docker image in google container registry - k8s will settle rest of the setup
   - name: 'gcr.io/cloud-builders/kubectl'
     args: [
       'set',
