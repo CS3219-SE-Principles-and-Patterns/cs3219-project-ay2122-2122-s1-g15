@@ -57,7 +57,7 @@ function Editor(props) {
       }
       // Setup websocket and shareDB connection
       var document_key = conn[0].document_key;
-      const socket = new ReconnectingWebSocket("wss://peerprep.ninja/editor");
+      const socket = new ReconnectingWebSocket("wss://peerprep.ninja/editor/socket");
       // Connection opened
       socket.addEventListener('open', function (event) {
         console.log('Connected to Editor WS Server')
