@@ -24,7 +24,7 @@ describe("GET /health", () => {
   it("should return successful health check", (done) => {
     chai
       .request(server)
-      .get("/api/health")
+      .get("/matching/api/health")
       .end((err, res) => {
         res.should.have.status(200);
         done();
@@ -47,7 +47,7 @@ describe("POST /match/submit", () => {
 
     chai
       .request(server)
-      .post("/api/match/submit")
+      .post("/matching/api/match/submit")
       .send({ user, difficulty })
       .end((err, res) => {
         res.should.have.status(200);
@@ -60,7 +60,7 @@ describe("POST /match/submit", () => {
   it("should return a 400 error due to missing user object in request body", (done) => {
     chai
       .request(server)
-      .post("/api/match/submit")
+      .post("/matching/api/match/submit")
       .send({ difficulty })
       .end((err, res) => {
         res.should.have.status(400);
@@ -71,7 +71,7 @@ describe("POST /match/submit", () => {
   it("should return a 400 error due to incorrect difficulty in request body", (done) => {
     chai
       .request(server)
-      .post("/api/match/submit")
+      .post("/matching/api/match/submit")
       .send({ user, difficulty: "hArD" })
       .end((err, res) => {
         res.should.have.status(400);
@@ -101,7 +101,7 @@ describe("PUT /match/cancel", () => {
 
     chai
       .request(server)
-      .put("/api/match/cancel")
+      .put("/matching/api/match/cancel")
       .send({ requestId })
       .end((err, res) => {
         res.should.have.status(200);
@@ -112,7 +112,7 @@ describe("PUT /match/cancel", () => {
   it("should return response with 400 status code due to incorrect requestId", (done) => {
     chai
       .request(server)
-      .put("/api/match/cancel")
+      .put("/matching/api/match/cancel")
       .send({ requestId: "123" })
       .end((err, res) => {
         res.should.have.status(400);
@@ -132,7 +132,7 @@ describe("PUT /match/find", () => {
     sinon.stub(MatchRequest, "findUser").withArgs(requestId1).resolves(userReq1);
     sinon.stub(MatchRequest, "findMatch").withArgs(userReq1).resolves(null)
     chai.request(server)
-    .put("/api/match/find")
+    .put("/matching/api/match/find")
     .send({requestId: requestId1})
     .end((err, res) => {
       res.should.have.status(200);
@@ -146,7 +146,7 @@ describe("PUT /match/find", () => {
     sinon.stub(MatchRequest, "findMatch").withArgs(userReq1).resolves(userReq2)
     var saveStub = sinon.stub(MatchRequest.prototype, "save")
     chai.request(server)
-    .put("/api/match/find")
+    .put("/matching/api/match/find")
     .send({requestId: requestId1})
     .end((err, res) => {
       res.should.have.status(200);
@@ -163,7 +163,7 @@ describe("PUT /match/find", () => {
     sinon.stub(MatchRequest, "findUser").withArgs(requestId1).resolves(session1);
     var saveStub = sinon.stub(MatchRequest.prototype, "save")
     chai.request(server)
-    .put("/api/match/find")
+    .put("/matching/api/match/find")
     .send({requestId: requestId1})
     .end((err, res) => {
       res.should.have.status(200);
