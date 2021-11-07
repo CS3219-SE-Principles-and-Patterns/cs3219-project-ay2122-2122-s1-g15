@@ -16,10 +16,8 @@ app.use(morgan("combined"));
 
 const shareDBServer = new ShareDB({db});
 const wss = new WebSocketServer({ server: server, path: "/editor/socket"});
-wss.on('connection', function connection(ws, req) {
+wss.on('connection', function connection(ws) {
   console.log('A new client Connected!');
-  const ip = req.headers['x-forwarded-for'].split(',')[0].trim();
-  console.log(ip);
   ws.send('Welcome New Client!');
   // For transport we are using a ws JSON stream for communication
   // that can read and write js objects.
