@@ -63,8 +63,8 @@ class Service {
               otherReq.match = userReq._id;
               otherReq.matchedUser = userReq.user;
               otherReq.sessionInfo = sessionInfo;
-              userReq.save().then(() => {
-                otherReq.save().then(() => {
+              return userReq.save().then(() => {
+                return otherReq.save().then(() => {
                   return userReq;
                 });
               })

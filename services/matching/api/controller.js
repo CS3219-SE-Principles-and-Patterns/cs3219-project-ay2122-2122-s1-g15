@@ -38,28 +38,6 @@ class MatchingController {
     });
   }
 
-  // static handleFindMatch(requestId) {
-  //   return service
-  //     .checkForMatch(requestId)
-  //     .then((users) => {
-  //       if (!users) {
-  //         console.log(`No match found for ${requestId}`);
-  //         return false;
-  //       }
-  //       for (var user of users) {
-  //         this.io.emit(user.requestId, user);
-  //         console.log(
-  //           `> Emitted event to ${
-  //             user.requestId
-  //           } with payload: ${user}`
-  //         );
-  //       }
-  //       return true
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // }
   static handleFindMatch(req, res) {
     try {
       validationResult(req).throw();

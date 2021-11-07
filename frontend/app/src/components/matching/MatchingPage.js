@@ -140,7 +140,6 @@ const MatchingPage = (props) => {
   }, [timerStart, remainingTime, matchFound, requestId]);
 
   React.useEffect(() => {
- 
     if (userContext && userContext.user && Object.keys(userContext.user).length != 0) {
       userContext.user.getIdToken(false).then((idToken) => {
         setUserToken(idToken)

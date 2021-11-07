@@ -40,10 +40,12 @@ const Header = () => {
           Matching
           <Link to="/matching" />
         </Menu.Item> */}
+        {loggedIn &&
         <Menu.Item key="3">
           Session
           <Link to="/session" />
         </Menu.Item>
+        }
         {loggedIn && (
           <SubMenu
             key="SubMenu"

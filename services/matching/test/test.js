@@ -123,9 +123,7 @@ describe("PUT /match/cancel", () => {
 
 describe("PUT /match/find", () => {
   var session1 = data.getSession(1)
-  var session2 = data.getSession(2)
   var requestId1 = data.requestId1
-  var requestId2 = data.requestId2
   var userReq1 = data.userReq1
   var userReq2 = data.userReq2
   it("should return response with 200 status code but with no match found", (done) => {
@@ -144,7 +142,7 @@ describe("PUT /match/find", () => {
   it("should return response with 200 status code and match found. service should search database for a match.", (done) => {
     sinon.stub(MatchRequest, "findUser").withArgs(requestId1).resolves(userReq1);
     sinon.stub(MatchRequest, "findMatch").withArgs(userReq1).resolves(userReq2)
-    var saveStub = sinon.stub(MatchRequest.prototype, "save")
+    sinon.stub(MatchRequest.prototype, "save").resolves()
     chai.request(server)
     .put("/matching/api/match/find")
     .send({requestId: requestId1})
@@ -153,15 +151,13 @@ describe("PUT /match/find", () => {
       res.body.found.should.equal(true)
       expect(res.body.session).to.not.be.null
       expect(res.body.session.requestId).to.equal(requestId1)
-      saveStub.restore()
-      sinon.assert.calledTwice(saveStub)
       done()
     })
   })
 
   it("should return response with 200 status code and match found. service should return the user's request as match was found previously.", (done) => {
     sinon.stub(MatchRequest, "findUser").withArgs(requestId1).resolves(session1);
-    var saveStub = sinon.stub(MatchRequest.prototype, "save")
+    var saveStub = sinon.stub(MatchRequest.prototype, "save").resolves()
     chai.request(server)
     .put("/matching/api/match/find")
     .send({requestId: requestId1})
