@@ -20,6 +20,8 @@ class MatchRequest {
   ..
   updateMatch(requestId, update)
   ..
-  findById(_id)
+  findMatch(MatchRequest)
+  ..
+  findById(ObjectId)
 }
 @enduml

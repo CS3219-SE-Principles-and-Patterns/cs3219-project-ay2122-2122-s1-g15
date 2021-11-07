@@ -1,22 +1,25 @@
 @startuml
 start
--> "wait" event payload: {requestId};
+-> /api/match/find \npayload: {requestId};
 if (There is a MatchRequest in the database with this requestId) then(true)
 else
--> false;
+-> false, unable to find requestId;
+: 400 Bad Request;
 stop
 endif
 if (A match has already been saved under this MatchRequest) then(true)
-: Emit an event to both users with their sessionInfo;
+: 200 OK\n payload: {found: true, session: MatchRequest};
 stop
 else
 -> false;
 if (Is there another MatchRequest that fulfills the matching criteria?) then (true)
 : Create sessionInfo containing session id and a random question;
 : Save the sessionInfo in each MatchRequest;
-: Emit an event for each user with their corresponding MatchRequests;
+: Update both MatchRequests in the database;
+: 200 OK\n payload: {found: true, session: MatchRequest};
 stop
 else
 -> false;
+: 200 OK\n payload: {found: false};
 stop
 @enduml
