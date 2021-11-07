@@ -8,11 +8,8 @@ import "highlight.js/styles/monokai-sublime.css";
 import Sharedb from "sharedb/lib/client";
 import richText from "rich-text";
 
-// const WSS_PORT = 6100;
-
 // Adding syntax highlight support for common languages
 const hljs = require("highlight.js/lib/common");
-
 // Registering the rich text type to make sharedb work with our quill editor
 Sharedb.types.register(richText.type);
 
@@ -61,8 +58,10 @@ function Editor(props) {
       // Setup websocket and shareDB connection
       var document_key = conn[0].document_key;
       const socket = new ReconnectingWebSocket("wss://peerprep.ninja/editor");
-      // const socket = new ReconnectingWebSocket("wss://peerprep.ninja:" + WSS_PORT);
-      // const socket = new WebSocket("wss://127.0.0.1:" + WSS_PORT);
+      // Connection opened
+      socket.addEventListener('open', function (event) {
+        console.log('Connected to Editor WS Server')
+      });
       const connection = new Sharedb.Connection(socket);
       // Querying for our document
       const doc = connection.get("documents", document_key);

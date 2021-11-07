@@ -1,23 +1,11 @@
-const app = require('../index');
-const WebSocket = require("ws");
-const WebSocketJSONStream = require("@teamwork/websocket-json-stream");
+const uri = process.env.MONGO_URI || "mongodb+srv://atlas_admin:KEwpeOZbjbfrWIOQ@nodejs-reviews.0ekmm.mongodb.net/connection?retryWrites=true&w=majority";
+const db = require('sharedb-mongo')(uri);
 const ShareDB = require("sharedb");
-const server = require("http").createServer(app);
-const shareDBServer = new ShareDB();
+const shareDBServer = new ShareDB({db});
 const connection = shareDBServer.connect();
-// const WSS_PORT = 6100;
-const wss = new WebSocket.Server({ server: server });
 
 class EditorService {
-  constructor() {
-    wss.on("connection", function connection(ws) {
-      // For transport we are using a ws JSON stream for communication
-      // that can read and write js objects.
-      const jsonStream = new WebSocketJSONStream(ws);
-      // console.log(shareDBServer);
-      shareDBServer.listen(jsonStream);
-    });
-  }
+  constructor() {}
 
   create_doc(document_key) {
     console.log("Starting server....");
@@ -28,7 +16,6 @@ class EditorService {
         if (error) console.error(error)
       })
     }
-
   }
 
   remove_document(document_key) {
