@@ -1,0 +1,14 @@
+apiVersion: networking.gke.io/v1beta1
+kind: FrontendConfig
+metadata:
+  name: pp-frontend-config
+spec:
+  redirectToHttps:
+    enabled: true
+---
+apiVersion: cloud.google.com/v1beta1
+kind: BackendConfig
+metadata:
+  name: pp-backend-config
+spec:
+  timeoutSec: 720000
