@@ -1,6 +1,6 @@
 const chai = require("chai");
 const chaiHttp = require("chai-http");
-const app = require("../test_env");
+const app = require("../index");
 const assert = chai.assert;
 const expect = chai.expect;
 
@@ -11,6 +11,11 @@ chai.should();
 var session_id = 2000;
 
 describe("Connections", () => {
+  before(function(done) {
+    app.on("dbConnected", function() {
+      done();
+    })
+  })
   describe("GET /", () => {
     it("Should get all connections", (done) => {
       chai
