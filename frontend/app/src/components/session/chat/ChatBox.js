@@ -6,6 +6,7 @@ import ChatBubble from "./ChatBubble";
 import "./ChatBox.css";
 import { SessionContext } from "../../../util/SessionProvider";
 import InfiniteScroll from "react-infinite-scroll-component";
+const { uuid } = require("uuidv4");
 
 const { TextArea } = Input;
 
@@ -17,16 +18,6 @@ const ChatBox = (props) => {
   const sessionContext = useContext(SessionContext);
   const { initiateDisconnect, setInitiateDisconnect, session, setSession } =
     sessionContext;
-
-  // TODO: Replace with deployed server endpoint
-  // const socket = io("http://localhost:8080/", {
-  //   path: "/chat/socket.io/",
-  //   extraHeaders: {
-  //     bearer: userToken,
-  //     "Access-Control-Allow-Origin": "*",
-  //   },
-  //   transports: ["websocket"],
-  // });
 
   const socket = io("https://peerprep.ninja", {
     path: "/chat/socket/socket.io",
@@ -46,6 +37,13 @@ const ChatBox = (props) => {
         sender: username,
         sessionId: sessionId,
       });
+      const messagePayload = {
+        message: formattedMsg,
+        sender: username,
+        chatId: uuid(),
+      };
+      console.log("Sent a chat msg!");
+      setChat((chat) => [...chat, messagePayload]);
     }
     setMessage("");
   };
