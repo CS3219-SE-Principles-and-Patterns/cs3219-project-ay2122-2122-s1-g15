@@ -57,10 +57,16 @@ const SessionPage = (props) => {
   };
 
   useEffect(() => {
-    userContext?.user?.getIdToken(false).then(function (idToken) {
-      setUserToken(idToken);
-      console.log(userToken);
-    });
+    if (
+      userContext &&
+      userContext.user &&
+      Object.keys(userContext.user).length != 0
+    ) {
+      userContext.user.getIdToken(false).then(function (idToken) {
+        setUserToken(idToken);
+        console.log(userToken);
+      });
+    }
     setUsername(userContext?.user?.data?.name?.split(/\s+/)?.[0]);
   }, [userContext.user, userToken]);
 
