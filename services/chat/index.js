@@ -53,7 +53,7 @@ const main = () => {
         chatId,
         sessionId,
       };
-      socket.broadcast.to(sessionId).emit("chat message", payload);
+      socket.to(sessionId).emit("chat message", payload);
       console.log(payload);
     });
     socket.on("initiate disconnect", ({ sessionId, username }) => {
