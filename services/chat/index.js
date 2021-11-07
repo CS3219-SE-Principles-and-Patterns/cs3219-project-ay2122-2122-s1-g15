@@ -22,7 +22,10 @@ app.use(function (req, res, next) {
   res.header("Access-Control-Allow-Methods", "POST, GET");
   next();
 });
-app.use((req, res, next)=> { console.log(req.url); next(); });
+app.use((req, res, next) => {
+  console.log(req.url);
+  next();
+});
 const server = require("http").createServer(app);
 
 const mongoClient = new MongoClient(
@@ -39,7 +42,7 @@ const io = require("socket.io")(server, {
     // allowedHeaders: ["Access-Control-Allow-Origin"],
   },
   path: "/chat/socket",
-  allowEIO3: true
+  allowEIO3: true,
 });
 
 const main = () => {
@@ -76,8 +79,8 @@ const main = () => {
         sender,
         chatId,
       };
-      // socket.to(sessionId).emit("chat message", payload);
-      io.sockets.in(sessionId).emit("chat message", payload);
+      socket.to(sessionId).emit("chat message", payload);
+      // io.sockets.in(sessionId).emit("chat message", payload);
       console.log(payload);
     });
     socket.on("initiate disconnect", ({ sessionId, username }) => {
