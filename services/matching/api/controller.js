@@ -85,7 +85,7 @@ class MatchingController {
       })
       .catch((err) => {
         console.log(err);
-        res.status(500).send("Internal server error");
+        res.status(400).send("Invalid requestId");
       });
   }
 
