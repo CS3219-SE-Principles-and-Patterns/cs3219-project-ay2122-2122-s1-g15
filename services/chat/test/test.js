@@ -12,7 +12,7 @@ describe("Chat Service Unit Tests", () => {
      * Sets up event listener for client1 and performs assertion on event arguments.
      */
     client1 = io(socketURL, {
-      path: "/chat/socket.io/",
+      path: "/chat/socket/socket.io/",
     });
     client1.on("chat message", function (args) {
       expect(args.message).to.equal("test");
@@ -29,7 +29,7 @@ describe("Chat Service Unit Tests", () => {
       client1.emit("join room", testPayload);
       // Set up client2 connection
       client2 = io(socketURL, {
-        path: "/chat/socket.io/",
+        path: "/chat/socket/socket.io",
       });
       client2.on("connect", function () {
         // Emit event when all clients are connected.
@@ -48,7 +48,7 @@ describe("Chat Service Unit Tests", () => {
      * Sets up event listener for client1 and performs assertion on event arguments.
      */
     client1 = io(socketURL, {
-      path: "/chat/socket.io/",
+      path: "/chat/socket/socket.io",
     });
     client1.on("user disconnected", function (args) {
       expect(args.sender).to.equal("server");
@@ -65,7 +65,7 @@ describe("Chat Service Unit Tests", () => {
       client1.emit("join room", testPayload);
       // Set up client2 connection
       client2 = io(socketURL, {
-        path: "/chat/socket.io/",
+        path: "/chat/socket/socket.io",
       });
       client2.on("connect", function () {
         // Emit event when all clients are connected.
@@ -83,7 +83,7 @@ describe("Chat Service Unit Tests", () => {
      * Sets up event listener for client1 and performs assertion on event arguments.
      */
     client1 = io(socketURL, {
-      path: "/chat/socket.io/",
+      path: "/chat/socket/socket.io",
     });
     client1.on("user connected", function (args) {
       expect(args.sender).to.equal("server");
@@ -100,7 +100,7 @@ describe("Chat Service Unit Tests", () => {
       client1.emit("join room", testPayload);
       // Set up client2 connection
       client2 = io(socketURL, {
-        path: "/chat/socket.io/",
+        path: "/chat/socket/socket.io",
       });
       client2.on("connect", function () {
         // Emit event when all clients are connected.
