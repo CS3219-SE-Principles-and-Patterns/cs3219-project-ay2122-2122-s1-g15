@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AiOutlineUser } from "react-icons/ai";
-import { Layout, Modal, Button, Row, Col, PageHeader } from "antd";
+import { Layout, Modal, Button, Col, PageHeader } from "antd";
 import ChatBox from "./chat/ChatBox";
 import Editor from "./editor/Editor";
 import axios from "axios";
@@ -9,11 +9,7 @@ import TokenLoadingView from "./TokenLoadingView";
 import "./SessionPage.css";
 import { UserContext } from "../../util/UserProvider";
 import { SessionContext } from "../../util/SessionProvider";
-
-const box = {
-  padding: "8px 12px",
-  background: "white",
-};
+import useUnload from "../../util/WindowUtil";
 
 const SessionPage = (props) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -63,6 +59,11 @@ const SessionPage = (props) => {
     });
     setUsername(userContext?.user?.data?.name?.split(/\s+/)?.[0]);
   }, [userContext.user, userToken]);
+
+  useUnload((e) => {
+    e.preventDefault();
+    e.returnValue = "";
+  });
 
   if (userToken !== "") {
     return (
