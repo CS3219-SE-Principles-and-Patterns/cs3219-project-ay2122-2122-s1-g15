@@ -15,7 +15,7 @@ const server = require("http").createServer(app);
 app.use(morgan("combined"));
 
 const shareDBServer = new ShareDB({db});
-const wss = new WebSocketServer({ server: server, path: "/socket"});
+const wss = new WebSocketServer({ server: server, path: "/editor/socket"});
 wss.on('connection', function connection(ws) {
   console.log('A new client Connected!');
   ws.send('Welcome New Client!');
