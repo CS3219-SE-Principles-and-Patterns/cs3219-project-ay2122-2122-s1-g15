@@ -12,3 +12,5 @@ metadata:
   name: pp-backend-config
 spec:
   timeoutSec: 720000
+  securityPolicy:
+    name: "peerprep-security-policy"

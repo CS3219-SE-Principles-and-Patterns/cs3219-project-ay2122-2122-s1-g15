@@ -9,6 +9,9 @@ metadata:
     ingress.kubernetes.io/enable-cors: "true"
     kubernetes.io/ingress.allow-http: "true"
     networking.gke.io/v1beta1.FrontendConfig: "pp-frontend-config"
+    ingress.kubernetes.io/custom-response-headers: |
+      Strict-Transport-Security: max-age=31536000; includeSubDomains
+      Content-Security-Policy: default-src 'none';
 spec:
   defaultBackend:
     service:

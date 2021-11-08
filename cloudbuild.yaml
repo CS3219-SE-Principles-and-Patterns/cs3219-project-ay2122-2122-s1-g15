@@ -111,29 +111,49 @@ steps:
 
   # Remove existing k8s pods
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['delete', '-f', 'kubernetes/client.yaml']
+    args: [
+      'set',
+      'image',
+      'deployments/peerprep-client',
+      'peerprep-client-container=gcr.io/peerprep-2d654/peerprep-client:latest'
+    ]
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
-    id: 'delete-client'
+    id: 'update-client'
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['delete', '-f', 'kubernetes/chat.yaml']
+    args: [
+      'set',
+      'image',
+      'deployments/peerprep-chat',
+      'peerprep-chat-container=gcr.io/peerprep-2d654/peerprep-chat:latest'
+    ]
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
-    id: 'delete-chat'
+    id: 'update-chat'
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['delete', '-f', 'kubernetes/editor.yaml']
+    args: [
+      'set',
+      'image',
+      'deployments/peerprep-editor',
+      'peerprep-editor-container=gcr.io/peerprep-2d654/peerprep-editor:latest'
+    ]
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
-    id: 'delete-editor'
+    id: 'update-editor'
   - name: 'gcr.io/cloud-builders/kubectl'
-    args: ['delete', '-f', 'kubernetes/matching.yaml']
+    args: [
+      'set',
+      'image',
+      'deployments/peerprep-matching',
+      'peerprep-matching-container=gcr.io/peerprep-2d654/peerprep-matching:latest'
+    ]
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
-    id: 'delete-matching'
+    id: 'update-matching'
 
   # Apply k8s configuration
   - name: 'gcr.io/cloud-builders/kubectl'
@@ -146,10 +166,10 @@ steps:
       'matching-build',
       'chat-build',
       'editor-build',
-      'delete-client',
-      'delete-chat',
-      'delete-editor',
-      'delete-matching'
+      'update-client',
+      'update-chat',
+      'update-editor',
+      'update-matching'
     ]
 images: [
   'gcr.io/peerprep-2d654/peerprep-client:latest',
