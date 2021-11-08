@@ -137,7 +137,7 @@ steps:
       'set',
       'image',
       'deployments/peerprep-editor',
-      'peerprep-client-container=gcr.io/peerprep-2d654/peerprep-editor:latest'
+      'peerprep-editor-container=gcr.io/peerprep-2d654/peerprep-editor:latest'
     ]
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
@@ -148,7 +148,7 @@ steps:
       'set',
       'image',
       'deployments/peerprep-matching',
-      'peerprep-client-container=gcr.io/peerprep-2d654/peerprep-matching:latest'
+      'peerprep-matching-container=gcr.io/peerprep-2d654/peerprep-matching:latest'
     ]
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
