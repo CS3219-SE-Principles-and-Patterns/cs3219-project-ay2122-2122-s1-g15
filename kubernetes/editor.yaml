@@ -1,3 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: peerprep-editor
+  # tag::labels3[]
+  labels:
+    # end::labels3[]
+    # tag::app4[]
+    app: editor
+    # end::app4[]
+spec:
+  selector:
+    matchLabels:
+      # tag::app5[]
+      app: editor
+      # end::app5[]
+  template:
+    metadata:
+      # tag::labels4[]
+      labels:
+        # end::labels4[]
+        # tag::app6[]
+        app: editor
+        # end::app6[]
+    spec:
+      containers:
+        - name: peerprep-editor-container
+          # tag::image2[]
+          image: gcr.io/peerprep-2d654/peerprep-editor:latest
+          # end::image2[]
+          ports:
+            # tag::containerPort2[]
+            - containerPort: 6001
+          # end::containerPort2[]
+          resources:
+            # You must specify requests for CPU to autoscale
+            # based on CPU utilization
+            requests:
+              cpu: "250m"
+---
+apiVersion: autoscaling/v2beta2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: peerprep-editor
+spec:
+  minReplicas: 1
+  maxReplicas: 5
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: peerprep-editor
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 40
+---
 apiVersion: v1
 kind: Service
 metadata:
