@@ -6,81 +6,154 @@ steps:
       '-c',
       'docker pull gcr.io/peerprep-2d654/peerprep-client:latest || exit 0'
     ]
+    id: 'client-pull'
   # Build and push updated docker image to google container registry
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
       '-t',
       'gcr.io/peerprep-2d654/peerprep-client:latest',
+      '--cache-from', 'gcr.io/peerprep-2d654/peerprep-client:latest',
       '.'
     ]
     dir: 'frontend/app'
+    id: 'client-build'
+    waitFor: ['client-pull']
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker push gcr.io/peerprep-2d654/peerprep-client:latest || exit 0'
+    ]
+    id: 'client-push'
+    waitFor: ['client-build']
+
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [
       '-c',
       'docker pull gcr.io/peerprep-2d654/peerprep-matching:latest || exit 0'
     ]
+    id: 'matching-pull'
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
       '-t',
       'gcr.io/peerprep-2d654/peerprep-matching:latest',
+      '--cache-from', 'gcr.io/peerprep-2d654/peerprep-matching:latest',
       '.'
     ]
     dir: 'services/matching'
+    id: 'matching-build'
+    waitFor: ['matching-pull']
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker push gcr.io/peerprep-2d654/peerprep-matching:latest || exit 0'
+    ]
+    id: 'matching-push'
+    waitFor: ['matching-build']
+
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [
       '-c',
       'docker pull gcr.io/peerprep-2d654/peerprep-chat:latest || exit 0'
     ]
+    id: 'chat-pull'
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
       '-t',
       'gcr.io/peerprep-2d654/peerprep-chat:latest',
+      '--cache-from', 'gcr.io/peerprep-2d654/peerprep-chat:latest',
       '.'
     ]
     dir: 'services/chat'
+    id: 'chat-build'
+    waitFor: ['chat-pull']
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker push gcr.io/peerprep-2d654/peerprep-chat:latest || exit 0'
+    ]
+    id: 'chat-push'
+    waitFor: ['chat-build']
+
   - name: 'gcr.io/cloud-builders/docker'
     entrypoint: 'bash'
     args: [
       '-c',
       'docker pull gcr.io/peerprep-2d654/peerprep-editor:latest || exit 0'
     ]
+    id: 'editor-pull'
   - name: 'gcr.io/cloud-builders/docker'
     args: [
       'build',
       '-t',
       'gcr.io/peerprep-2d654/peerprep-editor:latest',
+      '--cache-from', 'gcr.io/peerprep-2d654/peerprep-editor:latest',
       '.'
     ]
     dir: 'services/editor'
+    id: 'editor-build'
+    waitFor: ['editor-pull']
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'bash'
+    args: [
+      '-c',
+      'docker push gcr.io/peerprep-2d654/peerprep-editor:latest || exit 0'
+    ]
+    id: 'editor-push'
+    waitFor: ['editor-build']
+
   # Remove existing k8s pods
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['delete', '-f', 'kubernetes/client.yaml']
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+    id: 'delete-client'
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['delete', '-f', 'kubernetes/chat.yaml']
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+    id: 'delete-chat'
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['delete', '-f', 'kubernetes/editor.yaml']
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+    id: 'delete-editor'
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['delete', '-f', 'kubernetes/matching.yaml']
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+    id: 'delete-matching'
+
   # Apply k8s configuration
   - name: 'gcr.io/cloud-builders/kubectl'
     args: ['apply', '-f', 'kubernetes/']
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+    waitFor: [
+      'client-build',
+      'matching-build',
+      'chat-build',
+      'editor-build',
+      'delete-client',
+      'delete-chat',
+      'delete-editor',
+      'delete-matching'
+    ]
+images: [
+  'gcr.io/peerprep-2d654/peerprep-client:latest',
+  'gcr.io/peerprep-2d654/peerprep-matching:latest',
+  'gcr.io/peerprep-2d654/peerprep-chat:latest',
+  'gcr.io/peerprep-2d654/peerprep-editor:latest'
+]
