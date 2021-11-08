@@ -14,10 +14,3 @@ spec:
   timeoutSec: 720000
   securityPolicy:
     name: "peerprep-security-policy"
-#  customRequestHeaders:
-#    headers:
-#    - "Strict-Transport-Security: max-age=31536000; includeSubDomains"
-#    - "Content-Security-Policy:default-src 'none';"
-#    - "X-Content-Type-Options: nosniff"
-#    - "X-Frame-Options: SAMEORIGIN"
-#    - "Referrer-Policy: strict-origin-when-cross-origin"
