@@ -12,10 +12,12 @@ class ConnectionController {
         });
       }
       for(var i = 0; i < connections.length; i++) {
-        console.log(connections[i]);
         const document_key = connections[i]["document_key"];
-        service.create_doc(document_key);
-        console.log("" + document_key + " created!");
+        try {
+          service.create_doc(document_key);
+        } catch (err) {
+          console.log(err);
+        }
       }
     });
   }

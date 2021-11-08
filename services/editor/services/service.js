@@ -8,12 +8,20 @@ class EditorService {
   constructor() {}
 
   create_doc(document_key) {
-    console.log("Starting server....");
+    console.log("Creating Document " + document_key + " ...");
     ShareDB.types.register(require("rich-text").type);
     const doc = connection.get("documents", document_key);
     if (!doc.type) {
       doc.create([{ insert: "Hello World!" }], "rich-text", (error) => {
-        if (error) console.error(error)
+        if (error) {
+          if (error.code == "ERR_DOC_ALREADY_CREATED") {
+            console.log("" + document_key + " is already created! Skipping...")
+          } else {
+            console.error(error);
+          }
+        } else {
+          console.log("" + document_key + " created!");
+        }
       })
     }
   }
