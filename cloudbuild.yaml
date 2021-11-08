@@ -12,6 +12,7 @@ steps:
       'build',
       '-t',
       'gcr.io/peerprep-2d654/peerprep-client:latest',
+      '--cache-from', 'gcr.io/peerprep-2d654/peerprep-client:latest',
       '.'
     ]
     dir: 'frontend/app'
@@ -26,6 +27,7 @@ steps:
       'build',
       '-t',
       'gcr.io/peerprep-2d654/peerprep-matching:latest',
+      '--cache-from', 'gcr.io/peerprep-2d654/peerprep-matching:latest',
       '.'
     ]
     dir: 'services/matching'
@@ -40,6 +42,7 @@ steps:
       'build',
       '-t',
       'gcr.io/peerprep-2d654/peerprep-chat:latest',
+      '--cache-from', 'gcr.io/peerprep-2d654/peerprep-chat:latest',
       '.'
     ]
     dir: 'services/chat'
@@ -54,6 +57,7 @@ steps:
       'build',
       '-t',
       'gcr.io/peerprep-2d654/peerprep-editor:latest',
+      '--cache-from', 'gcr.io/peerprep-2d654/peerprep-editor:latest',
       '.'
     ]
     dir: 'services/editor'
@@ -84,3 +88,9 @@ steps:
     env:
       - 'CLOUDSDK_COMPUTE_ZONE=europe-west1-d'
       - 'CLOUDSDK_CONTAINER_CLUSTER=gke-peerprep-client'
+images: [
+  'gcr.io/peerprep-2d654/peerprep-client:latest',
+  'gcr.io/peerprep-2d654/peerprep-matching:latest',
+  'gcr.io/peerprep-2d654/peerprep-chat:latest',
+  'gcr.io/peerprep-2d654/peerprep-editor:latest'
+]
