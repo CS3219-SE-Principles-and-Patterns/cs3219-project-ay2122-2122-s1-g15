@@ -20,7 +20,7 @@ describe("Connections", () => {
     it("Should get all connections", (done) => {
       chai
         .request(app)
-        .get("/api/connection")
+        .get("/editor/api/connection")
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a("object");
@@ -33,7 +33,7 @@ describe("Connections", () => {
     it("Should create a new connection", (done) => {
       chai
         .request(app)
-        .post("/api/connection")
+        .post("/editor/api/connection")
         .set("content-type", "application/x-www-form-urlencoded")
         .send({
           session_id: session_id,
@@ -54,7 +54,7 @@ describe("Connections", () => {
     it("Should get the previously created connection", (done) => {
       chai
         .request(app)
-        .get("/api/connection/" + session_id)
+        .get("/editor/api/connection/" + session_id)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a("object");
@@ -67,7 +67,7 @@ describe("Connections", () => {
     it("Should Delete connection", (done) => {
       chai
         .request(app)
-        .delete("/api/connection/" + session_id)
+        .delete("/editor/api/connection/" + session_id)
         .end((err, res) => {
           if (err) {
             done(err);
