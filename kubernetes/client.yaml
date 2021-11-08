@@ -61,6 +61,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: peerprep-client
+  annotations:
+    cloud.google.com/backend-config: '{"default": "pp-backend-config"}'
+    cloud.google.com/neg: '{"ingress": true}'
 spec:
   # tag::NodePort2[]
   type: NodePort
