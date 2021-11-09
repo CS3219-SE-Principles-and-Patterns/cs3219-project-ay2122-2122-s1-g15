@@ -24,7 +24,7 @@ export default function Home() {
           <Row align="center">
             <img style={{ width: "25%" }} src={logo} alt="PeerPrep Logo" />
           </Row>
-          <h2>Welcome to PeerPrep v2.0</h2>
+          <h2>Welcome to PeerPrep</h2>
           <h3>
             The best platform in helping you to prepare for technical interviews
           </h3>
