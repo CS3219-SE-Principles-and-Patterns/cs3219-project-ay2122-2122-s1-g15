@@ -66,3 +66,9 @@ kubectl get ingress
 NAME               CLASS    HOSTS              ADDRESS         PORTS   AGE
 ingress-peerprep   <none>   *                  34.117.253.13   80      3d11h
 ```  
+
+### Tear down application
+To tear down the deployed services, simply run the following command:
+```bash  
+kubectl delete -f kubernetes/
+```  
