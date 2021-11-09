@@ -36,7 +36,7 @@ spec:
             # You must specify requests for CPU to autoscale
             # based on CPU utilization
             requests:
-              cpu: "250m"
+              cpu: "110m"
 ---
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
