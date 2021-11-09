@@ -15,9 +15,6 @@ collections MatchRequests as matchrequests
 
 user -> webapp: clicks cancel while on loading page
 webapp -> gateway: PUT /api/match/cancel \npayload: {requestId}
-par 
-webapp -> webapp: switch to question difficulty selection page
-else
 gateway -> controller: PUT /api/match/cancel \npayload: {requestId}
 controller -> service: cancelMatch(requestId)
 service -> matchrequests: find MatchRequest with requestId \nand update it as cancelled
@@ -25,5 +22,5 @@ matchrequests -> service
 service -> controller
 controller -> gateway: 200 OK
 gateway -> webapp: 200 OK
-end
+webapp -> webapp: switch to question difficulty selection page
 @enduml

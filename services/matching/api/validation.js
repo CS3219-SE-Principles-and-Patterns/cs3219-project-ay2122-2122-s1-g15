@@ -1,9 +1,7 @@
 const {
   DIFFICULTY,
-  HEADER_KEYS,
-  HEADER_VALS,
 } = require("../constants/constants");
-const { body} = require("express-validator");
+const { body } = require("express-validator");
 
 module.exports = {
   matchSubmit: [
@@ -19,14 +17,12 @@ module.exports = {
   matchCancel: [
     body("requestId").exists(),
     body("requestId").isString(),
-    body("requestId").isLength(36)
+    body("requestId").isLength(36),
   ],
 
   matchFind: [
     body("requestId").exists(),
     body("requestId").isString(),
-    body("requestId").isLength(36)
-  ]
-
-
+    body("requestId").isLength(36),
+  ],
 };

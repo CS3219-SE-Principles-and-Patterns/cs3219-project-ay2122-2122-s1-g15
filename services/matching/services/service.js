@@ -40,11 +40,13 @@ class Service {
     return MatchRequest.findUser(requestId)
       .then((userReq) => {
         if (userReq && userReq.match) {
-            return userReq
+          return userReq;
         }
         if (!userReq) {
           // return null;
-          throw new Error(`User with requestId ${requestId} not found in database`);
+          throw new Error(
+            `User with requestId ${requestId} not found in database`
+          );
         }
 
         return MatchRequest.findMatch(userReq)
@@ -53,27 +55,32 @@ class Service {
               return null;
             }
 
-            console.log(`Match found for ${requestId}: ${JSON.stringify(otherReq)}`)
+            console.log(
+              `Match found for ${requestId}: ${JSON.stringify(otherReq)}`
+            );
 
-            return this.createSession(userReq.difficulty)
-            .then(sessionInfo => {
-              userReq.match = otherReq._id;
-              userReq.matchedUser = otherReq.user;
-              userReq.sessionInfo = sessionInfo;
-              otherReq.match = userReq._id;
-              otherReq.matchedUser = userReq.user;
-              otherReq.sessionInfo = sessionInfo;
-              return Promise.all([userReq.save(), otherReq.save()]).then(() => {
-                return userReq;
-              })
-            })
+            return this.createSession(userReq.difficulty).then(
+              (sessionInfo) => {
+                userReq.match = otherReq._id;
+                userReq.matchedUser = otherReq.user;
+                userReq.sessionInfo = sessionInfo;
+                otherReq.match = userReq._id;
+                otherReq.matchedUser = userReq.user;
+                otherReq.sessionInfo = sessionInfo;
+                return Promise.all([userReq.save(), otherReq.save()]).then(
+                  () => {
+                    return userReq;
+                  }
+                );
+              }
+            );
           })
           .catch((err) => {
             throw err;
           });
       })
       .catch((err) => {
-        console.log(err)
+        console.log(err);
         throw new Error(errors.ERROR_MATCHING_USER);
       });
   }
@@ -89,12 +96,12 @@ class Service {
         if (!question) {
           throw new Error(errors.ERROR_NO_QUESTION);
         }
-        console.log(`Retrieved random question: ${JSON.stringify(question)}`)
+        console.log(`Retrieved random question: ${JSON.stringify(question)}`);
         var sessionId = uuid();
         var sessionInfo = {
           sessionId,
           difficulty,
-          question
+          question,
         };
         return sessionInfo;
       })
@@ -105,11 +112,11 @@ class Service {
   }
 
   static cancelMatch(requestId) {
-    var findCriteria = {requestId}
+    var findCriteria = { requestId };
     var update = {
-      match: "USER_CANCELLED"
-    }
-    return MatchRequest.updateMatch(findCriteria, update)
+      match: "USER_CANCELLED",
+    };
+    return MatchRequest.updateMatch(findCriteria, update);
   }
 }
 
