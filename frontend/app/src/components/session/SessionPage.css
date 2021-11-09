@@ -10,13 +10,8 @@
   margin-right: 0.5%;
 }
 
-/* .header-left {
-  width: 25%;
-} */
-
 .header-right {
   display: flex;
-  /* width: 75%; */
 }
 
 .user-box {
@@ -49,11 +44,4 @@
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-}
-
-.container-left {
-}
-
-.container-right {
-  height: 100%;
 }

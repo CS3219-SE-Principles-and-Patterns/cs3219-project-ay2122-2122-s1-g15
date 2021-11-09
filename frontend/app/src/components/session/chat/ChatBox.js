@@ -15,11 +15,6 @@ const socket = io("https://peerprep.ninja", {
   transports: ["websocket"],
 });
 
-// const socket = io("http://localhost:5000", {
-//   path: "/chat/socket/socket.io",
-//   transports: ["websocket"],
-// });
-
 const ChatBox = (props) => {
   const { username, sessionId, userToken } = props;
   const [message, setMessage] = useState("");
