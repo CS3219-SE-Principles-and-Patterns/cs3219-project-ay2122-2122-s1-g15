@@ -49,7 +49,6 @@ const ChatBox = (props) => {
         chatId: uuid(),
       };
       socket.emit("chat message", messagePayload);
-      console.log("Sent a chat msg!");
       setChat((chat) => [...chat, messagePayload]);
     }
     setMessage("");
@@ -63,7 +62,6 @@ const ChatBox = (props) => {
 
   useEffect(() => {
     socket.on("chat message", (payload) => {
-      console.log(payload);
       if (payload.sender !== username) {
         setChat((chat) => [...chat, payload]);
       }
@@ -84,7 +82,6 @@ const ChatBox = (props) => {
 
   useEffect(() => {
     if (initiateDisconnect === true) {
-      console.log("initiating disconnect!");
       const payload = { sessionId, username };
       socket.emit("initiate disconnect", payload);
       setSession(null);
