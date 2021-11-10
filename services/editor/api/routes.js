@@ -10,8 +10,6 @@ router.get("/", function (req, res) {
 // Import controller
 var connectionController = require("./connectionController");
 
-// 2 Routes - GET to create and return the connection
-// DELETE to delete the connection once the session ends
 router
   .route("/connection")
   .get(connectionController.index)

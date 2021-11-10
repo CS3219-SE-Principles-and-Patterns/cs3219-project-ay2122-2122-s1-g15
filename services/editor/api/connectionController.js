@@ -11,7 +11,7 @@ class ConnectionController {
           message: err,
         });
       }
-      for(var i = 0; i < connections.length; i++) {
+      for (var i = 0; i < connections.length; i++) {
         const document_key = connections[i]["document_key"];
         try {
           service.create_doc(document_key);
@@ -59,8 +59,6 @@ class ConnectionController {
         data: new_connection,
       });
     });
-    
-
   }
 
   delete(req, res) {
