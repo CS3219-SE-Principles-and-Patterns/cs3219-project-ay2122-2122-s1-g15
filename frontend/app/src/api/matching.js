@@ -25,13 +25,8 @@ export const postMatchRequest = async (userObj, difficulty, userToken) => {
       getHeaders(userToken)
     )
     .then((res) => {
-      console.log(res);
       return res.data;
     })
-    .catch((err) => {
-      console.log(err);
-      return null;
-    });
 };
 
 export const cancelMatchRequest = async (requestId, userToken) => {
@@ -42,11 +37,8 @@ export const cancelMatchRequest = async (requestId, userToken) => {
       getHeaders(userToken)
     )
     .then((res) => {
-      console.log(res);
+      return res
     })
-    .catch((err) => {
-      console.log(err);
-    });
 };
 
 export const findMatch = async (requestId, userToken) => {
@@ -57,11 +49,9 @@ export const findMatch = async (requestId, userToken) => {
       getHeaders(userToken)
     )
     .then((res) => {
-      console.log(res);
       return res.data;
     })
     .catch((err) => {
-      console.log(err);
       return null;
     });
 };

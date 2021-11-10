@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Layout } from "antd";
+import { Layout, message } from "antd";
 import SelectionView from "./SelectionView";
 import LoadingView from "./LoadingView";
 import TimeoutView from "./TimeoutView";
@@ -40,6 +40,7 @@ const MatchingPage = (props) => {
   const [requestId, setRequestId] = React.useState();
   const [userToken, setUserToken] = React.useState();
   const [user, setUser] = React.useState();
+
   // for selection view
   const handleSubmitMatchRequest = () => {
     // setView(views.loading);
@@ -55,17 +56,21 @@ const MatchingPage = (props) => {
   // receive the requestId to listen to
   const submitMatchRequest = async (index) => {
     var difficulty = questionDifficulties[index];
-    var response = await postMatchRequest(user, difficulty.key, userToken);
-    if (response && response.requestId) {
-      console.log("Received request id: " + response.requestId);
-      setRequestId(response.requestId);
-      setView(views.loading);
-      setTimerStart(true);
-      return;
+    try {
+      var response = await postMatchRequest(user, difficulty.key, userToken);
+      if (response && response.requestId) {
+        setRequestId(response.requestId);
+        setView(views.loading);
+        setTimerStart(true);
+        return;
+      }
+    } catch(err) {
+      if (err?.response?.status === 404) {
+        message.error("Invalid request parameters")
+      } else {
+        message.error("Unexpected error occured, try again later?")
+      }
     }
-    console.log(
-      "Error occured: response or requestId null when sending matching request"
-    );
   };
 
   // for timeout view
@@ -86,13 +91,21 @@ const MatchingPage = (props) => {
     setSelected(null);
   };
 
-  const handleMatchCancel = () => {
+  const handleMatchCancel = async () => {
     setRemainingTime(MATCH_DURATION);
     setTimerStart(false);
     
     // send update api call to matching to inform of cancel
-    cancelMatchRequest(requestId, userToken);
-    handleReturnToSelection();
+    try {
+      await cancelMatchRequest(requestId, userToken);
+      handleReturnToSelection();
+    } catch(err) {
+      if (err?.response?.status === 404) {
+        message.error("Invalid request parameters")
+      } else {
+        message.error("Unexpected error occured, try again later?")
+      }
+    }
   };
 
   // for loading view
@@ -143,7 +156,6 @@ const MatchingPage = (props) => {
     if (userContext && userContext.user && Object.keys(userContext.user).length != 0) {
       userContext.user.getIdToken(false).then((idToken) => {
         setUserToken(idToken)
-        console.log("User idtoken found")
       })
     }
     setUser(userContext?.user);
@@ -158,6 +170,7 @@ const MatchingPage = (props) => {
             questionDifficulties={questionDifficulties}
             handleQuestionSelect={handleQuestionSelect}
             selected={selected}
+            // message={message}
           />
         );
       case views.loading:

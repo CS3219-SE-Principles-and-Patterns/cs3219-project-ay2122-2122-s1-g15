@@ -1,10 +1,4 @@
-const { uuid } = require("uuidv4");
-const {
-  DIFFICULTY,
-  HEADER_KEYS,
-  HEADER_VALS,
-} = require("../constants/constants");
-const { body, validationResult } = require("express-validator");
+const { validationResult } = require("express-validator");
 const service = require("../services/service");
 
 /* Defines the logic used in handling requests */
