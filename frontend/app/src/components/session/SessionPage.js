@@ -60,7 +60,6 @@ const SessionPage = (props) => {
     ) {
       userContext.user.getIdToken(false).then(function (idToken) {
         setUserToken(idToken);
-        console.log(userToken);
       });
     }
     setUsername(userContext?.user?.data?.name?.split(/\s+/)?.[0]);
