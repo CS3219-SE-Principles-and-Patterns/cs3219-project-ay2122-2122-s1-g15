@@ -20,3 +20,6 @@ The application should start locally at http://localhost:3000.
 ## Deploying PeerPrep
 
 To deploy PeerPrep in your Google Cloud environment, please refer to the [Deployment Guide](./docs/deployment_guide.md).
+
+## Final Report
+Please refer to the [report folder](./docs/report) for our final report.
