@@ -91,10 +91,7 @@ class Service {
                   if (updatedUserReq) {
                     return updatedUserReq;
                   } else {
-                    userReq.match = otherReq._id;
-                    userReq.matchedUser = otherReq.user;
-                    userReq.sessionInfo = sessionInfo;
-                    return userReq;
+                    return null;
                   }
                 });
               }
