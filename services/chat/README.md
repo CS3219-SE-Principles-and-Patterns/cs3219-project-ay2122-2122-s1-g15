@@ -19,8 +19,6 @@ Run `npm install` to install dependencies
 1. After installing dependencies, run `npm start` to start the application.
 2. The service should be started on http://localhost:5000.
 
-Note: .env file is included for the ease of reproducibility.
-
 ## Running Tests
 
 Run `npm run test` to execute tests.
