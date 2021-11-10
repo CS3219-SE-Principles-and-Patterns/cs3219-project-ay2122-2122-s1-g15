@@ -120,7 +120,6 @@ const MatchingPage = (props) => {
   // timer hook
   React.useEffect(() => {
     const listenForMatch = async () => {
-      console.log("Listen for match");
       var response = await findMatch(requestId, userToken);
       if (response && response.found) {
         return handleMatchFound(response.session);
@@ -130,10 +129,8 @@ const MatchingPage = (props) => {
     let listenInterval = null;
     if (timerStart && requestId) {
       if (remainingTime === 0 && !matchFound) {
-        console.log("handle match timeout");
         handleMatchTimeout();
       } else {
-        console.log("set interval")
         listenForMatch();
         interval = setInterval(() => {
           setRemainingTime((remainingTime) => remainingTime - 1);
