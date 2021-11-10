@@ -25,9 +25,7 @@ const server = require("http").createServer(app);
 
 const io = require("socket.io")(server, {
   cors: {
-    origin: "*", // TODO: Change to our deployed domain later on
-    // methods: ["GET", "POST"],
-    // allowedHeaders: ["Access-Control-Allow-Origin"],
+    origin: "*",
   },
   path: "/chat/socket",
   allowEIO3: true,
