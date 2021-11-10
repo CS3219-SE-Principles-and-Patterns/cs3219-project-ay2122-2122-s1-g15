@@ -1,7 +1,7 @@
-const uri = process.env.MONGO_URI || "mongodb+srv://atlas_admin:KEwpeOZbjbfrWIOQ@nodejs-reviews.0ekmm.mongodb.net/connection?retryWrites=true&w=majority";
-const db = require('sharedb-mongo')(uri);
+const uri = process.env.MONGO_URI;
+const db = require("sharedb-mongo")(uri);
 const ShareDB = require("sharedb");
-const shareDBServer = new ShareDB({db});
+const shareDBServer = new ShareDB({ db });
 const connection = shareDBServer.connect();
 
 class EditorService {
@@ -15,14 +15,14 @@ class EditorService {
       doc.create([{ insert: "Hello World!" }], "rich-text", (error) => {
         if (error) {
           if (error.code == "ERR_DOC_ALREADY_CREATED") {
-            console.log("" + document_key + " is already created! Skipping...")
+            console.log("" + document_key + " is already created! Skipping...");
           } else {
             console.error(error);
           }
         } else {
           console.log("" + document_key + " created!");
         }
-      })
+      });
     }
   }
 

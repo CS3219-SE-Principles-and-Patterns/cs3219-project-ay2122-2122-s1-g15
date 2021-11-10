@@ -2,7 +2,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 const mongoose = require("mongoose");
 const app = require('../index');
-const uri = process.env.MONGO_URI || "mongodb+srv://atlas_admin:KEwpeOZbjbfrWIOQ@nodejs-reviews.0ekmm.mongodb.net/connection?retryWrites=true&w=majority";
+const uri = process.env.MONGO_URI;
 
 class DbHandler {
   constructor() {}

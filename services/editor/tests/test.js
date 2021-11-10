@@ -11,11 +11,11 @@ chai.should();
 var session_id = 2000;
 
 describe("Connections", () => {
-  before(function(done) {
-    app.on("dbConnected", function() {
+  before(function (done) {
+    app.on("dbConnected", function () {
       done();
-    })
-  })
+    });
+  });
   describe("GET /", () => {
     it("Should get all connections", (done) => {
       chai
