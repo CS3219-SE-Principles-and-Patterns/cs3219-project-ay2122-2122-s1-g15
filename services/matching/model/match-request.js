@@ -41,7 +41,8 @@ schema.static("findMatch", function ( userRequest) {
 schema.static("updateMatch", function (findCriteria, update) {
   return this.findOneAndUpdate(
     findCriteria,
-    update
+    update,
+    {new: true}
   ).exec();
 });
 

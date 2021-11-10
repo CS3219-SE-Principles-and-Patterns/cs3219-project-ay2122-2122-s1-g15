@@ -61,17 +61,42 @@ class Service {
 
             return this.createSession(userReq.difficulty).then(
               (sessionInfo) => {
-                userReq.match = otherReq._id;
-                userReq.matchedUser = otherReq.user;
-                userReq.sessionInfo = sessionInfo;
-                otherReq.match = userReq._id;
-                otherReq.matchedUser = userReq.user;
-                otherReq.sessionInfo = sessionInfo;
-                return Promise.all([userReq.save(), otherReq.save()]).then(
-                  () => {
+                var findCriteria1 = {
+                  requestId: userReq.requestId,
+                  match: null,
+                };
+                var findCriteria2 = {
+                  requestId: otherReq.requestId,
+                  match: null,
+                };
+                var update1 = {
+                  match: otherReq._id,
+                  matchedUser: otherReq.user,
+                  sessionInfo: sessionInfo,
+                };
+
+                var update2 = {
+                  match: userReq._id,
+                  matchedUser: userReq.user,
+                  sessionInfo: sessionInfo,
+                };
+
+                // otherReq.match = userReq._id;
+                // otherReq.matchedUser = userReq.user;
+                // otherReq.sessionInfo = sessionInfo;
+                return Promise.all([
+                  MatchRequest.updateMatch(findCriteria1, update1),
+                  MatchRequest.updateMatch(findCriteria2, update2),
+                ]).then(([updatedUserReq, otherReq]) => {
+                  if (updatedUserReq) {
+                    return updatedUserReq;
+                  } else {
+                    userReq.match = otherReq._id;
+                    userReq.matchedUser = otherReq.user;
+                    userReq.sessionInfo = sessionInfo;
                     return userReq;
                   }
-                );
+                });
               }
             );
           })
