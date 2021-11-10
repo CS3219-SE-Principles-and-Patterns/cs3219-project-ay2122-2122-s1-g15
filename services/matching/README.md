@@ -38,6 +38,7 @@ Request Body:
 **Response**
 
 **200**: Match Request accepted
+
 **400**: Missing fields in request body, or invalid difficulty given
 
 ### Cancels a Match Request
@@ -54,6 +55,7 @@ PUT request to http://localhost:4000/matching/api/match/cancel
 **Response**
 
 **200**: Match Request cancelled
+
 **400**: Invalid or missing requestId provided
 
 ### Finding a Match
@@ -70,4 +72,5 @@ Request Body:
 **Response**
 
 **200**: Match found for user
+
 **400**: Invalid or missing requestId provided

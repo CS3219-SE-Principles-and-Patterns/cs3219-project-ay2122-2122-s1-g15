@@ -1,6 +1,6 @@
 # PeerPrep Frontend
 
-<p align="center"><img src="./images/peerprep.png" width="350"/></p>
+<p><img src="./images/peerprep.png"/></p>
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

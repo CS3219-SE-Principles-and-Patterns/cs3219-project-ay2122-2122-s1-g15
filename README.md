@@ -1,6 +1,6 @@
 ﻿<p align="center"><img src="./docs/images/PeerPrep.png" width="350"/></p>
 
-The web application is live at https://peerprep.ninja
+PeerPrep is live at https://peerprep.ninja.
 
 ## Overview
 
@@ -12,11 +12,11 @@ To deploy PeerPrep in your Google Cloud environment, please refer to the [Deploy
 
 ## Running Locally
 
-Refer to the following individual services to setup and run each of them:
+Navigate to the following individual services to set up and run them locally:
 1. [Matching Service](./services/matching/)
 2. [Chat Service](./services/chat/)
 3. [Editor Service](./services/editor/)
 
-Finally, start running the frontend by following this [guide](./frontend/app/).
+Finally, start running the frontend service by following this [guide](./frontend/app/README.md).
 
 The application should start locally at http://localhost:3000.
