@@ -6,6 +6,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 # Set Up Guide
 
+## Navigate to the `frontend/app` directory
+
+Run `cd frontend/app` from the root of the project.
+
 ## Installing Dependencies
 
 Run `npm install` to install dependencies

@@ -12,9 +12,11 @@ To deploy PeerPrep in your Google Cloud environment, please refer to the [Deploy
 
 ## Running Locally
 
-Refer to the following guides to setup and run each of the backend services:
-1. [Matching Service](./services/matching/README.md)
-2. [Chat Service](./services/chat/README.md)
-3. [Editor Service](./services/editor/README.md)
+Refer to the following individual services to setup and run each of them:
+1. [Matching Service](./services/matching/)
+2. [Chat Service](./services/chat/)
+3. [Editor Service](./services/editor/)
 
-Finally, start running the frontend by following this [guide](./frontend/app/README.md)
+Finally, start running the frontend by following this [guide](./frontend/app/).
+
+The application should start locally at http://localhost:3000.

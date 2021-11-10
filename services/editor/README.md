@@ -6,6 +6,10 @@ Editor service provide functionalities for a real-time collaborative editor with
 
 # Set Up Guide
 
+## Navigate to the `editor` directory
+
+Run `cd services/editor` from the root of the project.
+
 ## Installing Dependencies
 
 Run `npm install` to install dependencies
@@ -13,7 +17,7 @@ Run `npm install` to install dependencies
 ## Running Locally
 
 1. After installing dependencies, run `npm start` to start the application.
-2. The application should be started on http://localhost:6001.
+2. The service should be started on http://localhost:6001.
 
 Note: .env file is included for the ease of reproducibility.
 
@@ -34,7 +38,7 @@ POST request to http://localhost:6001/editor/api/connection/
 Example request body:
 ```
 {
-    "session_id": "1234"
+    "session_id": String
 }
 ```
 
