@@ -139,25 +139,9 @@ describe("PUT /match/find", () => {
     })
   })
 
-  it("should return response with 200 status code and match found. service should search database for a match.", (done) => {
-    sinon.stub(MatchRequest, "findUser").withArgs(requestId1).resolves(userReq1);
-    sinon.stub(MatchRequest, "findMatch").withArgs(userReq1).resolves(userReq2)
-    sinon.stub(MatchRequest.prototype, "save").resolves()
-    chai.request(server)
-    .put("/matching/api/match/find")
-    .send({requestId: requestId1})
-    .end((err, res) => {
-      res.should.have.status(200);
-      res.body.found.should.equal(true)
-      expect(res.body.session).to.not.be.null
-      expect(res.body.session.requestId).to.equal(requestId1)
-      done()
-    })
-  })
 
   it("should return response with 200 status code and match found. service should return the user's request as match was found previously.", (done) => {
     sinon.stub(MatchRequest, "findUser").withArgs(requestId1).resolves(session1);
-    var saveStub = sinon.stub(MatchRequest.prototype, "save").resolves()
     chai.request(server)
     .put("/matching/api/match/find")
     .send({requestId: requestId1})
@@ -167,8 +151,6 @@ describe("PUT /match/find", () => {
       console.log(res.body)
       expect(res.body.session).to.not.be.null
       expect(res.body.session.match).to.equal(session1.match.toString())
-      saveStub.restore()
-      sinon.assert.notCalled(saveStub)
       done()
     })
   })
